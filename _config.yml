@@ -3,12 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: YuWay's Blog
-subtitle: ''
+title: GoForward's Blog
+subtitle: '别赶路，去感受路'
 description: ''
 keywords:
-author: YuWay
-language: zh_CN
+author: GoForward 
+language: zh-CN
 timezone: ''
 
 # URL
@@ -98,7 +98,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: ocean 
+theme: fluid 
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
