@@ -1,6 +1,6 @@
 ---
 title: 记录配置Typora+PicGo+GitHub图床写博客工具
-data: {{ data }}
+date: {{ date }}
 updated: {{ date }}
 tags: 
 categories: 记录

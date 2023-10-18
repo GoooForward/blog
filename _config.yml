@@ -103,6 +103,9 @@ theme: fluid
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: git
-  repo: https://github.com/GoooForward/blog.git
+- type: git
+  repo:  https://github.com/GoooForward/blog.git
+  branch: pages
+- type: git
+  repo: git@gitee.com:imtangyuwei/blog.git
   branch: pages

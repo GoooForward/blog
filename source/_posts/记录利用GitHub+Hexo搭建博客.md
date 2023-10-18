@@ -1,8 +1,8 @@
 ---
 title: 记录利用GitHub+Hexo搭建博客
-data: {{ data }}
+date: {{ date }}
 updated: {{ date }}
-tags: 
+tags: hexo
 categories: 记录
 ---
 
@@ -24,6 +24,8 @@ OK，下面就记录一下我搭建这个blog的过程以及踩过的坑。
 
 # 0x01 环境准备
 
+
+
 ## -0- 安装git
 
 这个太基础了，没装过就STFW（Search The Fucking Web）吧
@@ -32,8 +34,13 @@ OK，下面就记录一下我搭建这个blog的过程以及踩过的坑。
 
 ##  -1- 创建仓库
 
-创建仓库没什么好说的（~~应该不会有人建仓库都不会吧，如果不会就STFW吧~~），但唯一要注意的是必须要创建公共仓库
-![image-20231017214652171](https://raw.githubusercontent.com/GoooForward/picture/main/note-image/image-20231017214652171.png)
+创建仓库没什么好说的（~~如果不会就STFW吧~~），但唯一要注意的是必须要创建公共仓库
+
+![](https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230150149.png)
+
+
+
+>  其实如果不会魔法上网，无法使用Github，也可以使用国内的代码托管平台gitee，gitee同样提供pages的功能，但是必须先通过实名认证
 
 
 
@@ -47,7 +54,7 @@ OK，下面就记录一下我搭建这个blog的过程以及踩过的坑。
 
 > *"Node.js® is an open-source, cross-platform JavaScript runtime environment."*
 
-![image-20231017215911515](https://raw.githubusercontent.com/GoooForward/picture/main/note-image/image-20231017215911515.png)
+![](https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230213736.png)
 
 在Internet搜了一圈，大概了解了一下，浅显的理解为开源的JavaScript这个语言的运行环境，应该包括一些基本的运行库之类的。
 
@@ -89,12 +96,13 @@ Hexo是一个快速、简洁且高效的博客框架。hexo就相当于一个毛
 
 为什么选择Hexo框架而不是其他框架呢？对我来说，主要有以下几个优势：
 
-* 简单，hexo可以一键部署，命令简单，不需要复杂的操作，最适合我这种纯小白了
-* 支持Markdown，这个功能相信大多数博客框架都是
+* 简单。hexo可以一键部署，命令简单，不需要复杂的操作，而且有中文的文档，最适合我这种纯小白了
+* 支持Markdown。Markdown太好用了，YYDS，谁用谁知道
+* 有许多的主题。颜值即正义，谁不想用好看的皮肤呢，自己又写不出来，直接clone大佬的主题，改个配置文件直接用，美滋滋
 
 [Hexo官网](https://hexo.io/zh-cn/index.html)
 
-![](https://raw.githubusercontent.com/GoooForward/picture/main/note-image/202310181039079.png)
+![](https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230241456.png)
 
 执行如下命令安装Hexo
 
@@ -114,9 +122,11 @@ OK，到这里搭建的环境就准备好了，下面就可以开始搭建工作
 
 # 0x02 操作步骤
 
+
+
 ## -1- 初始化文件夹
 
-首先创建一个文件夹，用于存放blog的文件，然后进入该文件夹中，用`hexo init`初始化文件夹
+首先创建一个空文件夹，用于存放blog的文件，然后进入该文件夹中，用`hexo init`初始化文件夹
 
 ```bash
 mkdir blog
@@ -124,6 +134,161 @@ cd blog
 hexo init
 ```
 
+此时，hexo会自动clone框架代码，目录结构如下：
+
+```bash
+.
+├── _config.landscape.yml	#主题landscape的配置文件
+├── _config.yml				#整个框架的配置文件
+├── node_modules
+├── package.json
+├── package-lock.json
+├── scaffolds
+├── source					#用于存放网页的源文件
+└── themes					#用于存放主题的源文件
+```
 
 
-> To be continueba
+
+## -2- 预览网页
+
+初始化后，我们就已经获得了一个博客页面。使用
+
+```bash
+hexo server
+#or
+hexo s			#hexo可以自动补全
+```
+
+就可以在本地预览默认的博客样式，按Ctrl+C退出。
+
+![](https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230309151.png)
+
+
+
+使用`hexo cl`可以清除掉hexo生成的静态网页，类似于make clean。
+
+清除之后通过`hexo g`可以重新生成网页。
+
+
+
+hexo的命令并不多，使用`hexo help`可以看到hexo的命令
+
+```bash
+  clean     Remove generated files and cache.                                   
+  config    Get or set configurations.                                          
+  deploy    Deploy your website.                                                
+  generate  Generate static files.
+  help      Get help on a command.
+  init      Create a new Hexo folder.
+  list      List the information of the site
+  migrate   Migrate your site from other system to Hexo.
+  new       Create a new post.
+  publish   Moves a draft post from _drafts to _posts folder.
+  render    Render files with renderer plugins.
+  server    Start the server.
+  version   Display version information.
+```
+
+
+
+## -3- 部署网页
+
+现在我们已经获得了一个网页，但是还是只能在本地浏览，如何将其放到github中呢？这时就需要编辑配置文件了。
+
+打开博客根目录下的 _config.yml 文件，找到deploy项，按如下格式修改
+
+```yaml
+deploy: 
+  type: git 
+  repo: your-git-link
+  branch: your-pages-branch
+```
+
+其中
+
+1. type选择git
+2. repo是指你github上的博客仓库链接
+
+![](https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230332444.png)
+
+
+
+这里如果选择SSH链接，需要提前生成ssh id_rsa的公钥，并且添加到github上，如果没有添加的话就请STFW吧
+
+由于github改版，如果选择HTTP链接，现在已经不能直接通过帐号密码访问到仓库了，必须要生成一个token，通过token做密码才能访问到仓库，而这个token只会在生成时以明文的形式显示一次，并且很难记。所以这里最推荐的是配置公钥后使用SSH，如果非要使用HTTPS链接，又不想每次都输入密码，这里也有一个曲线救国的方法，就是开启git的记住密码功能，这样只用输入一次之后就可以不用输入了。
+
+```bash
+#开启git全局记住密码
+git config --global credential.helper store
+```
+
+3. branch是指你想要将git提交到哪个分支上。这里我推荐仓库创建两个分支，一个pages用于存放静态网页资源，一个source用于存放整个blog的源文件。这里的配置应该选择用于存放网页资源的pages分支。所以我的配置如下
+
+```yaml
+deploy: 
+  type: git 
+  repo: git@github.com:GoooForward/blog.git
+  branch: pages
+```
+
+---
+
+修改好配置文件后保存退出，使用`hexo d`将网页资源push到仓库上时会发现报错了
+
+```shell
+tangyuwei@legion:~/blog$ hexo d
+INFO  Validating config
+ERROR Deployer not found: git
+```
+
+这是因为我们选择了git来部署页面，而hexo此时还不知道git是什么，因此要安装一个插件
+
+```
+npm install hexo-deployer-git --save
+#--save 是指将插件安装到项目的node_modules目录下，并且写入依赖
+```
+
+安装好插件之后再执行`hexo d`就能成功将网页资源push到仓库的对应分支了
+
+---
+
+然后，来到github的对应仓库页面，选择Settings -> Pages -> Branch -> 选择分支 -> Save。
+
+![](https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230600315.png)
+
+
+
+![](https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230611572.png)
+
+保存后，Github就会开始部署该分支上的网页了，这个过程需要一段时间，可以在Actions页面看到部署进度
+
+![](https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230637169.png)
+
+成功部署之后就可以回到之前的pages页面访问你的Blog了
+
+![](https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230657411.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> To be continue
