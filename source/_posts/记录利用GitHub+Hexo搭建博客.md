@@ -1,5 +1,5 @@
 ---
-babatitle: 记录利用GitHub+Hexo搭建博客
+title: 记录利用GitHub+Hexo搭建博客
 data: {{ data }}
 updated: {{ date }}
 tags: 
@@ -12,7 +12,7 @@ categories: 记录
 
 搭建一个博客的方法有很多，但是对于我这种纯小白来说，使用现成的方案显然是最方便滴。
 
-首先，搭建博客需要肯定需要一个服务器，当然最好的办法就是自己物理上组一台主机当服务器，然后在搞到一个公网IP，这样整个服务器都完全掌握在自己手里。但是这样的服务器需要大把的“米”，而且在2023年的今天，获取一个私人的公网的IPv4地址也是十分困难滴，因此PlanA PASS。
+首先，搭建博客需要肯定需要一个服务器，当然最好的办法就是自己物理上组一台主机当服务器，然后再搞到一个公网IP，这样整个服务器都完全掌握在自己手里。但是这样的服务器需要大把的“米”，而且在2023年的今天，获取一个私人的公网的IPv4地址也是十分困难滴，因此PlanA PASS。
 
 随着云服务的发展，现如今通过租的方式来获取一个云服务器也是很容易的。但是云服务终究还是收费的，虽然各家云服务商都有新人优惠，但是小钱也是钱啊，咱这种玩玩而已的blog那自然是能省就省，等以后有钱有闲了再来研究研究这个方案。PlanB暂时放弃。
 
@@ -23,6 +23,12 @@ OK，下面就记录一下我搭建这个blog的过程以及踩过的坑。
 
 
 # 0x01 环境准备
+
+## -0- 安装git
+
+这个太基础了，没装过就STFW（Search The Fucking Web）吧
+
+
 
 ##  -1- 创建仓库
 
@@ -47,7 +53,7 @@ OK，下面就记录一下我搭建这个blog的过程以及踩过的坑。
 
 在[官网](https://nodejs.org/zh-cn)上下载一下安装包，LTS是长期维护版，理论上更稳定；Current就是当前最新版。我这里就下载LTS版本了，因为我也用不上新特性。
 
-下载下来是一个tar.xz格式的压缩包，使用如下目录进行解压
+我使用的是Ubuntu 22.04，下载下来是一个tar.xz格式的压缩包，使用如下目录进行解压
 
 ```bash
 tar -Jxf node-v18.18.1-linux-x64.tar.xz 		#-J 指定xz压缩格式（必须大写J）-x 解压操作 -f 指定要解压的文件
@@ -57,12 +63,14 @@ tar --xz -xf node-v18.18.1-linux-x64.tar.xz		#我觉得这个更好记，就是�
 
 解压之后就得到了Node.js的二进制可执行文件了，这就相当于windows下的portable版本的软件，解压即用，不用注册表等信息。
 
+如果是Windows下载下来应该是一个.exe的安装程序，就按照软件的正常安装步骤来就好。
+
 现在进入bin文件夹下就可以看到npm包管理软件的可执行文件了，接下来将该路径添加到系统的环境变量中，这样在其他的路径下也可以直接通过软件名来调用npm等软件了。在bin文件夹中执行如下命令
 
 ```bash
 echo "export PATH=$(pwd):$PATH" >> ~/.bashrc
 #or
-echo "export PATH=(your-nodejs-bin-path):$PATH" >> ~/.bashrc
+echo "export PATH=[your-nodejs-bin-path]:$PATH" >> ~/.bashrc
 ```
 
 然后加载一下bash配置文件
@@ -77,13 +85,44 @@ source ~/.bashrc
 
 ## -3- 安装Hexo
 
+Hexo是一个快速、简洁且高效的博客框架。hexo就相当于一个毛坯房，我们只需要装修就行了，不需要再打地基从平地起楼房。
+
+为什么选择Hexo框架而不是其他框架呢？对我来说，主要有以下几个优势：
+
+* 简单，hexo可以一键部署，命令简单，不需要复杂的操作，最适合我这种纯小白了
+* 支持Markdown，这个功能相信大多数博客框架都是
+
+[Hexo官网](https://hexo.io/zh-cn/index.html)
+
+![](https://raw.githubusercontent.com/GoooForward/picture/main/note-image/202310181039079.png)
+
 执行如下命令安装Hexo
 
 ```bash
-npm install hexo -g 		#-g 全局安装
+npm install hexo-cli -g 		#-g 全局安装  
 ```
 
+> hexo-cli中的cli是指command line interface版本，即命令行接口版本
 
+可以通过`hexo -v`命令来判断是否安装成功，如果看到了版本号就是安装成功
+
+
+
+OK，到这里搭建的环境就准备好了，下面就可以开始搭建工作了
+
+
+
+# 0x02 操作步骤
+
+## -1- 初始化文件夹
+
+首先创建一个文件夹，用于存放blog的文件，然后进入该文件夹中，用`hexo init`初始化文件夹
+
+```bash
+mkdir blog
+cd blog
+hexo init
+```
 
 
 
