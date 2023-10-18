@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+  
+  <entry>
+    <title>记录利用GitHub+Hexo搭建博客</title>
+    <link href="/blog/2023/10/18/%E8%AE%B0%E5%BD%95%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/"/>
+    <url>/blog/2023/10/18/%E8%AE%B0%E5%BD%95%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</url>
+    
+    <content type="html"><![CDATA[<h1 id="0x00-起因"><a href="#0x00-起因" class="headerlink" title="0x00 起因"></a>0x00 起因</h1><p>之前在Internet冲浪时经常会搜到一些别人写的博客，通常大家写博客往往是通过某乎、某某DN这样的平台，在平台之上创作。但是有时也能搜到一些个人博客，这些博客往往网页清爽，纯净无广告，有些博客还有些不错特效，抛开文章内容不谈，仅仅是如此清爽的页面就给了人良好的阅读体验。所以我便也想着整一个，这样就可以把自己写的一些垃圾扔在上面了，咱说整就整。</p><p>搭建一个博客的方法有很多，但是对于我这种纯小白来说，使用现成的方案显然是最方便滴。</p><p>首先，搭建博客需要肯定需要一个服务器，当然最好的办法就是自己物理上组一台主机当服务器，然后再搞到一个公网IP，这样整个服务器都完全掌握在自己手里。但是这样的服务器需要大把的“米”，而且在2023年的今天，获取一个私人的公网的IPv4地址也是十分困难滴，因此PlanA PASS。</p><p>随着云服务的发展，现如今通过租的方式来获取一个云服务器也是很容易的。但是云服务终究还是收费的，虽然各家云服务商都有新人优惠，但是小钱也是钱啊，咱这种玩玩而已的blog那自然是能省就省，等以后有钱有闲了再来研究研究这个方案。PlanB暂时放弃。</p><p>那最后咱们选择的方案是啥呢？嘿嘿，就是利用GitHub提供的免费pages功能来搭建这个blog。GitHub给每个人的每个仓库都提供了这个page功能，我认为GitHub的原意应该是方便用户给每个项目搭建一个介绍页面，但是我们正好就可以利用这个功能来搭建一个人博客。</p><p>OK，下面就记录一下我搭建这个blog的过程以及踩过的坑。</p><h1 id="0x01-环境准备"><a href="#0x01-环境准备" class="headerlink" title="0x01 环境准备"></a>0x01 环境准备</h1><h2 id="0-安装git"><a href="#0-安装git" class="headerlink" title="-0- 安装git"></a>-0- 安装git</h2><p>这个太基础了，没装过就STFW（Search The Fucking Web）吧</p><h2 id="1-创建仓库"><a href="#1-创建仓库" class="headerlink" title="-1- 创建仓库"></a>-1- 创建仓库</h2><p>创建仓库没什么好说的（<del>如果不会就STFW吧</del>），但唯一要注意的是必须要创建公共仓库<br><img src="https://raw.githubusercontent.com/GoooForward/picture/main/note-image/image-20231017214652171.png"></p><blockquote><p> 其实如果不会魔法上网，无法使用Github，也可以使用国内的代码托管平台gitee，gitee同样提供pages的功能，但是必须先通过实名认证</p></blockquote><h2 id="2-安装Node-js环境"><a href="#2-安装Node-js环境" class="headerlink" title="-2- 安装Node.js环境"></a>-2- 安装Node.js环境</h2><p>什么是Node.js？咱也不知道啊，不知道就STFW呗。wiki上是这样说的：</p><blockquote><p><em>“Node.js 是能够在服务器端运行 JavaScript 的开放源代码、跨平台执行环境。”</em></p></blockquote><p>在<a href="https://nodejs.org/zh-cn">Node.js的官网</a>上也有这样一句话：</p><blockquote><p><em>“Node.js® is an open-source, cross-platform JavaScript runtime environment.”</em></p></blockquote><p><img src="https://raw.githubusercontent.com/GoooForward/picture/main/note-image/image-20231017215911515.png"></p><p>在Internet搜了一圈，大概了解了一下，浅显的理解为开源的JavaScript这个语言的运行环境，应该包括一些基本的运行库之类的。</p><p>在<a href="https://nodejs.org/zh-cn">官网</a>上下载一下安装包，LTS是长期维护版，理论上更稳定；Current就是当前最新版。我这里就下载LTS版本了，因为我也用不上新特性。</p><p>我使用的是Ubuntu 22.04，下载下来是一个tar.xz格式的压缩包，使用如下目录进行解压</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">tar -Jxf node-v18.18.1-linux-x64.tar.xz <span class="hljs-comment">#-J 指定xz压缩格式（必须大写J）-x 解压操作 -f 指定要解压的文件</span><br><span class="hljs-comment">#or</span><br>tar --xz -xf node-v18.18.1-linux-x64.tar.xz<span class="hljs-comment">#我觉得这个更好记，就是不够优雅</span><br></code></pre></td></tr></table></figure><p>解压之后就得到了Node.js的二进制可执行文件了，这就相当于windows下的portable版本的软件，解压即用，不用注册表等信息。</p><p>如果是Windows下载下来应该是一个.exe的安装程序，就按照软件的正常安装步骤来就好。</p><p>现在进入bin文件夹下就可以看到npm包管理软件的可执行文件了，接下来将该路径添加到系统的环境变量中，这样在其他的路径下也可以直接通过软件名来调用npm等软件了。在bin文件夹中执行如下命令</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;export PATH=<span class="hljs-subst">$(pwd)</span>:<span class="hljs-variable">$PATH</span>&quot;</span> &gt;&gt; ~/.bashrc<br><span class="hljs-comment">#or</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;export PATH=[your-nodejs-bin-path]:<span class="hljs-variable">$PATH</span>&quot;</span> &gt;&gt; ~/.bashrc<br></code></pre></td></tr></table></figure><p>然后加载一下bash配置文件</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.bashrc<br></code></pre></td></tr></table></figure><p>这样就将该路径添加到了环境变量中了，下面安装Hexo。</p><h2 id="3-安装Hexo"><a href="#3-安装Hexo" class="headerlink" title="-3- 安装Hexo"></a>-3- 安装Hexo</h2><p>Hexo是一个快速、简洁且高效的博客框架。hexo就相当于一个毛坯房，我们只需要装修就行了，不需要再打地基从平地起楼房。</p><p>为什么选择Hexo框架而不是其他框架呢？对我来说，主要有以下几个优势：</p><ul><li>简单。hexo可以一键部署，命令简单，不需要复杂的操作，而且有中文的文档，最适合我这种纯小白了</li><li>支持Markdown。Markdown太好用了，YYDS，谁用谁知道</li><li>有许多的主题。颜值即正义，谁不想用好看的皮肤呢，自己又写不出来，直接clone大佬的主题，改个配置文件直接用，美滋滋</li></ul><p><a href="https://hexo.io/zh-cn/index.html">Hexo官网</a></p><p><img src="https://raw.githubusercontent.com/GoooForward/picture/main/note-image/202310181039079.png"></p><p>执行如下命令安装Hexo</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo-cli -g <span class="hljs-comment">#-g 全局安装  </span><br></code></pre></td></tr></table></figure><blockquote><p>hexo-cli中的cli是指command line interface版本，即命令行接口版本</p></blockquote><p>可以通过<code>hexo -v</code>命令来判断是否安装成功，如果看到了版本号就是安装成功</p><p>OK，到这里搭建的环境就准备好了，下面就可以开始搭建工作了</p><h1 id="0x02-操作步骤"><a href="#0x02-操作步骤" class="headerlink" title="0x02 操作步骤"></a>0x02 操作步骤</h1><h2 id="1-初始化文件夹"><a href="#1-初始化文件夹" class="headerlink" title="-1- 初始化文件夹"></a>-1- 初始化文件夹</h2><p>首先创建一个文件夹，用于存放blog的文件，然后进入该文件夹中，用<code>hexo init</code>初始化文件夹</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> blog<br><span class="hljs-built_in">cd</span> blog<br>hexo init<br></code></pre></td></tr></table></figure><p>此时，hexo会自动clone框架代码</p><blockquote><p>To be continueba</p></blockquote>]]></content>
+    
+    
+    <categories>
+      
+      <category>记录</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>记录配置Typora+PicGo+GitHub图床写博客工具</title>
+    <link href="/blog/2023/10/17/%E8%AE%B0%E5%BD%95%E9%85%8D%E7%BD%AETypora+PicGo+GitHub%E5%9B%BE%E5%BA%8A%E5%86%99%E5%8D%9A%E5%AE%A2%E5%B7%A5%E5%85%B7/"/>
+    <url>/blog/2023/10/17/%E8%AE%B0%E5%BD%95%E9%85%8D%E7%BD%AETypora+PicGo+GitHub%E5%9B%BE%E5%BA%8A%E5%86%99%E5%8D%9A%E5%AE%A2%E5%B7%A5%E5%85%B7/</url>
+    
+    <content type="html"><![CDATA[<p><a href="https://cdn.jsdelivr.net/gh/GoooForward/picture@main">https://cdn.jsdelivr.net/gh/GoooForward/picture@main</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>记录</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  
+</search>
