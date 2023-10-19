@@ -1,7 +1,6 @@
 ---
 title: 记录利用GitHub+Hexo搭建博客
 date: 2023-10-15
-update: {{ date }}
 tags: hexo
 categories: 记录
 ---
@@ -270,12 +269,6 @@ npm install hexo-deployer-git --save
 ![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230657411.png)
 
 
-
-## 踩坑一
-
-当你兴致勃勃的打开你的博客页面时，大概率要失望了，因为你会发现页面的排版是乱的，并且图片资源加载不出来，但是文字的链接还是在的。
-
-这就是我踩到的第一个坑了，当时一直搞不清楚是什么原因导致的
 
 
 
