@@ -35,6 +35,9 @@
 <meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191626076.png">
 <meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191636116.png">
 <meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191706912.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201545466.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201546103.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201550671.png">
 <meta property="article:published_time" content="2023-10-14T16:00:00.000Z">
 <meta property="article:modified_time" content="2023-10-14T16:00:00.000Z">
 <meta property="article:author" content="tangyuwei">
@@ -233,7 +236,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.6k 字
+          5.7k 字
         
       </span>
     
@@ -244,7 +247,7 @@
         
         
         
-          38 分钟
+          48 分钟
         
       </span>
     
@@ -292,11 +295,16 @@
 <p>随着云服务的发展，现如今通过租的方式来获取一个云服务器也是很容易的。但是云服务终究还是收费的，虽然各家云服务商都有新人优惠，但是小钱也是钱啊，咱这种玩玩而已的blog那自然是能省就省，等以后有钱有闲了再来研究研究这个方案。PlanB暂时放弃。</p>
 <p>那最后咱们选择的方案是啥呢？嘿嘿，就是利用GitHub提供的免费pages功能来搭建这个blog。GitHub给每个人的每个仓库都提供了这个page功能，我认为GitHub的原意应该是方便用户给每个项目搭建一个介绍页面，但是我们正好就可以利用这个功能来搭建一个人博客。</p>
 <p>OK，下面就记录一下我搭建这个blog的过程以及踩过的坑。</p>
-<h1 id="0x01-环境准备"><a href="#0x01-环境准备" class="headerlink" title="0x01 环境准备"></a>0x01 环境准备</h1><h2 id="0-安装git"><a href="#0-安装git" class="headerlink" title="-0- 安装git"></a>-0- 安装git</h2><p>这个太基础了，没装过就STFW（Search The Fucking Web）吧</p>
+<h1 id="0x01-环境准备"><a href="#0x01-环境准备" class="headerlink" title="0x01 环境准备"></a>0x01 环境准备</h1><h2 id="0-安装git"><a href="#0-安装git" class="headerlink" title="-0- 安装git"></a>-0- 安装git</h2><p>这个太基础了，在windows平台下就去Internet下载对应的安装包，一直默认next就好。</p>
+<p>如果是在Ubuntu平台下，就用如下命令安装吧</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">sudo apt <span class="hljs-keyword">install</span> git<br></code></pre></td></tr></table></figure>
+
+
+
 <h2 id="1-创建仓库"><a href="#1-创建仓库" class="headerlink" title="-1- 创建仓库"></a>-1- 创建仓库</h2><p>创建仓库没什么好说的（<del>如果不会就STFW吧</del>），但唯一要注意的是必须要创建公共仓库</p>
 <p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230150149.png" srcset="/blog/img/loading.gif" lazyload></p>
 <blockquote>
-<p> 其实如果不会魔法上网，无法使用Github，也可以使用国内的代码托管平台gitee，gitee同样提供pages的功能，但是必须先通过实名认证</p>
+<p> 其实如果不会魔法上网，无法使用Github，也可以使用国内的代码托管平台gitee，gitee同样提供pages的功能，但是必须先通过实名认证。但是我还是推荐先学会魔法</p>
 </blockquote>
 <h2 id="2-安装Node-js环境"><a href="#2-安装Node-js环境" class="headerlink" title="-2- 安装Node.js环境"></a>-2- 安装Node.js环境</h2><p>什么是Node.js？咱也不知道啊，不知道就STFW呗。wiki上是这样说的：</p>
 <blockquote>
@@ -326,7 +334,7 @@
 <ul>
 <li>简单。hexo可以一键部署，命令简单，不需要复杂的操作，而且有中文的文档，最适合我这种纯小白了</li>
 <li>支持Markdown。Markdown太好用了，YYDS，谁用谁知道</li>
-<li>有许多的主题。颜值即正义，谁不想用好看的皮肤呢，自己又写不出来，直接clone大佬的主题，改个配置文件直接用，美滋滋</li>
+<li>有许多的主题。颜值即正义，谁不想用好看的皮肤呢，自己写不出来，就直接clone大佬的主题，改个配置文件直接用，美滋滋</li>
 </ul>
 <p><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/index.html">Hexo官网</a></p>
 <p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230241456.png" srcset="/blog/img/loading.gif" lazyload></p>
@@ -337,16 +345,19 @@
 <p>hexo-cli中的cli是指command line interface版本，即命令行接口版本</p>
 </blockquote>
 <p>可以通过<code>hexo -v</code>命令来判断是否安装成功，如果看到了版本号就是安装成功</p>
+<hr>
+<p>PS：这里可能会有人安装失败，因为国内复杂的网络环境以及众所周知的GreatWall，如果你的网络无法反复连接到npm服务器，就很可能导致安装失败，可以尝试使用国内镜像的cnpm（请自行搜索使用）。</p>
 <p>OK，到这里搭建的环境就准备好了，下面就可以开始搭建工作了</p>
 <h1 id="0x02-操作步骤"><a href="#0x02-操作步骤" class="headerlink" title="0x02 操作步骤"></a>0x02 操作步骤</h1><h2 id="1-初始化文件夹"><a href="#1-初始化文件夹" class="headerlink" title="-1- 初始化文件夹"></a>-1- 初始化文件夹</h2><p>首先创建一个空文件夹，用于存放blog的文件，然后进入该文件夹中，用<code>hexo init</code>初始化文件夹</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> blog<br><span class="hljs-built_in">cd</span> blog<br>hexo init<br></code></pre></td></tr></table></figure>
 
 <p>此时，hexo会自动clone框架代码，目录结构如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">.<br>├── _config.landscape.yml	<span class="hljs-comment">#主题landscape的配置文件</span><br>├── _config.yml				<span class="hljs-comment">#整个框架的配置文件</span><br>├── node_modules<br>├── package.json<br>├── package-lock.json<br>├── scaffolds<br>├── <span class="hljs-built_in">source</span>					<span class="hljs-comment">#用于存放网页的源文件</span><br>└── themes					<span class="hljs-comment">#用于存放主题的源文件</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">.<br>├── _config.landscape.yml	<span class="hljs-comment">#主题landscape的配置文件</span><br>├── _config.yml				<span class="hljs-comment">#整个网页的配置文件</span><br>├── node_modules<br>├── package.json<br>├── package-lock.json<br>├── scaffolds<br>├── <span class="hljs-built_in">source</span>					<span class="hljs-comment">#用于存放网页的源文件</span><br>└── themes					<span class="hljs-comment">#用于存放主题的源文件</span><br></code></pre></td></tr></table></figure>
 
 
 
-<h2 id="2-预览网页"><a href="#2-预览网页" class="headerlink" title="-2- 预览网页"></a>-2- 预览网页</h2><p>初始化后，我们就已经获得了一个博客页面。使用</p>
+<h2 id="2-配置网页"><a href="#2-配置网页" class="headerlink" title="-2- 配置网页"></a>-2- 配置网页</h2><p>在根目录下有一个_config.yml 文件，它描述了整个hexo博客框架的配置。我们可以在这个文件里修改网页的标题和副标题、是否开启代码高亮功能等等，具体的配置可以根据<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/configuration.html">hexo官方文档</a>，但是这里有一个配置项很重要，留到后面再说。</p>
+<h2 id="3-预览网页"><a href="#3-预览网页" class="headerlink" title="-3- 预览网页"></a>-3- 预览网页</h2><p>其实初始化后，我们就已经获得了一个博客页面。使用</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo server<br><span class="hljs-comment">#or</span><br>hexo s			<span class="hljs-comment">#hexo可以自动补全</span><br></code></pre></td></tr></table></figure>
 
 <p>就可以在本地预览默认的博客样式，按Ctrl+C退出。</p>
@@ -358,7 +369,7 @@
 
 
 
-<h2 id="3-部署网页"><a href="#3-部署网页" class="headerlink" title="-3- 部署网页"></a>-3- 部署网页</h2><p>现在我们已经获得了一个网页，但是还是只能在本地浏览，如何将其放到github中呢？这时就需要编辑配置文件了。</p>
+<h2 id="4-部署网页"><a href="#4-部署网页" class="headerlink" title="-4- 部署网页"></a>-4- 部署网页</h2><p>现在我们已经获得了一个网页，但是还是只能在本地浏览，如何将其放到github中呢？这时就需要编辑配置文件了。</p>
 <p>打开博客根目录下的 _config.yml 文件，找到deploy项，按如下格式修改</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">deploy:</span> <br>  <span class="hljs-attr">type:</span> <span class="hljs-string">git</span> <br>  <span class="hljs-attr">repo:</span> <span class="hljs-string">your-git-link</span><br>  <span class="hljs-attr">branch:</span> <span class="hljs-string">your-pages-branch</span><br></code></pre></td></tr></table></figure>
 
@@ -393,20 +404,45 @@
 <p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230637169.png" srcset="/blog/img/loading.gif" lazyload></p>
 <p>成功部署之后就可以回到之前的pages页面访问你的Blog了</p>
 <p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230657411.png" srcset="/blog/img/loading.gif" lazyload></p>
-<h2 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h2><p>当你兴致勃勃的打开你的博客页面时，大概率要失望了，因为你会发现页面的排版是乱的，并且图片资源加载不出来，但是文字的链接还是在的。</p>
+<h3 id="踩坑一"><a href="#踩坑一" class="headerlink" title="踩坑一"></a>踩坑一</h3><p>当你兴致勃勃的打开你的博客页面时，大概率要失望了，因为你会发现页面的排版是乱的，并且图片资源加载不出来，但是文字的链接还是在的。</p>
 <p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191626076.png" srcset="/blog/img/loading.gif" lazyload></p>
 <p>这就是我踩到的第一个坑了，当时一直搞不清楚是什么原因导致的。使用<code>hexo s</code>在本地预览是正常的，但是部署到github上就会出现排版混乱。使用firefox的F12开发者工具查看网络请求，可以看到资源都没有找到<br><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191636116.png" srcset="/blog/img/loading.gif" lazyload></p>
 <hr>
 <p>经过一番search，终于找到了症结所在。回到本地的blog目录，编辑博客配置文件_config.yml，找到url的配置项，根据注释可以看到我们需要将github的博客页面的网址配置给url（注：url：后面有一个空格），还需要新增根目录项root并配置，其值为<code>/仓库名/</code>，其中前后的斜杠 &#x2F; 不能省。</p>
 <p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191706912.png" srcset="/blog/img/loading.gif" lazyload></p>
 <p>编辑好配置文件之后，重新执行重新生成一次网页资源并部署，执行如下命令</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo cl<br>hexo g<br>hexo d<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo cl		<span class="hljs-comment">#清除项目</span><br>hexo g		<span class="hljs-comment">#重新生成项目</span><br>hexo d		<span class="hljs-comment">#部署项目</span><br></code></pre></td></tr></table></figure>
 
 <p>执行后等待github重新部署网页完成，此时再打开博客网页就会发现和之前预览的页面是一样的了。</p>
-<blockquote>
+<p>其实_config.yml中还有很多和页面相关的配置，包括代码高亮，页面名称等等。</p>
+<h1 id="0x03-主题美化"><a href="#0x03-主题美化" class="headerlink" title="0x03 主题美化"></a>0x03 主题美化</h1><p>虽然hexo自带的landspace主题也还不错，但是还是缺少一些个性。hexo的一大优势就是支持更换主题，我们可以直接在github上clone大佬的开源主题，然后部署到我们自己的博客上，前人栽树，后人乘凉啊。</p>
+<h2 id="1-下载主题"><a href="#1-下载主题" class="headerlink" title="-1- 下载主题"></a>-1- 下载主题</h2><p>Hexo有一个官方的<a target="_blank" rel="noopener" href="https://hexo.io/themes/">主题站</a>，里面收录了很多的优质主题，这些主题提供了预览页面和github仓库主页，这里也推荐三个比较喜欢的主题</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next">NexT</a>  <a target="_blank" rel="noopener" href="https://theme-next.js.org/">预览</a></li>
+</ul>
+<p>​		这可能是最出名的hexo主题之一了，在github有高达8k的star。它的功能很强大，还有很多开发者为其开发了插件，如果不知道选什么主题，用NexT肯定不会是一个错误的选择</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201545466.png" srcset="/blog/img/loading.gif" lazyload alt="image-20231020154556334"></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/fluid-dev/hexo-theme-fluid">Fluid</a> <a target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/">预览</a></li>
+</ul>
+<p>​		一款国人大佬开发的hexo主题，也是我现在使用的主题。这款主题在github上也有6.4K的star，这款主题对国人很友好，不光文档是中文的，连配置文件里的注释都用中文写好了</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201546103.png" srcset="/blog/img/loading.gif" lazyload></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a> <a target="_blank" rel="noopener" href="https://arknights.theme.hexo.yue.zone/">预览</a></li>
+</ul>
+<p>​		老博士应该懂的都懂，有一说一，鹰角的UI设计的确是一流的</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201550671.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>下载主题就直接将主题源文件clone到博客仓库下的themes文件夹，或者下载release的文件，将其解压到themes文件夹中。这里有一个点要注意，也是我踩的第二个坑</p>
+<h3 id="踩坑二"><a href="#踩坑二" class="headerlink" title="踩坑二"></a>踩坑二</h3><p>大多数的主题仓库名都是 <code>hexo-theme-主题名</code>，直接clone下来会自动创建一个以仓库名命名的文件夹，这里一定要看主题的文档，大部分的主题都会要求将这个文件夹重命名为主题名，或者直接在克隆时就给出目标文件夹，例如Arknights主题，其clone命令是</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/Yue-plus/hexo-theme-arknights.git themes/arknights<br></code></pre></td></tr></table></figure>
+
+
+
+<p>当时我就是因为看文档不仔细，忽略了clone命令最后的目标文件夹参数，导致下载的主题死活不生效，留下了粗心大意的泪水。</p>
+<h2 id="2-配置主题"><a href="#2-配置主题" class="headerlink" title="-2- 配置主题"></a>-2- 配置主题</h2><blockquote>
 <p>To be continue</p>
 </blockquote>
-
+<h1 id="END"><a href="#END" class="headerlink" title="-END-"></a>-END-</h1>
                 
               </div>
             
