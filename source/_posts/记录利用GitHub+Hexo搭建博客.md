@@ -28,7 +28,13 @@ OK，下面就记录一下我搭建这个blog的过程以及踩过的坑。
 
 ## -0- 安装git
 
-这个太基础了，没装过就STFW（Search The Fucking Web）吧
+这个太基础了，在windows平台下就去Internet下载对应的安装包，一直默认next就好。
+
+如果是在Ubuntu平台下，就用如下命令安装吧
+
+```
+sudo apt install git
+```
 
 
 
@@ -40,7 +46,7 @@ OK，下面就记录一下我搭建这个blog的过程以及踩过的坑。
 
 
 
->  其实如果不会魔法上网，无法使用Github，也可以使用国内的代码托管平台gitee，gitee同样提供pages的功能，但是必须先通过实名认证
+>  其实如果不会魔法上网，无法使用Github，也可以使用国内的代码托管平台gitee，gitee同样提供pages的功能，但是必须先通过实名认证。但是我还是推荐先学会魔法
 
 
 
@@ -98,7 +104,7 @@ Hexo是一个快速、简洁且高效的博客框架。hexo就相当于一个毛
 
 * 简单。hexo可以一键部署，命令简单，不需要复杂的操作，而且有中文的文档，最适合我这种纯小白了
 * 支持Markdown。Markdown太好用了，YYDS，谁用谁知道
-* 有许多的主题。颜值即正义，谁不想用好看的皮肤呢，自己又写不出来，直接clone大佬的主题，改个配置文件直接用，美滋滋
+* 有许多的主题。颜值即正义，谁不想用好看的皮肤呢，自己写不出来，就直接clone大佬的主题，改个配置文件直接用，美滋滋
 
 [Hexo官网](https://hexo.io/zh-cn/index.html)
 
@@ -113,6 +119,10 @@ npm install hexo-cli -g 		#-g 全局安装
 > hexo-cli中的cli是指command line interface版本，即命令行接口版本
 
 可以通过`hexo -v`命令来判断是否安装成功，如果看到了版本号就是安装成功
+
+---
+
+PS：这里可能会有人安装失败，因为国内复杂的网络环境以及众所周知的GreatWall，如果你的网络无法反复连接到npm服务器，就很可能导致安装失败，可以尝试使用国内镜像的cnpm（请自行搜索使用）。
 
 
 
@@ -139,7 +149,7 @@ hexo init
 ```bash
 .
 ├── _config.landscape.yml	#主题landscape的配置文件
-├── _config.yml				#整个框架的配置文件
+├── _config.yml				#整个网页的配置文件
 ├── node_modules
 ├── package.json
 ├── package-lock.json
@@ -150,9 +160,17 @@ hexo init
 
 
 
-## -2- 预览网页
+## -2- 配置网页
 
-初始化后，我们就已经获得了一个博客页面。使用
+在根目录下有一个_config.yml 文件，它描述了整个hexo博客框架的配置。我们可以在这个文件里修改网页的标题和副标题、是否开启代码高亮功能等等，具体的配置可以根据[hexo官方文档](https://hexo.io/zh-cn/docs/configuration.html)，但是这里有一个配置项很重要，留到后面再说。
+
+
+
+
+
+## -3- 预览网页
+
+其实初始化后，我们就已经获得了一个博客页面。使用
 
 ```bash
 hexo server
@@ -192,7 +210,7 @@ hexo的命令并不多，使用`hexo help`可以看到hexo的命令
 
 
 
-## -3- 部署网页
+## -4- 部署网页
 
 现在我们已经获得了一个网页，但是还是只能在本地浏览，如何将其放到github中呢？这时就需要编辑配置文件了。
 
@@ -271,7 +289,7 @@ npm install hexo-deployer-git --save
 
 
 
-## 踩坑
+### 踩坑一
 
 当你兴致勃勃的打开你的博客页面时，大概率要失望了，因为你会发现页面的排版是乱的，并且图片资源加载不出来，但是文字的链接还是在的。
 
@@ -289,12 +307,76 @@ npm install hexo-deployer-git --save
 编辑好配置文件之后，重新执行重新生成一次网页资源并部署，执行如下命令
 
 ```bash
-hexo cl
-hexo g
-hexo d
+hexo cl		#清除项目
+hexo g		#重新生成项目
+hexo d		#部署项目
 ```
 
 执行后等待github重新部署网页完成，此时再打开博客网页就会发现和之前预览的页面是一样的了。
+
+其实_config.yml中还有很多和页面相关的配置，包括代码高亮，页面名称等等。
+
+
+
+# 0x03 主题美化
+
+虽然hexo自带的landspace主题也还不错，但是还是缺少一些个性。hexo的一大优势就是支持更换主题，我们可以直接在github上clone大佬的开源主题，然后部署到我们自己的博客上，前人栽树，后人乘凉啊。
+
+
+
+## -1- 下载主题
+
+Hexo有一个官方的[主题站](https://hexo.io/themes/)，里面收录了很多的优质主题，这些主题提供了预览页面和github仓库主页，这里也推荐三个比较喜欢的主题
+
+* [NexT](https://github.com/theme-next/hexo-theme-next)  [预览](https://theme-next.js.org/)
+
+​		这可能是最出名的hexo主题之一了，在github有高达8k的star。它的功能很强大，还有很多开发者为其开发了插件，如果不知道选什么主题，用NexT肯定不会是一个错误的选择
+
+![image-20231020154556334](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201545466.png)
+
+* [Fluid](https://github.com/fluid-dev/hexo-theme-fluid) [预览](https://hexo.fluid-dev.com/)
+
+​		一款国人大佬开发的hexo主题，也是我现在使用的主题。这款主题在github上也有6.4K的star，这款主题对国人很友好，不光文档是中文的，连配置文件里的注释都用中文写好了
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201546103.png)
+
+* [Arknights](https://github.com/Yue-plus/hexo-theme-arknights) [预览](https://arknights.theme.hexo.yue.zone/)
+
+​		老博士应该懂的都懂，有一说一，鹰角的UI设计的确是一流的
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201550671.png)
+
+
+
+下载主题就直接将主题源文件clone到博客仓库下的themes文件夹，或者下载release的文件，将其解压到themes文件夹中。这里有一个点要注意，也是我踩的第二个坑
+
+
+
+### 踩坑二
+
+大多数的主题仓库名都是 `hexo-theme-主题名`，直接clone下来会自动创建一个以仓库名命名的文件夹，这里一定要看主题的文档，大部分的主题都会要求将这个文件夹重命名为主题名，或者直接在克隆时就给出目标文件夹，例如Arknights主题，其clone命令是
+
+```bash
+git clone https://github.com/Yue-plus/hexo-theme-arknights.git themes/arknights
+```
+
+
+
+当时我就是因为看文档不仔细，忽略了clone命令最后的目标文件夹参数，导致下载的主题死活不生效，留下了粗心大意的泪水。
+
+
+
+## -2- 配置主题
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -319,3 +401,7 @@ hexo d
 
 
 > To be continue
+
+
+
+# -END-
