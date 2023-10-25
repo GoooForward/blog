@@ -40,6 +40,7 @@
 <meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201550671.png">
 <meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250940950.png">
 <meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250944880.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310251113339.png">
 <meta property="article:published_time" content="2023-10-14T16:00:00.000Z">
 <meta property="article:modified_time" content="2023-10-14T16:00:00.000Z">
 <meta property="article:author" content="tangyuwei">
@@ -238,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          7k 字
+          7.3k 字
         
       </span>
     
@@ -249,7 +250,7 @@
         
         
         
-          59 分钟
+          61 分钟
         
       </span>
     
@@ -450,7 +451,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo cl<br>hexo g<br>hexo s<br>hexo d<br></code></pre></td></tr></table></figure>
 
 <p>至此，大致的配置就完成了，就可以打开你的博客网页查看效果了。</p>
-<h1 id="0x04-使用方法"><a href="#0x04-使用方法" class="headerlink" title="0x04 使用方法"></a>0x04 使用方法</h1><h2 id="1-新建博文"><a href="#1-新建博文" class="headerlink" title="-1- 新建博文"></a>-1- 新建博文</h2><p>hexo 的博文的源格式是.md，其文件位置在&#x2F;source&#x2F;_posts&#x2F;下，你可以通过在这里新建md文件的形式来创建博文，也可以使用hexo的命令来新建博文，命令是</p>
+<h1 id="0x04-使用方法"><a href="#0x04-使用方法" class="headerlink" title="0x04 使用方法"></a>0x04 使用方法</h1><h2 id="1-管理博文"><a href="#1-管理博文" class="headerlink" title="-1- 管理博文"></a>-1- 管理博文</h2><p>hexo 的博文的源格式是.md，其文件位置在&#x2F;source&#x2F;_posts&#x2F;下，你可以通过在这里新建md文件的形式来创建博文，也可以使用hexo的命令来新建博文，命令是</p>
 <figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haxe">hexo <span class="hljs-keyword">new</span> <span class="hljs-type">your_title</span>		<span class="hljs-meta">#注：title不包含.md后缀</span><br></code></pre></td></tr></table></figure>
 
 <p>使用该命令后就会在&#x2F;source&#x2F;_posts&#x2F;下创建一个your_title.md的文件，之后就可以在该文件内开始创作了</p>
@@ -465,7 +466,7 @@
 <p>来到博客的根目录，使用<code>git init</code>将该文件夹初始化为一个git仓库，然后使用<code>git add .</code>将所以文件暂存，然后使用<code>git commit</code>生成一笔提交。</p>
 </li>
 <li><p>添加远程服务器</p>
-<p>使用<code>git remote add origin [url]</code> 添加新的远程，其命名为origin（可以改）。</p>
+<p>使用<code>git remote add origin [url]</code> 添加新的远程，其命名为origin（可以改），其url就是仓库的地址，ssh和http均可。</p>
 <p>然后pull同步一下，使用<code>git pull origin source --rebase</code> ,其中source是用于存放源文件的分支名，–rebase是指用rebase的方式处理冲突。</p>
 </li>
 <li><p>推送到远程服务器</p>
@@ -473,6 +474,11 @@
 </li>
 </ul>
 <p>成功之后就能在source分支中看到博客源文件了。</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310251113339.png" srcset="/blog/img/loading.gif" lazyload></p>
+<blockquote>
+<p>这里需要注意的一点是，由于使用github部署网页必须使用公共仓库，因此将源代码推送到公共仓库的source分支后就意味着你的博客完全开源了，对于部分主题的博客上锁功能就失去意义了，如果你希望你的博客不完全开源的话，可以新建一个私有仓库，在添加远程服务器者一步中，将url替换为你的私有仓库的地址，就可以将代码推送到私有仓库了。</p>
+<p>其实也可以使用子模块等其他办法，我觉得更麻烦，就不推荐了。</p>
+</blockquote>
 <h1 id="END"><a href="#END" class="headerlink" title="-END-"></a>-END-</h1>
                 
               </div>
@@ -562,12 +568,6 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
-                    
-                      <a href="/blog/2023/10/23/%E8%AE%B0%E5%BD%95%E5%88%A9%E7%94%A8Typora+GitHub+CDN/" title="">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
                     
                   </article>
                   <article class="post-next col-6">
