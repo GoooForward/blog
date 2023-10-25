@@ -70,8 +70,158 @@ categories: 记录
 
 
 
-https://cdn.jsdelivr.net/gh/GoooForward/picture@main
+## -4- PicGo
+
+OK，现在已经选好了图床和编辑器，还差一个工具将图片上传到图床上，这个工具就是PicGo。为什么选择PicGo呢？那是因为Typora官方支持的工具就是它，当然，PicGo也是足够好用的，并且它是开源的，在Win、Linux、MacOS都可以使用，支持的图床也足够丰富，还有插件可以扩展的它功能，所以大家几乎都使用它。
+
+[PicGo GitHub页面](https://github.com/Molunerfinn/PicGo)
+
+[PicGo 使用指南](https://picgo.github.io/PicGo-Doc/)
 
 
+
+# 0x02 配置过程
+
+以下过程全程以Ubuntu 22.04为例,其他系统大同小异。
+
+
+
+## -1- 安装Typora
+
+首先，需要获取安装包，在linux环境下是deb格式的，使用如下命令对安装进行解包安装
+
+```
+sudo dpkg -i Typora_Linux_xxxx_amd64.deb 
+```
+
+输入密码，安装完成后，键入`typora`就可以打开typora的界面了
+
+
+
+## -2- 准备GitHub仓库
+
+打开GitHub新建一个仓库，这个仓库和之前部署博客的仓库一样，必须选择公共仓库。
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230150149.png)
+
+ok，创建仓库完成后，图床就准备好了。It‘s too simple。
+
+### 创建token
+
+我们这里再顺手创建一个token，这个token就相当于github仓库的密码，可以用于访问你的仓库，之后配置picgo时会用到。
+
+首先来到github的setting页面，选择导航栏最下方的Developer setting（开发者设置）
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025202653090.png)
+
+然后选择Persional access tokens -> Tokens(classic)
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025202845916.png)
+
+再然后选择上方的Generate new tokens -> Generate new tokens(classic)
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025203039991.png)
+
+输入你的账户密码后会来到如下界面，这里的Note是用来给你的token取名字的，分别区分管理，Expiration是有效时间，时间越久风险越高，自行决定，不建议选择无限期。下面的权限只勾选上repo就行了，然后滑动到最底部，选择Generate token。
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025203300229.png)
+
+此时你就获得了一个token，它仅会以明文的形式展示这一次，当你关闭此页面你就再也没办法知道它是什么了，所以这里将它复制保存下来，之后配置PicGo时会用到。
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025203722658.png)
+
+
+
+## -3- 安装PicGo
+
+打开[PicGo GitHub页面](https://github.com/Molunerfinn/PicGo)，找到它的release
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025192018530.png)
+
+
+
+第一次来到这个界面我蒙了，因为我不知道下载哪一个，通常来说，linux的软件安装包是deb格式的拓展名，或者直接是打包好的二进制可执行程序，又或者是纯源码通过编译来安装。但是这里我找不到下载哪一个，通过一番搜索，发现这里有两个是linux下的安装包，一个扩展名为snap，这种安装包是基于snap这种新的包管理方式。对于这种包管理方式我也没接触过，浅浅地了解了一下，其优势是安全以及依赖自包含，其文件内包含了全部依赖的库。AppImage也是一种性质类似的安装包，其本质是一个压缩文件，其内也包含了全部的所需的运行库，因此安装这两个安装包不需要安装其他依赖。这里我下载AppImage，因为安装.snap安装包需要使用snap包管理工具，我当时不会。
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025192612648.png)
+
+
+
+下载完成后，赋予安装包可执行权限，使用命令
+
+```
+sudo chmod +x PicGo-2.3.1.AppImage
+```
+
+或者右键 -> 属性 -> 权限 -> 勾选运行执行权限
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025194941228.png)
+
+然后在终端直接`./PicGo-2.3.1.AppImage` 执行该安装包，发现会报错如下
+
+```
+dlopen(): error loading libfuse.so.2
+
+AppImages require FUSE to run. 
+You might still be able to extract the contents of this AppImage 
+if you run it with the --appimage-extract option. 
+See https://github.com/AppImage/AppImageKit/wiki/FUSE 
+for more information
+```
+
+意思是我们执行该安装包缺少FUSE，但是我们可以使用`--appimage-extract`这个选项来提取该安装包。于是我们的命令就变成了
+
+```
+./PicGo-2.3.1.AppImage --appimage-extract
+```
+
+回车之后，安装包的文件就被提取出来了，生成了一个名为`squashfs-root`的文件夹，这个文件夹里就有我们要的picgo可执行文件了,在该目录下执行`./picgo`可以测试是否能打开PicGo，打开之后会在桌面生成一个小图标，看到这个图标就说明安装PicGo完成了。
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025200122451.png)
+
+>PicGo有两个版本，一个是带图像界面的，可以通过UI交互的，也就是当前下载的这个。还有一个仅保留核心功能，通过命令行交互的PicGo-Core，PicGo其实也是对PicGo-Core的封装，但是增加了图像界面，更易用，而PicGo-Core使用起来更无感，但是使用门槛更高。大家可以根据使用习惯自行选择。
+>
+>[PicGo-Core GitHub界面](https://github.com/PicGo/PicGo-Core)
+
+
+
+## -4- 配置PicGo
+
+打开PicGo的主界面，先选择图床设置，再选择GitHub，然后编辑配置，就来到了图床配置界面。下面分别来讲解各项
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025201525131.png)
+
+* 图床配置名：该配置的名称，随便取就行
+
+* 设定仓库名：格式为`GitHub用户名/图床仓库名`，按照创建创建仓库时取得名字来就行
+
+* 设定分支名：上传到仓库的哪个分支上，没修改的话默认是main
+
+* 设定token：相当于密码，使用之前创建GitHub仓库时顺便创建的token
+
+* 设定存储路径：想要图片存放在哪个文件夹下，不填默认是根目录，注前面不能有斜杠/，最后的斜杠/不能省略
+
+* 设定自定义域名：此项不填，则你上传图片后获取的url是`https://raw.githubusercontent.com/用户名/仓库名/分支名/设定存储路径/文件名`，填写此项会替换掉前面的`https://raw.githubusercontent.com/用户名/仓库名/分支名`部分。
+
+  通过这个功能，我们可以使用CDN加速，便于我们在国内访问GitHub图床。这里推荐jsDriver这个免费的CDN，因此这里的格式为`https://cdn.jsdelivr.net/gh/用户名/仓库名@分支名`
+
+
+
+### CDN加速
+
+CDN（**C**ontent **D**istribution **N**etwork），中文全称是内容分发网络，它的本质是部署多个服务器，用户请求资源时通过最近的服务器来分发资源，降低主服务器的压力，同时也能提升用户的体验。最开始我是没有配置CDN的，因为我都是开着魔法上网的，没有意识到国内网络访问github慢这个问题，直到我想看看博客的手机端的观看体验才发现图片根本加载不出来，这才意识到想要正常在国内访问github图床，就必须配置CDN。
+
+好在有免费的CDN服务可以白嫖，jsDeliver是一款开源的免费公共CDN，它可以为国内用户加速github的开源项目，所以也可以用来帮助我们加速我们的开源github图床。
+
+但是jsDeliver目前在国内的备案以及被撤销了，这个CDN的前途目前还不明，这也是这套方案中最薄弱的一环，目前还能正常使用，但是未来的监管如何，现在就无从知晓了。
+
+
+
+> 对于jsDeliver的过往可以看看这篇博文：[jsDelivr域名遭到DNS污染](https://luotianyi.vc/6295.html)
+
+>  jsDelivr有很多的CDN赞助商共同支持，每一个服务商都会有自己的专有子域名，通过替换访问资源到其他的二级域名可以恢复访问。但这些CDN普遍速度一般，而且前途并不明朗，建议仅供临时使用。
+>
+> > CloudFlare：`test1.jsdelivr.net`
+> > CloudFlare：`testingcf.jsdelivr.net`
+> > Fastly：`fastly.jsdelivr.net`
+> > GCORE：`gcore.jsdelivr.net`
 
 # -END-
