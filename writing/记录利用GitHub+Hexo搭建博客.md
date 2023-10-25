@@ -1,13 +1,14 @@
 ---
 title: 记录利用GitHub+Hexo搭建博客
 date: 2023-10-15
+update: {{ date }}
 tags: hexo
 categories: 记录
 ---
 
 # 0x00 起因
 
-之前在Internet冲浪时经常会搜到一些别人写的博客，通常大家写博客往往是通过某乎、某某DN这样的平台，在平台之上创作。但是有时也能搜到一些个人博客，这些博客往往网页清爽，纯净无广告，有些博客还有些不错特效，抛开文章内容不谈，仅仅是如此清爽的页面就给了人良好的阅读体验。所以我便也想着整一个，这样就可以把自己写的一些垃圾扔在上面了，咱说整就整。
+之前在Internet冲浪时经常会搜到一些别人写的博客，通常国内普通人写博客往往是在平台之上创作，通过某乎、某某DN这样的平台。但是有时也能搜到一些个人博客，这些博客往往网页清爽，纯净无广告，有些博客还有些不错特效，抛开文章内容不谈，仅仅是如此清爽的页面就给了人良好的阅读体验。所以我便也想着整一个，这样就可以把自己写的一些垃圾扔在上面了，咱说整就整。
 
 搭建一个博客的方法有很多，但是对于我这种纯小白来说，使用现成的方案显然是最方便滴。
 
@@ -27,7 +28,13 @@ OK，下面就记录一下我搭建这个blog的过程以及踩过的坑。
 
 ## -0- 安装git
 
-这个太基础了，没装过就STFW（Search The Fucking Web）吧
+这个太基础了，在windows平台下就去Internet下载对应的安装包，一直默认next就好。
+
+如果是在Ubuntu平台下，就用如下命令安装吧
+
+```
+sudo apt install git
+```
 
 
 
@@ -39,7 +46,7 @@ OK，下面就记录一下我搭建这个blog的过程以及踩过的坑。
 
 
 
->  其实如果不会魔法上网，无法使用Github，也可以使用国内的代码托管平台gitee，gitee同样提供pages的功能，但是必须先通过实名认证
+>  其实如果不会魔法上网，无法使用Github，也可以使用国内的代码托管平台gitee，gitee同样提供pages的功能，但是必须先通过实名认证。但是我还是推荐先学会魔法
 
 
 
@@ -97,7 +104,7 @@ Hexo是一个快速、简洁且高效的博客框架。hexo就相当于一个毛
 
 * 简单。hexo可以一键部署，命令简单，不需要复杂的操作，而且有中文的文档，最适合我这种纯小白了
 * 支持Markdown。Markdown太好用了，YYDS，谁用谁知道
-* 有许多的主题。颜值即正义，谁不想用好看的皮肤呢，自己又写不出来，直接clone大佬的主题，改个配置文件直接用，美滋滋
+* 有许多的主题。颜值即正义，谁不想用好看的皮肤呢，自己写不出来，就直接clone大佬的主题，改个配置文件直接用，美滋滋
 
 [Hexo官网](https://hexo.io/zh-cn/index.html)
 
@@ -112,6 +119,10 @@ npm install hexo-cli -g 		#-g 全局安装
 > hexo-cli中的cli是指command line interface版本，即命令行接口版本
 
 可以通过`hexo -v`命令来判断是否安装成功，如果看到了版本号就是安装成功
+
+---
+
+PS：这里可能会有人安装失败，因为国内复杂的网络环境以及众所周知的GreatWall，如果你的网络无法反复连接到npm服务器，就很可能导致安装失败，可以尝试使用国内镜像的cnpm（请自行搜索使用）。
 
 
 
@@ -138,7 +149,7 @@ hexo init
 ```bash
 .
 ├── _config.landscape.yml	#主题landscape的配置文件
-├── _config.yml				#整个框架的配置文件
+├── _config.yml				#整个网页的配置文件
 ├── node_modules
 ├── package.json
 ├── package-lock.json
@@ -149,9 +160,15 @@ hexo init
 
 
 
-## -2- 预览网页
+## -2- 配置网页
 
-初始化后，我们就已经获得了一个博客页面。使用
+在根目录下有一个_config.yml 文件，它描述了整个hexo博客框架的配置。我们可以在这个文件里修改网页的标题和副标题、是否开启代码高亮功能等等，具体的配置可以根据[hexo官方文档](https://hexo.io/zh-cn/docs/configuration.html)，但是这里有一个url配置项很重要，留到后面再说。
+
+
+
+## -3- 预览网页
+
+其实初始化后，我们就已经获得了一个博客页面。使用
 
 ```bash
 hexo server
@@ -165,9 +182,7 @@ hexo s			#hexo可以自动补全
 
 
 
-使用`hexo cl`可以清除掉hexo生成的静态网页，类似于make clean。
-
-清除之后通过`hexo g`可以重新生成网页。
+使用`hexo cl`可以清除掉hexo生成的静态网页，清除之后通过`hexo g`可以重新生成网页。
 
 
 
@@ -191,7 +206,7 @@ hexo的命令并不多，使用`hexo help`可以看到hexo的命令
 
 
 
-## -3- 部署网页
+## -4- 部署网页
 
 现在我们已经获得了一个网页，但是还是只能在本地浏览，如何将其放到github中呢？这时就需要编辑配置文件了。
 
@@ -270,24 +285,165 @@ npm install hexo-deployer-git --save
 
 
 
+### 踩坑一
+
+当你兴致勃勃的打开你的博客页面时，大概率要失望了，因为你会发现页面的排版是乱的，并且图片资源加载不出来，但是文字的链接还是在的。
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191626076.png)
+
+这就是我踩到的第一个坑了，当时一直搞不清楚是什么原因导致的。使用`hexo s`在本地预览是正常的，但是部署到github上就会出现排版混乱。使用firefox的F12开发者工具查看网络请求，可以看到资源都没有找到
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191636116.png)
+
+---
+
+经过一番search，终于找到了症结所在。回到本地的blog目录，编辑博客配置文件_config.yml，找到url的配置项，根据注释可以看到我们需要将github的博客页面的网址配置给url（注：url：后面有一个空格），还需要新增根目录项root并配置，其值为`/仓库名/`，其中前后的斜杠 / 不能省。
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191706912.png)
+
+编辑好配置文件之后，重新执行重新生成一次网页资源并部署，执行如下命令
+
+```bash
+hexo cl		#清除项目
+hexo g		#重新生成项目
+hexo d		#部署项目
+```
+
+执行后等待github重新部署网页完成，此时再打开博客网页就会发现和之前预览的页面是一样的了。
+
+其实_config.yml中还有很多和页面相关的配置，包括代码高亮，页面名称等等，可以自行根据官方文档进行配置。
 
 
 
+# 0x03 主题美化
+
+虽然hexo自带的landspace主题也还不错，但是还是缺少一些个性。hexo的一大优势就是支持更换主题，我们可以直接在github上clone大佬的开源主题，然后部署到我们自己的博客上，前人栽树，后人乘凉啊。
 
 
 
+## -1- 下载主题
+
+Hexo有一个官方的[主题站](https://hexo.io/themes/)，里面收录了很多的优质主题，这些主题提供了预览页面和github仓库主页，这里也推荐三个比较喜欢的主题
+
+* [NexT](https://github.com/theme-next/hexo-theme-next)  [预览](https://theme-next.js.org/)
+
+​		这可能是最出名的hexo主题之一了，在github有高达8k的star。它的功能很强大，还有很多开发者为其开发了插件，如果不知道选什么主题，用NexT肯定不会是一个错误的选择
+
+![image-20231020154556334](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201545466.png)
+
+* [Fluid](https://github.com/fluid-dev/hexo-theme-fluid) [预览](https://hexo.fluid-dev.com/)
+
+​		一款国人大佬开发的hexo主题，也是我现在使用的主题。这款主题在github上也有6.4K的star，这款主题对国人很友好，不光文档是中文的，连配置文件里的注释都用中文写好了
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201546103.png)
+
+* [Arknights](https://github.com/Yue-plus/hexo-theme-arknights) [预览](https://arknights.theme.hexo.yue.zone/)
+
+​		老博士应该懂的都懂，有一说一，鹰角的UI设计的确是一流的
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201550671.png)
 
 
 
+下载主题就直接将主题源文件clone到博客仓库下的themes文件夹，或者下载release的文件，将其解压到themes文件夹中。这里有一个点要注意，也是我踩的第二个坑
 
 
 
+### 踩坑二
+
+大多数的主题仓库名都是 `hexo-theme-主题名`，直接clone下来会自动创建一个以仓库名命名的文件夹，这里一定要看主题的文档，大部分的主题都会要求将这个文件夹重命名为主题名，或者直接在克隆时就给出目标文件夹，例如Arknights主题，其clone命令是
+
+```bash
+git clone https://github.com/Yue-plus/hexo-theme-arknights.git themes/arknights
+```
 
 
 
+当时我就是因为看文档不仔细，忽略了clone命令最后的目标文件夹参数，导致下载的主题死活不生效，留下了粗心大意的泪水。
 
 
 
+## -2- 配置主题
+
+这部分的配置主要根据主题的文档来进行配置，不同的主题的配置项差异很大，这里需要注意的是要区分 **主题的配置文件** 和 **hexo网页框架的配置文件**，它们的名称都是_config.yml，在根目录下的是hexo网页的配置文件，在主题文件夹下的是主题的配置文件。在Hexo 5.0.0 版本以上，主题配置会优先使用博客目录下的`_config.主题名.yml` 文件。
+
+使用`hexo version`可以查看hexo版本
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250940950.png)
 
 
-> To be continue
+
+主题配置完成之后，还要回到hexo网页的配置文件中修改theme的配置项
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250944880.png)
+
+
+
+都配置好后就可以重新生成、预览、部署了，当然，最好先清除一下。
+
+```bash
+hexo cl
+hexo g
+hexo s
+hexo d
+```
+
+至此，大致的配置就完成了，就可以打开你的博客网页查看效果了。
+
+
+
+# 0x04 使用方法
+
+
+
+## -1- 管理博文
+
+hexo 的博文的源格式是.md，其文件位置在/source/_posts/下，你可以通过在这里新建md文件的形式来创建博文，也可以使用hexo的命令来新建博文，命令是
+
+```
+hexo new your_title		#注：title不包含.md后缀
+```
+
+使用该命令后就会在/source/_posts/下创建一个your_title.md的文件，之后就可以在该文件内开始创作了
+
+同理，如果你想删除一篇博文，也只需要来到该文件夹下，删除该博文的md文件 或者 仅仅是把该博文的md文件移走即可
+
+
+
+## -2- 源文件同步
+
+此前我们使用`hexo d`只会将网页的静态资源上传到github上，也就是source文件夹下的那些文件，但是如果你想对网页进行一些修改，缺少源文件是做不到的。为了在不同的电脑上都可以对网页作出修改，我们需要将源文件同步。
+
+还记得前面在部署时推荐创建两个分支吗，其中的source分支就是用来存储我们的源文件的。
+
+* 处理主题文件夹
+
+  如果主题文件夹是通过git clone的方式下载下来的话，在主题的文件夹里会有一个.git的隐藏文件夹，我们需要删除该文件夹，或者将其改为其他名称，我将其重命名为_git。这是因为通过git clone方式下载的文件夹会被视为一个git仓库，在我们暂存整个博客根目录时，git会检测到仓库的嵌套，会自动忽略被嵌套的子仓库，导致最终上传的github的源文件中缺少了主题的源文件，这样的话，我们在其他的机器上clone源文件就获取不到完整的代码，还需要重新clone一次主题的源文件，这显然是更麻烦的，还可能会导致你的主题配置文件丢失。因此，我们通过改名或删除.git文件夹的方式来避免git将主题文件夹识别为一个git仓库。
+
+* 初始化根目录
+
+  来到博客的根目录，使用`git init`将该文件夹初始化为一个git仓库，然后使用`git add .`将所以文件暂存，然后使用`git commit`生成一笔提交。
+
+* 添加远程服务器
+
+  使用`git remote add origin [url]` 添加新的远程，其命名为origin（可以改），其url就是仓库的地址，ssh和http均可。
+
+  然后pull同步一下，使用`git pull origin source --rebase` ,其中source是用于存放源文件的分支名，--rebase是指用rebase的方式处理冲突。
+
+* 推送到远程服务器
+
+  使用命令`git push origin HEAD:source`来推送到远程服务器的source分支。
+
+成功之后就能在source分支中看到博客源文件了。
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310251113339.png)
+
+
+
+> 这里需要注意的一点是，由于使用github部署网页必须使用公共仓库，因此将源代码推送到公共仓库的source分支后就意味着你的博客完全开源了，对于部分主题的博客上锁功能就失去意义了，如果你希望你的博客不完全开源的话，可以新建一个私有仓库，在添加远程服务器者一步中，将url替换为你的私有仓库的地址，就可以将代码推送到私有仓库了。
+>
+> 其实也可以使用子模块等其他办法，我觉得更麻烦，就不推荐了。
+
+
+
+# -END-
