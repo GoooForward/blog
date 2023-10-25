@@ -162,9 +162,7 @@ hexo init
 
 ## -2- 配置网页
 
-在根目录下有一个_config.yml 文件，它描述了整个hexo博客框架的配置。我们可以在这个文件里修改网页的标题和副标题、是否开启代码高亮功能等等，具体的配置可以根据[hexo官方文档](https://hexo.io/zh-cn/docs/configuration.html)，但是这里有一个配置项很重要，留到后面再说。
-
-
+在根目录下有一个_config.yml 文件，它描述了整个hexo博客框架的配置。我们可以在这个文件里修改网页的标题和副标题、是否开启代码高亮功能等等，具体的配置可以根据[hexo官方文档](https://hexo.io/zh-cn/docs/configuration.html)，但是这里有一个url配置项很重要，留到后面再说。
 
 
 
@@ -184,9 +182,7 @@ hexo s			#hexo可以自动补全
 
 
 
-使用`hexo cl`可以清除掉hexo生成的静态网页，类似于make clean。
-
-清除之后通过`hexo g`可以重新生成网页。
+使用`hexo cl`可以清除掉hexo生成的静态网页，清除之后通过`hexo g`可以重新生成网页。
 
 
 
@@ -296,6 +292,7 @@ npm install hexo-deployer-git --save
 ![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191626076.png)
 
 这就是我踩到的第一个坑了，当时一直搞不清楚是什么原因导致的。使用`hexo s`在本地预览是正常的，但是部署到github上就会出现排版混乱。使用firefox的F12开发者工具查看网络请求，可以看到资源都没有找到
+
 ![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191636116.png)
 
 ---
@@ -314,7 +311,7 @@ hexo d		#部署项目
 
 执行后等待github重新部署网页完成，此时再打开博客网页就会发现和之前预览的页面是一样的了。
 
-其实_config.yml中还有很多和页面相关的配置，包括代码高亮，页面名称等等。
+其实_config.yml中还有很多和页面相关的配置，包括代码高亮，页面名称等等，可以自行根据官方文档进行配置。
 
 
 
@@ -368,39 +365,84 @@ git clone https://github.com/Yue-plus/hexo-theme-arknights.git themes/arknights
 
 ## -2- 配置主题
 
+这部分的配置主要根据主题的文档来进行配置，不同的主题的配置项差异很大，这里需要注意的是要区分 **主题的配置文件** 和 **hexo网页框架的配置文件**，它们的名称都是_config.yml，在根目录下的是hexo网页的配置文件，在主题文件夹下的是主题的配置文件。在Hexo 5.0.0 版本以上，主题配置会优先使用博客目录下的`_config.主题名.yml` 文件。
+
+使用`hexo version`可以查看hexo版本
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250940950.png)
 
 
 
+主题配置完成之后，还要回到hexo网页的配置文件中修改theme的配置项
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250944880.png)
 
 
 
+都配置好后就可以重新生成、预览、部署了，当然，最好先清除一下。
+
+```bash
+hexo cl
+hexo g
+hexo s
+hexo d
+```
+
+至此，大致的配置就完成了，就可以打开你的博客网页查看效果了。
 
 
 
+# 0x04 使用方法
 
 
 
+## -1- 管理博文
+
+hexo 的博文的源格式是.md，其文件位置在/source/_posts/下，你可以通过在这里新建md文件的形式来创建博文，也可以使用hexo的命令来新建博文，命令是
+
+```
+hexo new your_title		#注：title不包含.md后缀
+```
+
+使用该命令后就会在/source/_posts/下创建一个your_title.md的文件，之后就可以在该文件内开始创作了
+
+同理，如果你想删除一篇博文，也只需要来到该文件夹下，删除该博文的md文件 或者 仅仅是把该博文的md文件移走即可
 
 
 
+## -2- 源文件同步
+
+此前我们使用`hexo d`只会将网页的静态资源上传到github上，也就是source文件夹下的那些文件，但是如果你想对网页进行一些修改，缺少源文件是做不到的。为了在不同的电脑上都可以对网页作出修改，我们需要将源文件同步。
+
+还记得前面在部署时推荐创建两个分支吗，其中的source分支就是用来存储我们的源文件的。
+
+* 处理主题文件夹
+
+  如果主题文件夹是通过git clone的方式下载下来的话，在主题的文件夹里会有一个.git的隐藏文件夹，我们需要删除该文件夹，或者将其改为其他名称，我将其重命名为_git。这是因为通过git clone方式下载的文件夹会被视为一个git仓库，在我们暂存整个博客根目录时，git会检测到仓库的嵌套，会自动忽略被嵌套的子仓库，导致最终上传的github的源文件中缺少了主题的源文件，这样的话，我们在其他的机器上clone源文件就获取不到完整的代码，还需要重新clone一次主题的源文件，这显然是更麻烦的，还可能会导致你的主题配置文件丢失。因此，我们通过改名或删除.git文件夹的方式来避免git将主题文件夹识别为一个git仓库。
+
+* 初始化根目录
+
+  来到博客的根目录，使用`git init`将该文件夹初始化为一个git仓库，然后使用`git add .`将所以文件暂存，然后使用`git commit`生成一笔提交。
+
+* 添加远程服务器
+
+  使用`git remote add origin [url]` 添加新的远程，其命名为origin（可以改），其url就是仓库的地址，ssh和http均可。
+
+  然后pull同步一下，使用`git pull origin source --rebase` ,其中source是用于存放源文件的分支名，--rebase是指用rebase的方式处理冲突。
+
+* 推送到远程服务器
+
+  使用命令`git push origin HEAD:source`来推送到远程服务器的source分支。
+
+成功之后就能在source分支中看到博客源文件了。
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310251113339.png)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-> To be continue
+> 这里需要注意的一点是，由于使用github部署网页必须使用公共仓库，因此将源代码推送到公共仓库的source分支后就意味着你的博客完全开源了，对于部分主题的博客上锁功能就失去意义了，如果你希望你的博客不完全开源的话，可以新建一个私有仓库，在添加远程服务器者一步中，将url替换为你的私有仓库的地址，就可以将代码推送到私有仓库了。
+>
+> 其实也可以使用子模块等其他办法，我觉得更麻烦，就不推荐了。
 
 
 
