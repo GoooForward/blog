@@ -38,6 +38,8 @@
 <meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201545466.png">
 <meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201546103.png">
 <meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201550671.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250940950.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250944880.png">
 <meta property="article:published_time" content="2023-10-14T16:00:00.000Z">
 <meta property="article:modified_time" content="2023-10-14T16:00:00.000Z">
 <meta property="article:author" content="tangyuwei">
@@ -236,7 +238,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.7k 字
+          7k 字
         
       </span>
     
@@ -247,7 +249,7 @@
         
         
         
-          48 分钟
+          59 分钟
         
       </span>
     
@@ -356,14 +358,13 @@
 
 
 
-<h2 id="2-配置网页"><a href="#2-配置网页" class="headerlink" title="-2- 配置网页"></a>-2- 配置网页</h2><p>在根目录下有一个_config.yml 文件，它描述了整个hexo博客框架的配置。我们可以在这个文件里修改网页的标题和副标题、是否开启代码高亮功能等等，具体的配置可以根据<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/configuration.html">hexo官方文档</a>，但是这里有一个配置项很重要，留到后面再说。</p>
+<h2 id="2-配置网页"><a href="#2-配置网页" class="headerlink" title="-2- 配置网页"></a>-2- 配置网页</h2><p>在根目录下有一个_config.yml 文件，它描述了整个hexo博客框架的配置。我们可以在这个文件里修改网页的标题和副标题、是否开启代码高亮功能等等，具体的配置可以根据<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/configuration.html">hexo官方文档</a>，但是这里有一个url配置项很重要，留到后面再说。</p>
 <h2 id="3-预览网页"><a href="#3-预览网页" class="headerlink" title="-3- 预览网页"></a>-3- 预览网页</h2><p>其实初始化后，我们就已经获得了一个博客页面。使用</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo server<br><span class="hljs-comment">#or</span><br>hexo s			<span class="hljs-comment">#hexo可以自动补全</span><br></code></pre></td></tr></table></figure>
 
 <p>就可以在本地预览默认的博客样式，按Ctrl+C退出。</p>
 <p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230309151.png" srcset="/blog/img/loading.gif" lazyload></p>
-<p>使用<code>hexo cl</code>可以清除掉hexo生成的静态网页，类似于make clean。</p>
-<p>清除之后通过<code>hexo g</code>可以重新生成网页。</p>
+<p>使用<code>hexo cl</code>可以清除掉hexo生成的静态网页，清除之后通过<code>hexo g</code>可以重新生成网页。</p>
 <p>hexo的命令并不多，使用<code>hexo help</code>可以看到hexo的命令</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">clean     Remove generated files and cache.                                   <br>config    Get or <span class="hljs-built_in">set</span> configurations.                                          <br>deploy    Deploy your website.                                                <br>generate  Generate static files.<br><span class="hljs-built_in">help</span>      Get <span class="hljs-built_in">help</span> on a <span class="hljs-built_in">command</span>.<br>init      Create a new Hexo folder.<br>list      List the information of the site<br>migrate   Migrate your site from other system to Hexo.<br>new       Create a new post.<br>publish   Moves a draft post from _drafts to _posts folder.<br>render    Render files with renderer plugins.<br>server    Start the server.<br>version   Display version information.<br></code></pre></td></tr></table></figure>
 
@@ -406,7 +407,8 @@
 <p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230657411.png" srcset="/blog/img/loading.gif" lazyload></p>
 <h3 id="踩坑一"><a href="#踩坑一" class="headerlink" title="踩坑一"></a>踩坑一</h3><p>当你兴致勃勃的打开你的博客页面时，大概率要失望了，因为你会发现页面的排版是乱的，并且图片资源加载不出来，但是文字的链接还是在的。</p>
 <p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191626076.png" srcset="/blog/img/loading.gif" lazyload></p>
-<p>这就是我踩到的第一个坑了，当时一直搞不清楚是什么原因导致的。使用<code>hexo s</code>在本地预览是正常的，但是部署到github上就会出现排版混乱。使用firefox的F12开发者工具查看网络请求，可以看到资源都没有找到<br><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191636116.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>这就是我踩到的第一个坑了，当时一直搞不清楚是什么原因导致的。使用<code>hexo s</code>在本地预览是正常的，但是部署到github上就会出现排版混乱。使用firefox的F12开发者工具查看网络请求，可以看到资源都没有找到</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191636116.png" srcset="/blog/img/loading.gif" lazyload></p>
 <hr>
 <p>经过一番search，终于找到了症结所在。回到本地的blog目录，编辑博客配置文件_config.yml，找到url的配置项，根据注释可以看到我们需要将github的博客页面的网址配置给url（注：url：后面有一个空格），还需要新增根目录项root并配置，其值为<code>/仓库名/</code>，其中前后的斜杠 &#x2F; 不能省。</p>
 <p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191706912.png" srcset="/blog/img/loading.gif" lazyload></p>
@@ -414,7 +416,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo cl		<span class="hljs-comment">#清除项目</span><br>hexo g		<span class="hljs-comment">#重新生成项目</span><br>hexo d		<span class="hljs-comment">#部署项目</span><br></code></pre></td></tr></table></figure>
 
 <p>执行后等待github重新部署网页完成，此时再打开博客网页就会发现和之前预览的页面是一样的了。</p>
-<p>其实_config.yml中还有很多和页面相关的配置，包括代码高亮，页面名称等等。</p>
+<p>其实_config.yml中还有很多和页面相关的配置，包括代码高亮，页面名称等等，可以自行根据官方文档进行配置。</p>
 <h1 id="0x03-主题美化"><a href="#0x03-主题美化" class="headerlink" title="0x03 主题美化"></a>0x03 主题美化</h1><p>虽然hexo自带的landspace主题也还不错，但是还是缺少一些个性。hexo的一大优势就是支持更换主题，我们可以直接在github上clone大佬的开源主题，然后部署到我们自己的博客上，前人栽树，后人乘凉啊。</p>
 <h2 id="1-下载主题"><a href="#1-下载主题" class="headerlink" title="-1- 下载主题"></a>-1- 下载主题</h2><p>Hexo有一个官方的<a target="_blank" rel="noopener" href="https://hexo.io/themes/">主题站</a>，里面收录了很多的优质主题，这些主题提供了预览页面和github仓库主页，这里也推荐三个比较喜欢的主题</p>
 <ul>
@@ -439,9 +441,38 @@
 
 
 <p>当时我就是因为看文档不仔细，忽略了clone命令最后的目标文件夹参数，导致下载的主题死活不生效，留下了粗心大意的泪水。</p>
-<h2 id="2-配置主题"><a href="#2-配置主题" class="headerlink" title="-2- 配置主题"></a>-2- 配置主题</h2><blockquote>
-<p>To be continue</p>
-</blockquote>
+<h2 id="2-配置主题"><a href="#2-配置主题" class="headerlink" title="-2- 配置主题"></a>-2- 配置主题</h2><p>这部分的配置主要根据主题的文档来进行配置，不同的主题的配置项差异很大，这里需要注意的是要区分 <strong>主题的配置文件</strong> 和 <strong>hexo网页框架的配置文件</strong>，它们的名称都是_config.yml，在根目录下的是hexo网页的配置文件，在主题文件夹下的是主题的配置文件。在Hexo 5.0.0 版本以上，主题配置会优先使用博客目录下的<code>_config.主题名.yml</code> 文件。</p>
+<p>使用<code>hexo version</code>可以查看hexo版本</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250940950.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>主题配置完成之后，还要回到hexo网页的配置文件中修改theme的配置项</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250944880.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>都配置好后就可以重新生成、预览、部署了，当然，最好先清除一下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo cl<br>hexo g<br>hexo s<br>hexo d<br></code></pre></td></tr></table></figure>
+
+<p>至此，大致的配置就完成了，就可以打开你的博客网页查看效果了。</p>
+<h1 id="0x04-使用方法"><a href="#0x04-使用方法" class="headerlink" title="0x04 使用方法"></a>0x04 使用方法</h1><h2 id="1-新建博文"><a href="#1-新建博文" class="headerlink" title="-1- 新建博文"></a>-1- 新建博文</h2><p>hexo 的博文的源格式是.md，其文件位置在&#x2F;source&#x2F;_posts&#x2F;下，你可以通过在这里新建md文件的形式来创建博文，也可以使用hexo的命令来新建博文，命令是</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haxe">hexo <span class="hljs-keyword">new</span> <span class="hljs-type">your_title</span>		<span class="hljs-meta">#注：title不包含.md后缀</span><br></code></pre></td></tr></table></figure>
+
+<p>使用该命令后就会在&#x2F;source&#x2F;_posts&#x2F;下创建一个your_title.md的文件，之后就可以在该文件内开始创作了</p>
+<p>同理，如果你想删除一篇博文，也只需要来到该文件夹下，删除该博文的md文件 或者 仅仅是把该博文的md文件移走即可</p>
+<h2 id="2-源文件同步"><a href="#2-源文件同步" class="headerlink" title="-2- 源文件同步"></a>-2- 源文件同步</h2><p>此前我们使用<code>hexo d</code>只会将网页的静态资源上传到github上，也就是source文件夹下的那些文件，但是如果你想对网页进行一些修改，缺少源文件是做不到的。为了在不同的电脑上都可以对网页作出修改，我们需要将源文件同步。</p>
+<p>还记得前面在部署时推荐创建两个分支吗，其中的source分支就是用来存储我们的源文件的。</p>
+<ul>
+<li><p>处理主题文件夹</p>
+<p>如果主题文件夹是通过git clone的方式下载下来的话，在主题的文件夹里会有一个.git的隐藏文件夹，我们需要删除该文件夹，或者将其改为其他名称，我将其重命名为_git。这是因为通过git clone方式下载的文件夹会被视为一个git仓库，在我们暂存整个博客根目录时，git会检测到仓库的嵌套，会自动忽略被嵌套的子仓库，导致最终上传的github的源文件中缺少了主题的源文件，这样的话，我们在其他的机器上clone源文件就获取不到完整的代码，还需要重新clone一次主题的源文件，这显然是更麻烦的，还可能会导致你的主题配置文件丢失。因此，我们通过改名或删除.git文件夹的方式来避免git将主题文件夹识别为一个git仓库。</p>
+</li>
+<li><p>初始化根目录</p>
+<p>来到博客的根目录，使用<code>git init</code>将该文件夹初始化为一个git仓库，然后使用<code>git add .</code>将所以文件暂存，然后使用<code>git commit</code>生成一笔提交。</p>
+</li>
+<li><p>添加远程服务器</p>
+<p>使用<code>git remote add origin [url]</code> 添加新的远程，其命名为origin（可以改）。</p>
+<p>然后pull同步一下，使用<code>git pull origin source --rebase</code> ,其中source是用于存放源文件的分支名，–rebase是指用rebase的方式处理冲突。</p>
+</li>
+<li><p>推送到远程服务器</p>
+<p>使用命令<code>git push origin HEAD:source</code>来推送到远程服务器的source分支。</p>
+</li>
+</ul>
+<p>成功之后就能在source分支中看到博客源文件了。</p>
 <h1 id="END"><a href="#END" class="headerlink" title="-END-"></a>-END-</h1>
                 
               </div>
@@ -531,6 +562,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/blog/2023/10/23/%E8%AE%B0%E5%BD%95%E5%88%A9%E7%94%A8Typora+GitHub+CDN/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
