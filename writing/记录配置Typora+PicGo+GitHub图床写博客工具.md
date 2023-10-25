@@ -94,7 +94,7 @@ OK，现在已经选好了图床和编辑器，还差一个工具将图片上传
 sudo dpkg -i Typora_Linux_xxxx_amd64.deb 
 ```
 
-输入密码，安装完成后，键入`typora`就可以打开typora的界面了
+输入密码，就安装完成了
 
 
 
@@ -223,5 +223,13 @@ CDN（**C**ontent **D**istribution **N**etwork），中文全称是内容分发�
 > > CloudFlare：`testingcf.jsdelivr.net`
 > > Fastly：`fastly.jsdelivr.net`
 > > GCORE：`gcore.jsdelivr.net`
+
+
+
+
+
+
+
+
 
 # -END-
