@@ -1,6 +1,8 @@
 ---
-title: VSCode配置CC++环境指南
-date: 2023-10-23
+title: VSCode配置CC++环境个人指南
+date: 2023-10-23 10:00:00
+updated: {{ date }}
+hide: true
 tags: vscode
 categories: 
 ---
@@ -21,7 +23,7 @@ categories:
 
 ## -1- 安装扩展
 
-VScode的本质是个单纯的文本编辑器，对于不同的编程语言的支持是通过编辑器插件来实现的，这一点和Vim很像。因此为了让VScode支持C/C++，需要安装一个C/C++扩展
+VScode的本质是个单纯的文本编辑器，对于不同的编程语言的支持是通过编辑器插件来实现的。因此为了让VScode支持C/C++，需要安装一个C/C++扩展
 
 ![C/C++ 扩展](https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/cpp-extension.png)
 
