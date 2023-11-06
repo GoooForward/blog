@@ -6,7 +6,7 @@ tags:
   - Typora
   - PicGo
   - 图床
-categories: 记录
+categories: 学习
 ---
 
 

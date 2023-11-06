@@ -3,7 +3,7 @@ title: 记录利用GitHub+Hexo搭建博客
 date: 2023-10-15 10:00:00
 updated: {{ date }}
 tags: hexo
-categories: 记录
+categories: 学习
 ---
 
 # 0x00 引言
