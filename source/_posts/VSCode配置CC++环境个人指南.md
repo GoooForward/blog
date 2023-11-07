@@ -1,10 +1,10 @@
 ---
-title: VSCode配置CC++环境个人指南
+title: VSCode配置C/C++环境个人指南
 date: 2023-10-23 10:00:00
 updated: {{ date }}
 hide: true
 tags: vscode
-categories: 
+categories: 学习
 ---
 
 # 0x00 引言
