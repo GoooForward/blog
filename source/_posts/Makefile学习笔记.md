@@ -44,21 +44,75 @@ makefile的文件名通常有三种格式：Makefile、makefile、GNUmakefile，
 
 
 
+# 0x02 初识Makefile
 
 
 
+## -1- makefile基本规则
+
+```makefile
+target ... : prerequisites ...
+    recipe
+    ...
+    ...
+```
+
+* target
+
+  可以是一个object file（目标文件），也可以是一个可执行文件，还可以是一个标签（label）。对于标签这种特性，在后续的“伪目标”章节中会有叙述。
+
+* prerequisites
+
+  生成该target所依赖的文件和/或target。
+
+* recipe
+
+  该target要执行的命令（任意的shell命令）。
 
 
 
+这种格式描述了文件之间的依赖关系，也就是target依赖于prerequisites，且target这个文件的生成规则描述在recipe中。通俗来说就是：**prerequisites中如果有一个以上的文件比target文件要新的话，recipe所定义的命令就会被执行。**
 
 
 
+一个示例
+
+```
+edit : main.o kbd.o command.o display.o \
+        insert.o search.o files.o utils.o
+    cc -o edit main.o kbd.o command.o display.o \
+        insert.o search.o files.o utils.o
+
+main.o : main.c defs.h
+    cc -c main.c
+kbd.o : kbd.c defs.h command.h
+    cc -c kbd.c
+command.o : command.c defs.h command.h
+    cc -c command.c
+display.o : display.c defs.h buffer.h
+    cc -c display.c
+insert.o : insert.c defs.h buffer.h
+    cc -c insert.c
+search.o : search.c defs.h buffer.h
+    cc -c search.c
+files.o : files.c defs.h buffer.h command.h
+    cc -c files.c
+utils.o : utils.c defs.h
+    cc -c utils.c
+clean :
+    rm edit main.o kbd.o command.o display.o \
+        insert.o search.o files.o utils.o
+```
+
+> **关于CC与GCC**
+>
+> CC就是是C compiler，即C编译器，而GCC是GNU CC，也就是GNU C编译器，在linux中，cc实际上就是指向gcc，这是因为cc是Unix的软件，是要收费的，因此GNU组织就编写了免费开源的gcc来取代cc。
+>
+> [Linux下的cc与gcc](https://www.cnblogs.com/zhouyinhui/archive/2010/02/01/1661078.html)
 
 
 
-
-
-
+在这个makefile中，目标文件（target）包含：可执行文件edit和中间目标文件（ `*.o` ），依赖文件（prerequisites）就是冒号后面的那些 `.c` 文件和 `.h` 文件。每一个 `.o` 文件都有一组依赖文件，而这些 `.o` 文件又是可执行文件 `edit` 的依赖文件。依赖关系的实质就是说明了目标文件是由哪些文件生成的，换言之，目标文件是哪些文件更新的。
 
 
 
