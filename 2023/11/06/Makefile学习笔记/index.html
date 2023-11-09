@@ -16,26 +16,24 @@
   <meta name="author" content="tangyuwei">
   <meta name="keywords" content="">
   
-    <meta name="description" content="0x00 引言众所周知，VScode是个好编辑器，拥有丰富的插件，现代化的UI设计，高度的可定制性，几乎可以用来写所有的主流编程语言。但是伴随着高度可定制而来的是它是高使用门槛，它不像传统的针对某一语言的IDE那样，它的配置项非常多，这些配置项都写在json文件中，并且很多设置找不到对应的UI设置界面。我估计包括我在内的很多人都不知道如何正确的配置VSCode，在应对一些大型的多文件的项目时就会出">
+    <meta name="description" content="0x00 引言从前的我并不知道什么是make，这主要有两个原因，一是从前学习编程都是使用的都是windows平台，二是早期学习编程大都是单个文件实现一个简单的功能，不涉及到多文件编译，也用不到make。在windows平台，大多数项目有完备的IDE可以使用，像Visual Studio，MDK之类的，对于多文件的项目，它们都会有一个项目文件，通过项目文件打开该项目就能很容易的实现多文件编译。然而，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="VSCode配置C&#x2F;C++环境个人指南">
-<meta property="og:url" content="https://goooforward.github.io/blog/2023/10/23/VSCode%E9%85%8D%E7%BD%AECC++%E7%8E%AF%E5%A2%83%E4%B8%AA%E4%BA%BA%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:title" content="Makefile学习笔记">
+<meta property="og:url" content="https://goooforward.github.io/blog/2023/11/06/Makefile%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="YuweiのBlog">
-<meta property="og:description" content="0x00 引言众所周知，VScode是个好编辑器，拥有丰富的插件，现代化的UI设计，高度的可定制性，几乎可以用来写所有的主流编程语言。但是伴随着高度可定制而来的是它是高使用门槛，它不像传统的针对某一语言的IDE那样，它的配置项非常多，这些配置项都写在json文件中，并且很多设置找不到对应的UI设置界面。我估计包括我在内的很多人都不知道如何正确的配置VSCode，在应对一些大型的多文件的项目时就会出">
+<meta property="og:description" content="0x00 引言从前的我并不知道什么是make，这主要有两个原因，一是从前学习编程都是使用的都是windows平台，二是早期学习编程大都是单个文件实现一个简单的功能，不涉及到多文件编译，也用不到make。在windows平台，大多数项目有完备的IDE可以使用，像Visual Studio，MDK之类的，对于多文件的项目，它们都会有一个项目文件，通过项目文件打开该项目就能很容易的实现多文件编译。然而，">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/cpp-extension.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231023210921602.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231023212644106.png">
-<meta property="article:published_time" content="2023-10-23T02:00:00.000Z">
-<meta property="article:modified_time" content="2023-10-23T02:00:00.000Z">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202311061550545.png">
+<meta property="article:published_time" content="2023-11-06T02:59:00.000Z">
+<meta property="article:modified_time" content="2023-11-06T02:59:00.000Z">
 <meta property="article:author" content="tangyuwei">
-<meta property="article:tag" content="vscode">
+<meta property="article:tag" content="regex">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/cpp-extension.png">
+<meta name="twitter:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202311061550545.png">
   
   
   
-  <title>VSCode配置C/C++环境个人指南 - YuweiのBlog</title>
+  <title>Makefile学习笔记 - YuweiのBlog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle">VSCode配置C/C++环境个人指南</span>
+            <span id="subtitle">Makefile学习笔记</span>
           
         </div>
 
@@ -212,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-10-23 10:00" pubdate>
-          2023年10月23日 上午
+        <time datetime="2023-11-06 10:59" pubdate>
+          2023年11月6日 上午
         </time>
       </span>
     
@@ -224,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          2.5k 字
         
       </span>
     
@@ -235,7 +233,7 @@
         
         
         
-          10 分钟
+          22 分钟
         
       </span>
     
@@ -272,31 +270,47 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">VSCode配置C/C++环境个人指南</h1>
+            <h1 id="seo-header">Makefile学习笔记</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="0x00-引言"><a href="#0x00-引言" class="headerlink" title="0x00 引言"></a>0x00 引言</h1><p>众所周知，VScode是个好编辑器，拥有丰富的插件，现代化的UI设计，高度的可定制性，几乎可以用来写所有的主流编程语言。但是伴随着高度可定制而来的是它是高使用门槛，它不像传统的针对某一语言的IDE那样，它的配置项非常多，这些配置项都写在json文件中，并且很多设置找不到对应的UI设置界面。我估计包括我在内的很多人都不知道如何正确的配置VSCode，在应对一些大型的多文件的项目时就会出现无法的正确跳转、找不到宏定义的情况，虽然有时可能不影响最终的编译运行，但是还是会阻碍效率的提高。因此，今天就来学习一下如何配置VSCode（针对C&#x2F;C++项目）。</p>
-<p>学习的教材使用的是<a target="_blank" rel="noopener" href="https://code.visualstudio.com/docs/cpp/config-linux">VScode官方文档</a>，在网上逛了一圈，没有找到特别满意的教程，所以还是回归文档吧</p>
-<h1 id="0x01-安装扩展及编译器"><a href="#0x01-安装扩展及编译器" class="headerlink" title="0x01 安装扩展及编译器"></a>0x01 安装扩展及编译器</h1><h2 id="1-安装扩展"><a href="#1-安装扩展" class="headerlink" title="-1- 安装扩展"></a>-1- 安装扩展</h2><p>VScode的本质是个单纯的文本编辑器，对于不同的编程语言的支持是通过编辑器插件来实现的。因此为了让VScode支持C&#x2F;C++，需要安装一个C&#x2F;C++扩展</p>
-<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/cpp-extension.png" srcset="/blog/img/loading.gif" lazyload alt="C/C++ 扩展"></p>
-<h2 id="2-安装编译器"><a href="#2-安装编译器" class="headerlink" title="-2- 安装编译器"></a>-2- 安装编译器</h2><p>VScode本质是个文本编辑器，它本身并不会编译代码，实施上其他的IDE也不会编译代码，编译的工作都是通过编译器来实现的，只是调用的过程被隐藏起来了。为了能够在VScode中运行代码，我们需要安装编译器。我使用的Linux平台，最常用的编译器是GCC，在windows平台下可以使用GCC的移植版本MinGW。Clang目前也被广泛使用，只是我还没尝试过。</p>
-<p>VScode的IntelliSense支持的编译器如下</p>
-<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231023210921602.png" srcset="/blog/img/loading.gif" lazyload></p>
-<h1 id="0x02-C-C-项目的三个配置文件"><a href="#0x02-C-C-项目的三个配置文件" class="headerlink" title="0x02 C&#x2F;C++项目的三个配置文件"></a>0x02 C&#x2F;C++项目的三个配置文件</h1><p>VScode打开的文件夹会成为VScode的工作区，工作区内包含一个名为<code>.vscode</code>的文件夹，里面包含三个配置文件</p>
-<ul>
-<li><code>tasks.json</code>（编译器构建设置）</li>
-<li><code>launch.json</code>（调试器设置）</li>
-<li><code>c_cpp_properties.json</code>（编译器路径和 IntelliSense 设置）</li>
-</ul>
-<p>下面一个一个介绍</p>
+                <h1 id="0x00-引言"><a href="#0x00-引言" class="headerlink" title="0x00 引言"></a>0x00 引言</h1><p>从前的我并不知道什么是make，这主要有两个原因，一是从前学习编程都是使用的都是windows平台，二是早期学习编程大都是单个文件实现一个简单的功能，不涉及到多文件编译，也用不到make。在windows平台，大多数项目有完备的IDE可以使用，像Visual Studio，MDK之类的，对于多文件的项目，它们都会有一个项目文件，通过项目文件打开该项目就能很容易的实现多文件编译。然而，随着学习的深入，越来越多的时候都在使用Linux开发，对于那些没有完备IDE支持的项目，学习如何自动化编译多文件项目就变得越来越重要。</p>
+<p>其实，在这次下定决心学习Makefile之前，我其实也学习了Makefile几次，但是都浅尝辄止，半途而废了，仅仅只是学习了一些最最基础的语法，然而实际工作中，发现我学习的那些最基础的东西连项目给出的Makefile都读不懂，这次我决定一口气认认真真地学完Makefile，至少做到能看懂项目的Makefile，对于自己的一些小项目的Makefile要能够写出来。</p>
+<p>学习Makefile，我选择的教材是我之前就学习过的陈皓大佬的<a target="_blank" rel="noopener" href="https://seisman.github.io/how-to-write-makefile/overview.html">《跟我一起写Makefile》</a>，在这里悼念一下陈皓大佬，世事无常，感谢大佬的奉献。</p>
+<p>其他资料：<a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/make.html">GNU make手册</a></p>
+<h1 id="0x01-什么是Makefile"><a href="#0x01-什么是Makefile" class="headerlink" title="0x01 什么是Makefile"></a>0x01 什么是Makefile</h1><h2 id="1-编译过程"><a href="#1-编译过程" class="headerlink" title="-1- 编译过程"></a>-1- 编译过程</h2><p>要了解Makefile首先要复习一下C文件的编译过程。这里要搬出一张经典的图片了。这里的预处理器，编译器，汇编器，连接器分别对应了不同的工具，这些工具共同组成了编译器。<br><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202311061550545.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>对于多文件项目，首先会将不同的源文件编译为目标文件，在Windows下也就是 <code>.obj</code> 文件，UNIX下是 <code>.o</code> 文件，即Object File。然后再将大量的目标文件连接在一起成为可执行文件，这个动作被叫做连接。</p>
 <blockquote>
-<p>PS: JSON是由美国程序员道格拉斯·克罗克福特构想和设计的一种轻量级资料交换格式。其内容由属性和值所组成，因此也有易于阅读和处理的优势。JSON是独立于编程语言的资料格式，其不仅是JavaScript的子集，也采用了C语言家族的习惯用法，目前也有许多编程语言都能够将其解析和字符串化，其广泛使用的程度也使其成为通用的资料格式。</p>
+<p>链接时，主要是链接函数和全局变量。所以，我们可以使用这些中间目标文件（ <code>.o</code> 文件或 <code>.obj</code> 文件）来链接我们的应用程序。链接器并不管函数所在的源文件，只管函数的中间目标文件（Object File），在大多数时候，由于源文件太多，编译生成的中间目标文件太多，而在链接时需要明显地指出中间目标文件名，这对于编译很不方便。所以，我们要给中间目标文件打个包，在Windows下这种包叫“库文件”（Library File），也就是 <code>.lib</code> 文件，在UNIX下，是Archive File，也就是 <code>.a</code> 文件。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ahelloyou/article/details/112620353">程序运行库文件链接原理</a></p>
 </blockquote>
-<h2 id="1-tasks-json"><a href="#1-tasks-json" class="headerlink" title="-1- tasks.json"></a>-1- tasks.json</h2><p>当你打开一个文件夹时，本身是不包含<code>.vscode</code>文件夹的，因为此时还不需要生成对应的json文件，也就是说，如果坚持不用VScode构建调试的话，你的工作区内不包含<code>.vscode</code>文件夹也是可以的。</p>
-<p>当你对一个c文件进行运行（F5）时，会弹出对话框，此时会要求选择使用的编译器，一旦选择了编译器，就会自动生成<code>.vscode</code>文件夹以及<code>tasks.json</code>文件。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231023212644106.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h2 id="2-make简介"><a href="#2-make简介" class="headerlink" title="-2- make简介"></a>-2- make简介</h2><p>make是Linux上最常用的项目管理工具，make命令可以帮助我们自动化完成上面提到的文件编译过程，并且帮助我们管理好源文件之间的依赖关系，当有源文件发生变化时，所有依赖于此源文件的源代码都会被重新编译。</p>
+<p>make命令并不能凭空管理项目，它需要一个Makefile文件来描述项目中源文件的依赖关系，以及编译方法。所以学习使用make，就是学习如何编写Makefile。</p>
+<p>makefile的文件名通常有三种格式：Makefile、makefile、GNUmakefile，make会在当前目录下自动寻找找三个文件名，如果没有找到的话，make就无法继续编译程序，产生一个错误并退出。</p>
+<h1 id="0x02-初识Makefile"><a href="#0x02-初识Makefile" class="headerlink" title="0x02 初识Makefile"></a>0x02 初识Makefile</h1><h2 id="1-makefile基本规则"><a href="#1-makefile基本规则" class="headerlink" title="-1- makefile基本规则"></a>-1- makefile基本规则</h2><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs makefile">target ... : prerequisites ...<br>    recipe<br>    ...<br>    ...<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>target</p>
+<p>可以是一个object file（目标文件），也可以是一个可执行文件，还可以是一个标签（label）。对于标签这种特性，在后续的“伪目标”章节中会有叙述。</p>
+</li>
+<li><p>prerequisites</p>
+<p>生成该target所依赖的文件和&#x2F;或target。</p>
+</li>
+<li><p>recipe</p>
+<p>该target要执行的命令（任意的shell命令）。</p>
+</li>
+</ul>
+<p>这种格式描述了文件之间的依赖关系，也就是target依赖于prerequisites，且target这个文件的生成规则描述在recipe中。通俗来说就是：<strong>prerequisites中如果有一个以上的文件比target文件要新的话，recipe所定义的命令就会被执行。</strong></p>
+<p>一个示例</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">edit</span> : main.<span class="hljs-keyword">o</span> kbd.<span class="hljs-keyword">o</span> <span class="hljs-keyword">command</span>.<span class="hljs-keyword">o</span> <span class="hljs-keyword">display</span>.<span class="hljs-keyword">o</span> \<br>        <span class="hljs-keyword">insert</span>.<span class="hljs-keyword">o</span> <span class="hljs-built_in">search</span>.<span class="hljs-keyword">o</span> <span class="hljs-keyword">files</span>.<span class="hljs-keyword">o</span> utils.<span class="hljs-keyword">o</span><br>    <span class="hljs-keyword">cc</span> -<span class="hljs-keyword">o</span> <span class="hljs-keyword">edit</span> main.<span class="hljs-keyword">o</span> kbd.<span class="hljs-keyword">o</span> <span class="hljs-keyword">command</span>.<span class="hljs-keyword">o</span> <span class="hljs-keyword">display</span>.<span class="hljs-keyword">o</span> \<br>        <span class="hljs-keyword">insert</span>.<span class="hljs-keyword">o</span> <span class="hljs-built_in">search</span>.<span class="hljs-keyword">o</span> <span class="hljs-keyword">files</span>.<span class="hljs-keyword">o</span> utils.<span class="hljs-keyword">o</span><br><br>main.<span class="hljs-keyword">o</span> : main.<span class="hljs-keyword">c</span> defs.h<br>    <span class="hljs-keyword">cc</span> -<span class="hljs-keyword">c</span> main.<span class="hljs-keyword">c</span><br>kbd.<span class="hljs-keyword">o</span> : kbd.<span class="hljs-keyword">c</span> defs.h <span class="hljs-keyword">command</span>.h<br>    <span class="hljs-keyword">cc</span> -<span class="hljs-keyword">c</span> kbd.<span class="hljs-keyword">c</span><br><span class="hljs-keyword">command</span>.<span class="hljs-keyword">o</span> : <span class="hljs-keyword">command</span>.<span class="hljs-keyword">c</span> defs.h <span class="hljs-keyword">command</span>.h<br>    <span class="hljs-keyword">cc</span> -<span class="hljs-keyword">c</span> <span class="hljs-keyword">command</span>.<span class="hljs-keyword">c</span><br><span class="hljs-keyword">display</span>.<span class="hljs-keyword">o</span> : <span class="hljs-keyword">display</span>.<span class="hljs-keyword">c</span> defs.h <span class="hljs-keyword">buffer</span>.h<br>    <span class="hljs-keyword">cc</span> -<span class="hljs-keyword">c</span> <span class="hljs-keyword">display</span>.<span class="hljs-keyword">c</span><br><span class="hljs-keyword">insert</span>.<span class="hljs-keyword">o</span> : <span class="hljs-keyword">insert</span>.<span class="hljs-keyword">c</span> defs.h <span class="hljs-keyword">buffer</span>.h<br>    <span class="hljs-keyword">cc</span> -<span class="hljs-keyword">c</span> <span class="hljs-keyword">insert</span>.<span class="hljs-keyword">c</span><br><span class="hljs-built_in">search</span>.<span class="hljs-keyword">o</span> : <span class="hljs-built_in">search</span>.<span class="hljs-keyword">c</span> defs.h <span class="hljs-keyword">buffer</span>.h<br>    <span class="hljs-keyword">cc</span> -<span class="hljs-keyword">c</span> <span class="hljs-built_in">search</span>.<span class="hljs-keyword">c</span><br><span class="hljs-keyword">files</span>.<span class="hljs-keyword">o</span> : <span class="hljs-keyword">files</span>.<span class="hljs-keyword">c</span> defs.h <span class="hljs-keyword">buffer</span>.h <span class="hljs-keyword">command</span>.h<br>    <span class="hljs-keyword">cc</span> -<span class="hljs-keyword">c</span> <span class="hljs-keyword">files</span>.<span class="hljs-keyword">c</span><br>utils.<span class="hljs-keyword">o</span> : utils.<span class="hljs-keyword">c</span> defs.h<br>    <span class="hljs-keyword">cc</span> -<span class="hljs-keyword">c</span> utils.<span class="hljs-keyword">c</span><br>clean :<br>    rm <span class="hljs-keyword">edit</span> main.<span class="hljs-keyword">o</span> kbd.<span class="hljs-keyword">o</span> <span class="hljs-keyword">command</span>.<span class="hljs-keyword">o</span> <span class="hljs-keyword">display</span>.<span class="hljs-keyword">o</span> \<br>        <span class="hljs-keyword">insert</span>.<span class="hljs-keyword">o</span> <span class="hljs-built_in">search</span>.<span class="hljs-keyword">o</span> <span class="hljs-keyword">files</span>.<span class="hljs-keyword">o</span> utils.<span class="hljs-keyword">o</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>关于CC与GCC</strong></p>
+<p>CC就是是C compiler，即C编译器，而GCC是GNU CC，也就是GNU C编译器，在linux中，cc实际上就是指向gcc，这是因为cc是Unix的软件，是要收费的，因此GNU组织就编写了免费开源的gcc来取代cc。</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhouyinhui/archive/2010/02/01/1661078.html">Linux下的cc与gcc</a></p>
+</blockquote>
+<p>在这个makefile中，目标文件（target）包含：可执行文件edit和中间目标文件（ <code>*.o</code> ），依赖文件（prerequisites）就是冒号后面的那些 <code>.c</code> 文件和 <code>.h</code> 文件。每一个 <code>.o</code> 文件都有一组依赖文件，而这些 <code>.o</code> 文件又是可执行文件 <code>edit</code> 的依赖文件。依赖关系的实质就是说明了目标文件是由哪些文件生成的，换言之，目标文件是哪些文件更新的。</p>
 <h1 id="END"><a href="#END" class="headerlink" title="-END-"></a>-END-</h1>
                 
               </div>
@@ -330,7 +344,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/blog/tags/vscode/" class="print-no-link">#vscode</a>
+        <a href="/blog/tags/regex/" class="print-no-link">#regex</a>
       
     </div>
   
@@ -342,8 +356,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>VSCode配置C/C++环境个人指南</div>
-      <div>https://goooforward.github.io/blog/2023/10/23/VSCode配置CC++环境个人指南/</div>
+      <div>Makefile学习笔记</div>
+      <div>https://goooforward.github.io/blog/2023/11/06/Makefile学习笔记/</div>
     </div>
     <div class="license-meta">
       
@@ -355,7 +369,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年10月23日</div>
+          <div>2023年11月6日</div>
         </div>
       
       
