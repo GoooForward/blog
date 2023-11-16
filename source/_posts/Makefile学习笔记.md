@@ -52,7 +52,7 @@ makefile的文件名通常有三种格式：Makefile、makefile、GNUmakefile，
 
 ```makefile
 target ... : prerequisites ...
-    recipe
+    command
     ...
     ...
 ```
@@ -65,19 +65,19 @@ target ... : prerequisites ...
 
   生成该target所依赖的文件和/或target。
 
-* recipe
+* command
 
   该target要执行的命令（任意的shell命令）。
 
 
 
-这种格式描述了文件之间的依赖关系，也就是target依赖于prerequisites，且target这个文件的生成规则描述在recipe中。通俗来说就是：**prerequisites中如果有一个以上的文件比target文件要新的话，recipe所定义的命令就会被执行。**
+这种格式描述了文件之间的依赖关系，也就是target依赖于prerequisites，且target这个文件的生成规则描述在recipe中。通俗来说就是：**prerequisites中如果有一个以上的文件比target文件要新的话，command所定义的命令就会被执行。**
 
 
 
 ### 一个示例
 
-```
+```makefile
 edit : main.o kbd.o command.o display.o \
         insert.o search.o files.o utils.o
     cc -o edit main.o kbd.o command.o display.o \
@@ -126,10 +126,216 @@ clean :
 
 1. make首先会在当前目录寻找`Makefile`或者`makefile`
 2. 如果找到，就会自动读取到第一个目标（这个目标可以是目标文件，也可以是label，make不做判断），这个目标就是make的最终目标，在前面的例子中，就是edit这个文件
-3. 如果edit这个文件不存在，或者是edit后面所依赖的文件（包括依赖文件的依赖文件）的修改时间要比edit更新，那么make就会自动执行recipe中所定义的命令来生成edit这个文件
+3. 如果edit这个文件不存在，或者是edit后面所依赖的文件（包括依赖文件的依赖文件）的修改时间要比edit更新，那么make就会自动执行command中所定义的命令来生成edit这个文件
+4. 如果edit的依赖文件中也有不存在的，或者不是最新的，那么make就会去寻找以该依赖文件为目标的规则，然后按照相同的过程去执行command命令生成这个依赖文件（就是一种递归）
+5. 最后edit的所有依赖文件都集齐了，就会执行edit对应的command命令，最后生成edit这个文件
 
-4. 如果edit的依赖文件中也有不存在的，或者不是最新的，那么make就会去寻找以该依赖文件为目标的规则，然后按照相同的过程去执行recipe命令生成这个依赖文件（就是一种递归）
-5. 最后edit的所有依赖文件都集齐了，就会执行edit对应的recipe命令，最后生成edit这个文件
+
+
+在make的工作流程中，首先在读取最终目标时，make只会把一个target作为它的最终目标，只要此target规则中的依赖文件都集齐了，就会自动执行其后的shell命令，如果将clean的规则放在文件最开头，那么执行make也只会自动执行清除的命令，而后面的编译部分就全部不执行了。
+
+其次，在检测依赖文件的修改时间时，要注意依赖文件的依赖也是当前目标文件的依赖，也是会检测的。举个例子，当已经执行了一次编译，此时所有的目标文件都已经生成了，然后修改其中的一个源文件`files.c`，然后执行make，按照执行流程，会选择edit作为最终目标，然后检测edit是否比它的依赖更新，`files.c`不是edit的依赖，但是却是`files.o`的依赖，而`files.o`是edit的依赖，因此`files.c`也可以视为edit的依赖，执行时会先重新生成`files.o`然后生成最终目标`edit`。
+
+
+
+## -3- makefile 中使用变量
+
+在编写makefile时，特别是大型的makefile时，可能会遇到同一段字符串被反复使用，例如
+
+```makefile
+edit : main.o kbd.o command.o display.o insert.o search.o files.o utils.o
+    cc -o edit main.o kbd.o command.o display.o insert.o search.o files.o utils.o
+```
+
+这里的依赖`.o`文件和后面command命令中所指明的`.o`文件都是一样的，当我们想要添加新的`.o`文件时，就需要在不同的地方手动添加，makefile足够大时，手动添加很难保证不出错，这极大地增加了makefile的维护成本。所以我们可以使用变量来代替原本的一连串`.o`文件，makefile中变量的本质类似于C语言中的宏定义，只做文本替换。我们用`object`来代替原本的一连串`.o`文件，原本的makefile就改进为
+
+```makefile
+objects = main.o kbd.o command.o display.o \
+    insert.o search.o files.o utils.o
+
+edit : $(objects)
+    cc -o edit $(objects)
+main.o : main.c defs.h
+    cc -c main.c
+kbd.o : kbd.c defs.h command.h
+    cc -c kbd.c
+command.o : command.c defs.h command.h
+    cc -c command.c
+display.o : display.c defs.h buffer.h
+    cc -c display.c
+insert.o : insert.c defs.h buffer.h
+    cc -c insert.c
+search.o : search.c defs.h buffer.h
+    cc -c search.c
+files.o : files.c defs.h buffer.h command.h
+    cc -c files.c
+utils.o : utils.c defs.h
+    cc -c utils.c
+clean :
+    rm edit $(objects)
+```
+
+
+
+## -4- makefile 的自动推导机制
+
+make可以自动推导出目标文件以及其依赖文件后面的命令，当make找到一个`xxx.o`文件，它就会自动把`xxx.c`加入到其依赖中，并且自动脑补出`cc -c xxx.c`的命令，因此，借助这个机制，makefile又可以被简化为
+
+```makefile
+objects = main.o kbd.o command.o display.o \
+    insert.o search.o files.o utils.o
+
+edit : $(objects)
+    cc -o edit $(objects)
+
+main.o : defs.h
+kbd.o : defs.h command.h
+command.o : defs.h command.h
+display.o : defs.h buffer.h
+insert.o : defs.h buffer.h
+search.o : defs.h buffer.h
+files.o : defs.h buffer.h command.h
+utils.o : defs.h
+
+.PHONY : clean
+clean :
+    rm edit $(objects)
+```
+
+这种书写方法属于make的**隐式规则**。`.PHONY : clean`表示clean是一个伪目标。
+
+
+
+## -5- 以源文件为中心的makefile风格
+
+前面借助make的自动推导机制已经实现了省略了各`.c`文件，只留下了各自依赖的`.h`头文件，经过观察，可以发现这些不同的目标文件都依赖于几个相同的`.h`头文件。前面给出的makefile都是以不同的目标文件为中心编写的，其本质是列举出每个目标文件受哪些依赖文件的影响，那么是否可以反过来，以源文件（依赖文件）为中心，列举出不同源文件能影响哪些目标文件，答案自然是肯定的。新风格的makefile如下：
+
+```makefile
+objects = main.o kbd.o command.o display.o \
+    insert.o search.o files.o utils.o
+
+edit : $(objects)
+    cc -o edit $(objects)
+
+$(objects) : defs.h
+kbd.o command.o files.o : command.h
+display.o insert.o search.o files.o : buffer.h
+
+.PHONY : clean
+clean :
+    rm edit $(objects)
+```
+
+`defs.h`会影响全部`.o`文件，`command.h`会影响`kbd.o` `command.o` `files.o`，`buffer.h`会影响`display.o` `insert.o` `search.o` `files.o ` 。同时make的自动推导机制依然生效，每个`.o`文件依旧依赖于对应的`.c`文件。使用这种书写风格可以进一步简化makefile，同时也能表明文件之间的依赖关系。只不过采用这种风格会显得文件的依赖关系没那么清晰，需要阅读者在看的同时分析。
+
+
+
+## -6- 清空目录的规则
+
+每个Makefile中都应该写一个清空目标文件（ `.o` ）和可执行文件的规则，这不仅便于重编译，也很利于保持文件的清洁。这是一个“修养”，通常的写法是
+
+```makefile
+clean:
+    rm edit $(objects)
+```
+
+而更为标准的写法应该是
+
+```makefile
+.PHONY : clean
+clean :
+    -rm edit $(objects)
+```
+
+这里的`.PHONY`表明`clean`是一个伪目标。而在`rm`前面添加一个减号`-`表示当出现问题时，忽略错误，继续执行后面的内容。
+
+`clean` 的规则不要放在文件的开头，不然，这就会变成make的默认目标，相信谁也不愿意这样。不成文的规矩是——“clean从来都是放在文件的最后”。
+
+
+
+## -7- makefile里有什么
+
+Makefile里主要包含了五个东西：显式规则、隐式规则、变量定义、指令和注释。
+
+1. 显式规则。显式规则说明了如何生成一个或多个目标文件。这是由Makefile的书写者明显指出要生成的文件、文件的依赖文件和生成的命令。
+2. 隐式规则。由于我们的make有自动推导的功能，所以隐式规则可以让我们比较简略地书写Makefile，这是由make所支持的。
+3. 变量的定义。在Makefile中我们要定义一系列的变量，变量一般都是字符串，这个有点像你C语言中的宏，当Makefile被执行时，其中的变量都会被扩展到相应的引用位置上。
+4. 指令。其包括了三个部分：
+   1. 一个是在一个Makefile中引用另一个Makefile，就像C语言中的include一样；
+   2. 另一个是指根据某些情况指定Makefile中的有效部分，就像C语言中的预编译#if一样；
+   3. 还有就是定义一个多行的命令。有关这一部分的内容，我会在后续的部分中讲述。
+5. 注释。Makefile中只有行注释，和UNIX的Shell脚本一样，其注释是用 `#` 字符，这个就像C/C++中的 `//` 一样。如果你要在你的Makefile中使用 `#` 字符，可以用反斜杠进行转义，如： `\#` 。
+
+
+
+## -8- Makefile文件名
+
+默认的情况下，make命令会在当前目录下按顺序寻找文件名为 `GNUmakefile` 、 `makefile` 和 `Makefile` 的文件。在这三个文件名中，最好使用 `Makefile` 这个文件名，因为这个文件名在排序上靠近其它比较重要的文件，比如 `README`。最好不要用 `GNUmakefile`，因为这个文件名只能由GNU `make` ，其它版本的 `make` 无法识别，但是基本上来说，大多数的 `make` 都支持 `makefile` 和 `Makefile` 这两种默认文件名。
+
+当然，也可以使用别的文件名来书写Makefile，比如：“Make.Solaris”，“Make.Linux”等，如果要指定特定的Makefile，你可以使用make的 `-f` 或 `--file` 参数，如： `make -f Make.Solaris` 或 `make --file Make.Linux` 。如果你使用多条 `-f` 或 `--file` 参数，可以指定多个makefile。
+
+
+
+## -9- 包含其他的Makefile
+
+在Makefile使用 `include` 指令可以把别的Makefile包含进来，这很像C语言的 `#include` ，被包含的文件会原模原样的放在当前文件的包含位置。
+
+```
+include <filenames>...
+```
+
+`<filenames>` 可以是当前操作系统Shell的文件模式（可以包含路径和通配符）。
+
+在 `include` 前面可以有一些空字符，但是绝不能是 `Tab` 键开始。 `include` 和 `<filenames>` 可以用一个或多个空格隔开。举个例子，你有这样几个Makefile： `a.mk` 、 `b.mk` 、 `c.mk` ，还有一个文件叫 `foo.make` ，以及一个变量 `$(bar)` ，其包含了 `bish` 和 `bash` ，那么，下面的语句：
+
+```
+include foo.make *.mk $(bar)
+```
+
+等价于：
+
+```makefile
+include foo.make a.mk b.mk c.mk bish bash
+```
+
+make命令开始时，会找寻 `include` 所指出的其它Makefile，并把其内容安置在当前的位置。就好像C/C++的 `#include` 指令一样。如果文件都没有指定绝对路径或是相对路径的话，make会在当前目录下首先寻找，如果当前目录下没有找到，那么，make还会在下面的几个目录下找：
+
+1. 如果make执行时，有 `-I` 或 `--include-dir` 参数，那么make就会在这个参数所指定的目录下去寻找。
+2. 接下来按顺序寻找目录 `<prefix>/include` （一般是 `/usr/local/bin` ）、 `/usr/gnu/include` 、 `/usr/local/include` 、 `/usr/include` 。
+
+环境变量 `.INCLUDE_DIRS` 包含当前 make 会寻找的目录列表。你应当避免使用命令行参数 `-I` 来寻找以上这些默认目录，否则会使得 `make` “忘掉”所有已经设定的包含目录，包括默认目录。也就是说，使用了`-I`参数指定了include目录之后，make就只会在指定的目录下寻找，并且不再去默认的目录中寻找
+
+如果有文件没有找到的话，make会生成一条警告信息，但不会马上出现致命错误。它会继续载入其它的文件，一旦完成makefile的读取，make会再重试这些没有找到，或是不能读取的文件，如果还是不行，make才会出现一条致命信息。如果你想让make不理那些无法读取的文件，而继续执行，你可以在include前加一个减号“-”。如：
+
+```
+-include <filenames>...
+```
+
+其表示，无论include过程中出现什么错误，都不要报错继续执行。如果要和其它版本 `make` 兼容，可以使用 `sinclude` 代替 `-include` 。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
