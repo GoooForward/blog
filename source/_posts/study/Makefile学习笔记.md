@@ -15,7 +15,7 @@ categories: 学习
 
 其实，在这次下定决心学习Makefile之前，我其实也学习了Makefile几次，但是都浅尝辄止，半途而废了，仅仅只是学习了一些最最基础的语法，然而实际工作中，发现我学习的那些最基础的东西连项目给出的Makefile都读不懂，这次我决定一口气认认真真地学完Makefile，至少做到能看懂项目的Makefile，对于自己的一些小项目的Makefile要能够写出来。
 
-学习Makefile，我选择的教材是我之前就学习过的陈皓大佬的[《跟我一起写Makefile》](https://seisman.github.io/how-to-write-makefile/overview.html)，在这里悼念一下陈皓大佬，世事无常，感谢大佬的奉献。
+学习Makefile，我选择的教材是我之前就学习过的陈皓大佬的[《跟我一起写Makefile》](https://seisman.github.io/how-to-write-makefile/overview.html)。
 
 其他资料：[GNU make手册](https://www.gnu.org/software/make/manual/make.html)
 
@@ -535,6 +535,329 @@ littleoutput : text.g
 ```
 
 其中， `-$(subst output,,$@)` 中的 `$` 表示执行一个Makefile的函数，函数名为subst，后面的为参数。关于函数，将在后面讲述。这里的这个函数是替换字符串的意思， `$@` 表示目标的集合，就像一个数组， `$@` 依次取出目标，并执于命令。
+
+
+
+## -6- 静态模式
+
+静态模式可以更加容易地定义多目标的规则，可以让我们的规则变得更加的有弹性和灵活。我们还是先来看一下语法：
+
+```
+<targets ...> : <target-pattern> : <prereq-patterns ...>
+    <commands>
+    ...
+```
+
+targets定义了一系列的目标文件，可以有通配符。是目标的一个集合。
+
+target-pattern是指明了targets的模式，也就是的目标集模式。
+
+prereq-patterns是目标的依赖模式，它对target-pattern形成的模式再进行一次依赖目标的定义。
+
+这样描述这三个东西，可能还是没有说清楚，还是举个例子来说明一下吧。如果我们的\<target-pattern\>定义成 `%.o` ，意思是我们的\<target\>;集合中都是以 `.o` 结尾的，而如果我们的\<prereq-patterns\>定义成 `%.c` ，意思是对\<target-pattern\>所形成的目标集进行二次定义，其计算方法是，取\<target-pattern\>模式中的 `%` （也就是去掉了 `.o` 这个结尾），并为其加上 `.c` 这个结尾，形成的新集合。
+
+所以，我们的“目标模式”或是“依赖模式”中都应该有 `%` 这个字符，如果你的文件名中有 `%` 那么你可以使用反斜杠 `\` 进行转义，来标明真实的 `%` 字符。
+
+看一个例子：
+
+```
+objects = foo.o bar.o
+
+all: $(objects)
+
+$(objects): %.o: %.c
+    $(CC) -c $(CFLAGS) $< -o $@
+```
+
+上面的例子中，指明了我们的目标从$object中获取， `%.o` 表明要所有以 `.o` 结尾的目标，也就是 `foo.o bar.o` ，也就是变量 `$object` 集合的模式，而依赖模式 `%.c` 则取模式 `%.o` 的 `%` ，也就是 `foo bar` ，并为其加下 `.c` 的后缀，于是，我们的依赖目标就是 `foo.c bar.c` 。而命令中的 `$<` 和 `$@` 则是自动化变量， `$<` 表示第一个依赖文件， `$@` 表示目标集（也就是“foo.o bar.o”）。于是，上面的规则展开后等价于下面的规则：
+
+```
+foo.o : foo.c
+    $(CC) -c $(CFLAGS) foo.c -o foo.o
+bar.o : bar.c
+    $(CC) -c $(CFLAGS) bar.c -o bar.o
+```
+
+试想，如果我们的 `%.o` 有几百个，那么我们只要用这种很简单的“静态模式规则”就可以写完一堆规则，实在是太有效率了。“静态模式规则”的用法很灵活，如果用得好，那会是一个很强大的功能。再看一个例子：
+
+```
+files = foo.elc bar.o lose.o
+
+$(filter %.o,$(files)): %.o: %.c
+    $(CC) -c $(CFLAGS) $< -o $@
+$(filter %.elc,$(files)): %.elc: %.el
+    emacs -f batch-byte-compile $<
+```
+
+$(filter %.o,$(files))表示调用Makefile的filter函数，过滤“$files”集，只要其中模式为“%.o”的内容。其它的内容，我就不用多说了吧。这个例子展示了Makefile中更大的弹性。
+
+
+
+## -7- 自动生成依赖
+
+在使用大型项目时，一个源文件通常会包含很多头文件，在编写Makefile时，人工手动维护这种依赖关系是一件很容易出错的事。而C/C++编译器提供的一项功能可以很好的解决这个问题。
+
+```
+cc -M main.c
+```
+
+其输出是：
+
+```
+main.o : main.c defs.h
+```
+
+编译器会自动生成的依赖关系，这样一来，就不必再手动书写若干文件的依赖关系，而由编译器自动生成了。需要提醒一句的是，如果使用GNU的C/C++编译器，你得用 `-MM` 参数，不然， `-M` 参数会把一些标准库的头文件也包含进来。
+
+gcc -M main.c的输出是:
+
+```
+main.o: main.c defs.h /usr/include/stdio.h /usr/include/features.h \
+    /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h \
+    /usr/lib/gcc-lib/i486-suse-linux/2.95.3/include/stddef.h \
+    /usr/include/bits/types.h /usr/include/bits/pthreadtypes.h \
+    /usr/include/bits/sched.h /usr/include/libio.h \
+    /usr/include/_G_config.h /usr/include/wchar.h \
+    /usr/include/bits/wchar.h /usr/include/gconv.h \
+    /usr/lib/gcc-lib/i486-suse-linux/2.95.3/include/stdarg.h \
+    /usr/include/bits/stdio_lim.h
+```
+
+gcc -MM main.c的输出则是:
+
+```makefile
+main.o: main.c defs.h
+```
+
+
+
+下面的问题是如何将此功能与Makefile结合起来呢，不可能让makefile本身也依赖于`%.c`，GNU组织建议把编译器为每一个源文件的自动生成的依赖关系放到一个文件中，为每一个 `name.c` 的文件都生成一个 `name.d` 的Makefile文件， `.d` 文件中就存放对应 `.c` 文件的依赖关系。
+
+于是，我们可以写出 `.c` 文件和 `.d` 文件的依赖关系，并让make自动更新或生成 `.d` 文件，并把其包含在我们的主Makefile中，这样，我们就可以自动化地生成每个文件的依赖关系了。
+
+这里，我们给出了一个模式规则来产生 `.d` 文件：
+
+```
+%.d: %.c
+    @set -e; rm -f $@; \
+    $(CC) -M $(CPPFLAGS) $< > $@.$$$$; \
+    sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+    rm -f $@.$$$$
+```
+
+这个规则的意思是，所有的 `.d` 文件依赖于 `.c` 文件， `rm -f $@` 的意思是删除所有的目标，也就是 `.d` 文件，第二行的意思是，为每个依赖文件 `$<` ，也就是 `.c` 文件生成依赖文件， `$@` 表示模式 `%.d` 文件，如果有一个C文件是name.c，那么 `%` 就是 `name` ， `$$$$` 意为一个随机编号，第二行生成的文件有可能是“name.d.12345”，第三行使用sed命令做了一个替换，也就是将`name.c :`替换为`name.c name.d :`。第四行就是删除临时文件。
+
+这个模式要做的事就是在编译器生成的依赖关系中加入 `.d` 文件的依赖，即把依赖关系：
+
+```
+main.o : main.c defs.h
+```
+
+转成：
+
+```
+main.o main.d : main.c defs.h
+```
+
+这样`.d`文件也会自动更新并且生成了
+
+
+
+# 0x04 书写命令
+
+每条规则中的命令和操作系统Shell的命令行是一致的。make会一按顺序一条一条的执行命令，每条命令的开头必须以 `Tab` 键开头，除非，命令是紧跟在依赖规则后面的分号后的。在命令行之间中的空格或是空行会被忽略，但是如果该空格或空行是以Tab键开头的，那么make会认为其是一个空命令。
+
+我们在UNIX下可能会使用不同的Shell，但是make的命令默认是被 `/bin/sh` ——UNIX的标准Shell 解释执行的。除非你特别指定一个其它的Shell。Makefile中， `#` 是注释符，很像C/C++中的 `//` ，其后的本行字符都被注释。
+
+
+
+## -1- 显示命令
+
+通常，make会把其要执行的命令行在命令执行前输出到屏幕上。当我们用 `@` 字符在命令行前，那么，这个命令将不被make显示出来，最具代表性的例子是，我们用这个功能来向屏幕显示一些信息。如:
+
+```
+@echo 正在编译XXX模块......
+```
+
+当make执行时，会输出“正在编译XXX模块……”字串，但不会输出命令，如果没有“@”，那么，make将输出:
+
+```
+echo 正在编译XXX模块......
+正在编译XXX模块......
+```
+
+如果make执行时，带入make参数 `-n` 或 `--just-print` ，那么其只是显示命令，但不会执行命令，这个功能很有利于我们调试我们的Makefile，看看我们书写的命令是执行起来是什么样子的或是什么顺序的。
+
+而make参数 `-s` 或 `--silent` 或 `--quiet` 则是全面禁止命令的显示。
+
+
+
+## -2- 命令执行
+
+如果需要让上一行的命令结果作用于下一行，就需要将这两个命令用分号隔开，而非将这两条命令放在两行。如：
+
+- 示例一：
+
+```
+exec:
+    cd /home/hchen
+    pwd
+```
+
+- 示例二：
+
+```
+exec:
+    cd /home/hchen; pwd
+```
+
+当我们执行 `make exec` 时，第一个例子中的cd没有作用，pwd会打印出当前的Makefile目录，而第二个例子中，cd就起作用了，pwd会打印出“/home/hchen”。
+
+
+
+## -3- 命令出错
+
+每当命令运行完后，make会检测每个命令的返回码，如果命令返回成功，那么make会执行下一条命令，当规则中所有的命令成功返回后，这个规则就算是成功完成了。如果一个规则中的某个命令出错了（命令退出码非零），那么make就会终止执行当前规则，这将有可能终止所有规则的执行。
+
+有些时候，命令的出错并不表示就是错误的。例如mkdir命令，我们一定需要建立一个目录，如果目录不存在，那么mkdir就成功执行，万事大吉，如果目录存在，那么就出错了。我们之所以使用mkdir的意思就是一定要有这样的一个目录，于是我们就不希望mkdir出错而终止规则的运行。
+
+为了做到这一点，忽略命令的出错，我们可以在Makefile的命令行前加一个减号 `-` （在Tab键之后），标记为不管命令出不出错都认为是成功的。如：
+
+```
+clean:
+    -rm -f *.o
+```
+
+如果在执行make时加上 `-i` 或是 `--ignore-errors` 参数，那么make将会被设定为全局忽略错误，也就是make会忽略掉makefile中全部的错误。
+
+此外，和伪目标一样，我们可以用特殊标记`.IGNORE`将目标设定为忽略错误。例如
+
+```
+.IGNORE: clean
+clean:
+    rm -f *.o
+```
+
+这样，无论rm的执行正确与否，make都会忽略掉返回结果，认为是正确的。
+
+还有一个要提一下的make的参数的是 `-k` 或是 `--keep-going` ，这个参数的意思是，如果某规则中的命令出错了，那么就终止该规则的执行，但继续执行其它规则。
+
+
+
+## -4- 嵌套执行make
+
+在大型项目中，不同的功能、模块的源文件都被分类放在不同的文件夹目录下，如果将整个工程的编译规则都写在一个makefile中，会导致不便于维护，也会显得makefile过于臃肿，使用起来也不够灵活。为了解决这些问题，可以嵌套使用make，在每个模块的目录下都编写一个对应模块的makefile文件，将该模块下的编译规则、依赖信息写入对应的makefile下，然后在总的makefile中调用这些子目录下的makefile就能做到编译整个项目了。
+
+例如，我们有一个子目录叫subdir，这个目录下有个Makefile文件，来指明了这个目录下文件的编译规则。那么我们总控的Makefile可以这样书写：
+
+```
+subsystem:
+    cd subdir && $(MAKE)
+```
+
+其等价于：
+
+```
+subsystem:
+    $(MAKE) -C subdir
+```
+
+定义$(MAKE)宏变量的意思是，也许我们的make需要一些参数，所以定义成一个变量比较利于维护。这两个例子的意思都是先进入“subdir”目录，然后执行make命令。
+
+
+
+总控Makefile的变量可以传递到下级的Makefile中（如果你显示的声明），但是**不会**覆盖下层的Makefile中所定义的变量，除非指定了 `-e` 参数。
+
+如果你要传递变量到下级Makefile中，那么你可以使用这样的声明:
+
+```
+export <variable ...>;
+```
+
+如果你不想让某些变量传递到下级Makefile中，那么你可以这样声明:
+
+```
+unexport <variable ...>;
+```
+
+如果要传递所有的变量，那么，只要一个export就行了。后面什么也不用跟，表示传递所有的变量。
+
+需要注意的是，有两个变量，一个是 `SHELL` ，一个是 `MAKEFLAGS` ，这两个变量不管你是否export，其总是要传递到下层 Makefile中，特别是 `MAKEFLAGS` 变量，其中包含了make的参数信息，如果我们执行“总控Makefile”时有make参数或是在上层 Makefile中定义了这个变量，那么 `MAKEFLAGS` 变量将会是这些参数，并会传递到下层Makefile中，这是一个系统级的环境变量。
+
+但是make命令中的有几个参数并不往下传递，它们是 `-C` , `-f` , `-h`, `-o` 和 `-W` （-C 改变工作目录，-f 指定Makefile，-h 输出帮助信息，-o 指定文件不被更新，-W touch指定文件后执行），如果你不想往下层传递参数，那么，你可以这样来：
+
+```
+subsystem:
+    cd subdir && $(MAKE) MAKEFLAGS=
+```
+
+---
+
+还有一个在“嵌套执行”中比较有用的参数， `-w` 或是 `--print-directory` 会在make的过程中输出一些信息，让你看到目前的工作目录。比如，如果我们的下级make目录是“/home/hchen/gnu/make”，如果我们使用 `make -w` 来执行，那么当进入该目录时，我们会看到:
+
+```
+make: Entering directory `/home/hchen/gnu/make'.
+```
+
+而在完成下层make后离开目录时，我们会看到:
+
+```
+make: Leaving directory `/home/hchen/gnu/make'
+```
+
+当你使用 `-C` 参数来指定make下层Makefile时， `-w` 会被自动打开的。如果参数中有 `-s` （ `--slient` ）或是 `--no-print-directory` ，那么， `-w` 总是失效的。
+
+
+
+## -5- 对应命令包
+
+如果Makefile中出现一些相同命令序列，那么我们可以为这些相同的命令序列定义一个变量。定义这种命令序列的语法以 `define` 开始，以 `endef` 结束，如:
+
+```
+define run-yacc
+yacc $(firstword $^)
+mv y.tab.c $@
+endef
+```
+
+这里，“run-yacc”是这个命令包的名字，其不要和Makefile中的变量重名。在 `define` 和 `endef` 中的两行就是命令序列。这个命令包中的第一个命令是运行Yacc程序，因为Yacc程序总是生成“y.tab.c”的文件，所以第二行的命令就是把这个文件改改名字。还是把这个命令包放到一个示例中来看看吧。
+
+```
+foo.c : foo.y
+    $(run-yacc)
+```
+
+我们可以看见，要使用这个命令包，我们就好像使用变量一样。在这个命令包的使用中，命令包“run-yacc”中的 `$^` 就是 `foo.y` ， `$@` 就是 `foo.c` ，make在执行命令包时，命令包中的每个命令会被依次独立执行。
+
+
+
+
+
+# 0x05 使用变量
+
+这一部分，陈皓大佬写得有些冗杂，所以参考了[makefile简明教程](https://www.zhaixue.cc/makefile/makefile-val.html)的部分，
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
