@@ -1211,27 +1211,124 @@ override同样是针对于系统环境传入的变量，或是make命令行指�
 
 # 0x06 使用条件判断
 
+使用条件判断，可以让make根据运行时的不同情况选择不同的执行分支。条件表达式可以是比较变量的值，或是比较变量和常量的值。在Makefile中，可以使用ifeq、ifneq、ifdef、ifndef 等关键字来进行条件判断。
+
+先看一个例子：
+
+```makefile
+libs_for_gcc = -lgnu
+normal_libs =
+
+foo: $(objects)
+ifeq ($(CC),gcc)
+    $(CC) -o foo $(objects) $(libs_for_gcc)
+else
+    $(CC) -o foo $(objects) $(normal_libs)
+endif
+```
+
+在这个示例中，根据$(CC)变量的值，会选择不同的库来完成编译。其中`ifeq` 、 `else` 和 `endif`是条件判断的关键字。 `ifeq` 的意思表示条件语句的开始，并指定一个条件表达式，表达式包含两个参数，以逗号分隔，表达式以圆括号括起。 `else` 表示条件表达式为假的情况。 `endif` 表示一个条件语句的结束，任何一个条件表达式都应该以 `endif` 结束。
+
+当我们的变量 `$(CC)` 值是 `gcc` 时，目标 `foo` 的规则是：
+
+```
+foo: $(objects)
+    $(CC) -o foo $(objects) $(libs_for_gcc)
+```
+
+而当我们的变量 `$(CC)` 值不是 `gcc` 时（比如 `cc` ），目标 `foo` 的规则是：
+
+```
+foo: $(objects)
+    $(CC) -o foo $(objects) $(normal_libs)
+```
 
 
 
+由此可以得出条件判断的语法规则：
+
+```
+<conditional-directive>
+<text-if-true>
+endif
+```
+
+以及:
+
+```
+<conditional-directive>
+<text-if-true>
+else
+<text-if-false>
+endif
+```
+
+其中 `<conditional-directive>` 表示条件关键字，一共有四个： `ifeq`、`ifneq`、`ifdef`、`ifndef`
 
 
 
+## -1- ifeq & ifneq
+
+`ifeq`就是比较两个参数的值是否相等，如果相等则为真，否则为假。`ifeq`后面的参数有多种写法
+
+```
+ifeq (<arg1>, <arg2>)
+ifeq '<arg1>' '<arg2>'
+ifeq "<arg1>" "<arg2>"
+ifeq "<arg1>" '<arg2>'
+ifeq '<arg1>' "<arg2>"
+```
+
+参数中还可以使用make的函数。如:
+
+```
+ifeq ($(strip $(foo)),)
+<text-if-empty>
+endif
+```
+
+这个示例中使用了 `strip` 函数，如果这个函数的返回值是空（Empty），那么 `<text-if-empty>` 就生效。
 
 
 
+`ifneq`就是比较两个参数的值是否不相等，如果不相等则为真，否则为假。这就于`ifeq`刚好相反，不过多赘述。
 
 
 
+## -2- ifdef & ifndef
 
+语法规则
 
+```
+ifdef <variable-name>
+```
 
+如果变量 `<variable-name>` 的值非空，那到表达式为真。否则，表达式为假。当然， `<variable-name>` 同样可以是一个函数的返回值。注意， `ifdef` 只是测试一个变量是否有值，其并不会把变量扩展到当前位置。还是来看两个例子：
 
+示例一：
 
+```
+bar =
+foo = $(bar)
+ifdef foo
+    frobozz = yes
+else
+    frobozz = no
+endif
+```
 
+示例二：
 
+```
+foo =
+ifdef foo
+    frobozz = yes
+else
+    frobozz = no
+endif
+```
 
-
+第一个例子中， `$(frobozz)` 值是 `yes` ，第二个则是 `no`。
 
 
 
