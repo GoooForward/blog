@@ -2,8 +2,10 @@
 title: Makefile学习笔记
 date: 2023-11-06 10:59:00
 updated: {{ date }}
-hide: true
-tags: regex
+#hide: true
+tags: 
+  - make
+  - makefiles
 categories: 学习
 ---
 
@@ -1339,6 +1341,765 @@ endif
 # 0x07 使用函数
 
 在Makefile中可以使用函数来处理变量，从而让我们的命令或是规则更为的灵活和具有智能。make 所支持的函数也不算很多，不过已经足够我们的操作了。函数调用后，函数的返回值可以当做变量来使用。
+
+
+
+## -1- 函数的调用语法
+
+函数调用，很像变量的使用，也是以 `$` 来标识的，其语法如下：
+
+```
+$(<function> <arguments>)
+or
+${<function> <arguments>}
+```
+
+这里， `<function>` 就是函数名，make支持的函数不多。 `<arguments>` 为函数的参数，**参数间以逗号 `,` 分隔，而函数名和参数之间以“空格”分隔**。函数调用以 `$` 开头，以圆括号或花括号把函数名和参数括起。
+
+示例：
+
+```
+comma:= ,
+empty:=
+space:= $(empty) $(empty)
+foo:= a b c
+bar:= $(subst $(space),$(comma),$(foo))
+```
+
+在这个示例中， `$(comma)` 的值是一个逗号。 `$(space)` 使用了 `$(empty)` 定义了一个空格， `$(foo)` 的值是 `a b c` ， `$(bar)` 的定义用，调用了函数 `subst` ，这是一个替换函数，这个函数有三个参数，第一个参数是被替换字串，第二个参数是替换字串，第三个参数是替换操作作用的字串。这个函数也就是把 `$(foo)` 中的空格替换成逗号，所以 `$(bar)` 的值是 `a,b,c` 。
+
+
+
+## -2- 字符串处理函数
+
+### subst
+
+```
+$(subst <from>,<to>,<text>)
+```
+
+- 名称：字符串替换函数
+
+- 功能：把字串 `<text>` 中的 `<from>` 字符串替换成 `<to>` 。
+
+- 返回：函数返回被替换过后的字符串。
+
+- 示例：
+
+  > ```
+  > $(subst ee,EE,feet on the street)
+
+把 `feet on the street` 中的 `ee` 替换成 `EE` ，返回结果是 `fEEt on the strEEt` 。
+
+
+
+### patsubst
+
+```
+$(patsubst <pattern>,<replacement>,<text>)
+```
+
+- 名称：模式字符串替换函数。
+
+- 功能：查找 `<text>` 中的单词（单词以“空格”、“Tab”或“回车”“换行”分隔）是否符合模式 `<pattern>` ，如果匹配的话，则以 `<replacement>` 替换。这里， `<pattern>` 可以包括通配符 `%` ，表示任意长度的字串。如果 `<replacement>` 中也包含 `%` ，那么， `<replacement>` 中的这个 `%` 将是 `<pattern>` 中的那个 `%` 所代表的字串。（可以用 `\` 来转义，以 `\%` 来表示真实含义的 `%` 字符）
+
+- 返回：函数返回被替换过后的字符串。
+
+- 示例：
+
+  > ```
+  > $(patsubst %.c,%.o,x.c.c bar.c)
+  > ```
+
+把字串 `x.c.c bar.c` 符合模式 `%.c` 的单词替换成 `%.o` ，返回结果是 `x.c.o bar.o`
+
+
+
+### strip
+
+```
+$(strip <string>)
+```
+
+- 名称：去空格函数。
+
+- 功能：去掉 `<string>` 字串中开头和结尾的空字符。
+
+- 返回：返回被去掉空格的字符串值。
+
+- 示例：
+
+  > ```
+  > $(strip a b c )
+  > ```
+
+  把字串 `a b c ` 去掉开头和结尾的空格，结果是 `a b c`。
+
+
+
+### findstring
+
+```
+$(findstring <find>,<in>)
+```
+
+- 名称：查找字符串函数
+
+- 功能：在字串 `<in>` 中查找 `<find>` 字串。
+
+- 返回：如果找到，那么返回 `<find>` ，否则返回空字符串。
+
+- 示例：
+
+  > ```
+  > $(findstring a,a b c)
+  > $(findstring a,b c)
+  > ```
+
+第一个函数返回 `a` 字符串，第二个返回空字符串
+
+
+
+### filter
+
+```
+$(filter <pattern...>,<text>)
+```
+
+- 名称：过滤函数
+
+- 功能：以 `<pattern>` 模式过滤 `<text>` 字符串中的单词，保留符合模式 `<pattern>` 的单词。可以有多个模式。
+
+- 返回：返回符合模式 `<pattern>` 的字串。
+
+- 示例：
+
+  > ```
+  > sources := foo.c bar.c baz.s ugh.h
+  > foo: $(sources)
+  >     cc $(filter %.c %.s,$(sources)) -o foo
+  > ```
+
+  `$(filter %.c %.s,$(sources))` 返回的值是 `foo.c bar.c baz.s` 。
+
+
+
+### filter-out
+
+```
+$(filter-out <pattern...>,<text>)
+```
+
+- 名称：反过滤函数
+
+- 功能：以 `<pattern>` 模式过滤 `<text>` 字符串中的单词，去除符合模式 `<pattern>` 的单词。可以有多个模式。
+
+- 返回：返回不符合模式 `<pattern>` 的字串。
+
+- 示例：
+
+  > ```
+  > objects=main1.o foo.o main2.o bar.o
+  > mains=main1.o main2.o
+  > ```
+
+  `$(filter-out $(mains),$(objects))` 返回值是 `foo.o bar.o` 。
+
+
+
+### sort 
+
+```
+$(sort <list>)
+```
+
+- 名称：排序函数
+- 功能：给字符串 `<list>` 中的单词排序（升序）。
+- 返回：返回排序后的字符串。
+- 示例： `$(sort foo bar lose)` 返回 `bar foo lose` 。
+- 备注： `sort` 函数会去掉 `<list>` 中相同的单词。
+
+
+
+### word
+
+```
+$(word <n>,<text>)
+```
+
+- 名称：取单词函数
+- 功能：取字符串 `<text>` 中第 `<n>` 个单词。（从一开始）
+- 返回：返回字符串 `<text>` 中第 `<n>` 个单词。如果 `<n>` 比 `<text>` 中的单词数要大，那么返回空字符串。
+- 示例： `$(word 2, foo bar baz)` 返回值是 `bar` 。
+
+
+
+### wordlist
+
+```
+$(wordlist <ss>,<e>,<text>)
+```
+
+- 名称：取单词串函数
+- 功能：从字符串 `<text>` 中取从 `<ss>` 开始到 `<e>` 的单词串。 `<ss>` 和 `<e>` 是一个数字。
+- 返回：返回字符串 `<text>` 中从 `<ss>` 到 `<e>` 的单词字串。如果 `<ss>` 比 `<text>` 中的单词数要大，那么返回空字符串。如果 `<e>` 大于 `<text>` 的单词数，那么返回从 `<ss>` 开始，到 `<text>` 结束的单词串。
+- 示例： `$(wordlist 2, 3, foo bar baz)` 返回值是 `bar baz` 。
+
+
+
+### words
+
+```
+$(words <text>)
+```
+
+- 名称：单词个数统计函数
+- 功能：统计 `<text>` 中字符串中的单词个数。
+- 返回：返回 `<text>` 中的单词数。
+- 示例： `$(words, foo bar baz)` 返回值是 `3` 。
+- 备注：如果我们要取 `<text>` 中最后的一个单词，我们可以这样： `$(word $(words <text>),<text>)` 。
+
+
+
+### firstword
+
+```
+$(firstword <text>)
+```
+
+- 名称：首单词函数——firstword。
+- 功能：取字符串 `<text>` 中的第一个单词。
+- 返回：返回字符串 `<text>` 的第一个单词。
+- 示例： `$(firstword foo bar)` 返回值是 `foo`。
+- 备注：这个函数可以用 `word` 函数来实现： `$(word 1,<text>)` 
+
+
+
+以上，是所有的字符串操作函数，如果搭配混合使用，可以完成比较复杂的功能。这里，举一个现实中应用的例子。我们知道，make使用 `VPATH` 变量来指定“依赖文件”的搜索路径。于是，我们可以利用这个搜索路径来指定编译器对头文件的搜索路径参数 `CFLAGS` ，如：
+
+```
+override CFLAGS += $(patsubst %,-I%,$(subst :, ,$(VPATH)))
+```
+
+如果我们的 `$(VPATH)` 值是 `src:../headers` ，那么 `$(patsubst %,-I%,$(subst :, ,$(VPATH)))` 将返回 `-Isrc -I../headers` ，这正是cc或gcc搜索头文件路径的参数。
+
+
+
+
+
+## -3- 文件名操作函数
+
+这些函数主要是处理文件名的。每个函数的参数字符串都会被当做一个或是一系列的文件名来对待。
+
+### dir
+
+```
+$(dir <names...>)
+```
+
+- 名称：取目录函数——dir。
+- 功能：从文件名序列 `<names>` 中取出目录部分。目录部分是指最后一个反斜杠（ `/` ）之前的部分。如果没有反斜杠，那么返回 `./` 。
+- 返回：返回文件名序列 `<names>` 的目录部分。
+- 示例： `$(dir src/foo.c hacks)` 返回值是 `src/ ./` 。
+
+
+
+### notdir
+
+```
+$(notdir <names...>)
+```
+
+- 名称：取文件函数——notdir。
+- 功能：从文件名序列 `<names>` 中取出非目录部分。非目录部分是指最後一个反斜杠（ `/` ）之后的部分。
+- 返回：返回文件名序列 `<names>` 的非目录部分。
+- 示例: `$(notdir src/foo.c hacks)` 返回值是 `foo.c hacks` 。
+
+
+
+### suffix
+
+```
+$(suffix <names...>)
+```
+
+- 名称：取後缀函数——suffix。
+- 功能：从文件名序列 `<names>` 中取出各个文件名的后缀。
+- 返回：返回文件名序列 `<names>` 的后缀序列，如果文件没有后缀，则返回空字串。
+- 示例： `$(suffix src/foo.c src-1.0/bar.c hacks)` 返回值是 `.c .c`。
+
+
+
+### basename
+
+```
+$(basename <names...>)
+```
+
+- 名称：取前缀函数——basename。
+- 功能：从文件名序列 `<names>` 中取出各个文件名的前缀部分。
+- 返回：返回文件名序列 `<names>` 的前缀序列，如果文件没有前缀，则返回空字串。
+- 示例： `$(basename src/foo.c src-1.0/bar.c hacks)` 返回值是 `src/foo src-1.0/bar hacks` 。
+
+
+
+### addsuffix
+
+```
+$(addsuffix <suffix>,<names...>)
+```
+
+- 名称：加后缀函数——addsuffix。
+- 功能：把后缀 `<suffix>` 加到 `<names>` 中的每个单词后面。
+- 返回：返回加过后缀的文件名序列。
+- 示例： `$(addsuffix .c,foo bar)` 返回值是 `foo.c bar.c` 。
+
+
+
+### addprefix
+
+```
+$(addprefix <prefix>,<names...>)
+```
+
+- 名称：加前缀函数——addprefix。
+- 功能：把前缀 `<prefix>` 加到 `<names>` 中的每个单词前面。
+- 返回：返回加过前缀的文件名序列。
+- 示例： `$(addprefix src/,foo bar)` 返回值是 `src/foo src/bar` 。
+
+
+
+### join
+
+```
+$(join <list1>,<list2>)
+```
+
+- 名称：连接函数——join。
+- 功能：把 `<list2>` 中的单词对应地加到 `<list1>` 的单词后面。如果 `<list1>` 的单词个数要比 `<list2>` 的多，那么， `<list1>` 中的多出来的单词将保持原样。如果 `<list2>` 的单词个数要比 `<list1>` 多，那么， `<list2>` 多出来的单词将被复制到 `<list1>` 中。
+- 返回：返回连接过后的字符串。
+- 示例： `$(join aaa bbb , 111 222 333)` 返回值是 `aaa111 bbb222 333` 。
+
+
+
+## -4- foreach 函数
+
+foreach是一个用于循环的函数，它的语法规则：
+
+```
+$(foreach <var>,<list>,<text>)
+```
+
+这个函数的意思是，把参数 `<list>` 中的单词逐一取出放到参数 `<var>` 所指定的变量中，然后再执行 `<text>` 所包含的表达式。每一次 `<text>` 会返回一个字符串，循环过程中， `<text>` 的所返回的每个字符串会以空格分隔，最后当整个循环结束时， `<text>` 所返回的每个字符串所组成的整个字符串（以空格分隔）将会是foreach函数的返回值。
+
+所以， `<var>` 最好是一个变量名， `<list>` 可以是一个表达式，而 `<text>` 中一般会使用 `<var>` 这个参数来依次枚举 `<list>` 中的单词。举个例子：
+
+```
+names := a b c d
+
+files := $(foreach n,$(names),$(n).o)
+```
+
+上面的例子中， `$(name)` 中的单词会被挨个取出，并存到变量 `n` 中， `$(n).o` 每次根据 `$(n)` 计算出一个值，这些值以空格分隔，最后作为foreach函数的返回，所以， `$(files)` 的值是 `a.o b.o c.o d.o` 。
+
+注意，foreach中的 `<var>` 参数是一个临时的局部变量，foreach函数执行完后，参数 `<var>` 的变量将不在作用，其作用域只在foreach函数当中。
+
+
+
+## -5- if函数
+
+if函数很像GNU的make所支持的条件语句——ifeq（参见前面所述的章节），if函数的语法是：
+
+```
+$(if <condition>,<then-part>)
+```
+
+或是
+
+```
+$(if <condition>,<then-part>,<else-part>)
+```
+
+可见，if函数可以包含“else”部分，或是不含。即if函数的参数可以是两个，也可以是三个。 `<condition>` 参数是if的表达式，如果其返回的为非空字符串，那么这个表达式就相当于返回真，于是， `<then-part>` 会被计算，否则 `<else-part>` 会被计算。
+
+而if函数的返回值是，如果 `<condition>` 为真（非空字符串），那个 `<then-part>` 会是整个函数的返回值，如果 `<condition>` 为假（空字符串），那么 `<else-part>` 会是整个函数的返回值，此时如果 `<else-part>` 没有被定义，那么，整个函数返回空字串。
+
+所以， `<then-part>` 和 `<else-part>` 只会有一个被计算。
+
+举个例子：
+
+```
+# 定义一个变量
+DEBUG = 1
+
+# 使用 if 函数进行条件判断
+CFLAGS = $(if $(filter 1,$(DEBUG)),-g -Wall,-O2)
+```
+
+在这个例子中，`CFLAGS`的值会更具`DEBUG`变量的值来选择，如果其值为1，则会选择`-g -Wall`，否则会选择`-O2`。
+
+
+
+## -6- call函数
+
+call函数可以调用你自定义的参数化函数，你可以写一个非常复杂的表达式，这个表达式中，你可以定义许多参数，然后你可以call函数来向这个表达式传递参数。它的语法是：
+
+```
+$(call <function-name>,<parm1>,<parm2>,...,<parmn>)
+```
+
+当执行这个函数时，会把参数 `<parm1>` 、 `<parm2>` 、 `<parm3>` 依次传入自定义的函数中的变量，最后的自定义函数返回值就是call函数的返回值。关于这个自定义函数，其变量通常用`$(1)` `$(2)` `$(3)`(以此类推)来表示传入的第1个、第2个、第3个参数。举个例子更好理解
+
+```
+# 定义一个简单的函数，用于连接两个字符串
+concat = $(1)$(2)
+
+# 使用 call 函数调用定义的函数
+result := $(call concat, Hello, World)
+```
+
+在这个例子中，concat就是一个我们自定义的简单函数，它接受两个参数`$(1)` 和`$(2)`，并把它们按顺序连起来。所以最终如result的结果是`HelloWorld`
+
+再举个例子
+
+```
+reverse =  $(2) $(1)
+
+foo = $(call reverse,a,b)
+```
+
+此时的 `foo` 的值就是 `b a` 。
+
+需要注意：在向 call 函数传递参数时要尤其注意空格的使用。call 函数在处理参数时，第2个及其之后的参数中的空格会被保留，因而可能造成一些奇怪的效果。因而在向call函数提供参数时，最安全的做法是去除所有多余的空格。
+
+
+
+## -7- origin函数
+
+origin函数不像其它的函数，他并不操作变量的值，他只是告诉你你的这个变量是哪里来的？其语法是：
+
+```
+$(origin <variable>)
+```
+
+注意， `<variable>` 是变量的名字，不应该是引用。所以你最好不要在 `<variable>` 中使用`$` 字符。Origin函数会以其返回值来告诉你这个变量的“出生情况”，下面，是origin函数的返回值:
+
+- `undefined`
+
+  如果 `<variable>` 从来没有定义过，origin函数返回这个值 `undefined`
+
+- `default`
+
+  如果 `<variable>` 是一个默认的定义，比如“CC”这个变量，这种变量我们将在后面讲述。
+
+- `environment`
+
+  如果 `<variable>` 是一个环境变量，并且当Makefile被执行时， `-e` 参数没有被打开。
+
+- `file`
+
+  如果 `<variable>` 这个变量被定义在Makefile中。
+
+- `command line`
+
+  如果 `<variable>` 这个变量是被命令行定义的。
+
+- `override`
+
+  如果 `<variable>` 是被override指示符重新定义的。
+
+- `automatic`
+
+  如果 `<variable>` 是一个命令运行中的自动化变量。关于自动化变量将在前面介绍过了。
+
+这些信息对于我们编写Makefile是非常有用的，例如，假设我们有一个Makefile其包了一个定义文件 Make.def，在 Make.def中定义了一个变量“bletch”，而我们的环境中也有一个环境变量“bletch”，此时，我们想判断一下，如果变量来源于环境，那么我们就把之重定义了，如果来源于Make.def或是命令行等非环境的，那么我们就不重新定义它。于是，在我们的Makefile中，我们可以这样写：
+
+```
+ifdef bletch
+    ifeq "$(origin bletch)" "environment"
+        bletch = barf, gag, etc.
+    endif
+endif
+```
+
+当然，你也许会说，使用 `override` 关键字不就可以重新定义环境中的变量了吗？为什么需要使用这样的步骤？是的，我们用 `override` 是可以达到这样的效果，可是 `override` 过于粗暴，它同时会把从命令行定义的变量也覆盖了，而我们只想重新定义环境传来的，而不想重新定义命令行传来的。
+
+
+
+## -8- shell函数
+
+shell函数就是用来执行shell命令的函数。它的参数是操作系统的shell命令，操作系统的标准输出会作为函数的返回值，可以用来给变量赋值，也可以用于函数的嵌套。
+
+```
+contents := $(shell cat foo)
+files := $(shell echo *.c)
+```
+
+除了shell函数之外，直接在shell命令前后加上反引号`，这样同样也能执行shell命令。
+
+```
+contents := `cat foo`
+files := `echo *.c`
+```
+
+注意，这个函数会新生成一个Shell程序来执行命令，所以你要注意其运行性能，如果你的Makefile中有一些比较复杂的规则，并大量使用了这个函数，那么对于你的系统性能是有害的。特别是Makefile的隐式规则可能会让你的shell函数执行的次数比你想像的多得多。
+
+
+
+## -9- 控制make函数
+
+make提供了一些函数来控制make的运行。通常，你需要检测一些运行Makefile时的运行时信息，并且根据这些信息来决定，你是让make继续执行，还是停止。
+
+```
+$(error <text ...>)
+```
+
+产生一个致命的错误， `<text ...>` 是错误信息。注意，error函数不会在一被使用就会产生错误信息，所以如果你把其定义在某个变量中，并在后续的脚本中使用这个变量，那么也是可以的。例如：
+
+示例一：
+
+```
+ifdef ERROR_001
+    $(error error is $(ERROR_001))
+endif
+```
+
+示例二：
+
+```
+ERR = $(error found an error!)
+
+.PHONY: err
+
+err: $(ERR)
+```
+
+示例一会在变量ERROR_001定义了后执行时产生error调用，而示例二则在目录err被执行时才发生error调用。
+
+```
+$(warning <text ...>)
+```
+
+这个函数很像error函数，只是它并不会让make退出，只是输出一段警告信息，而make继续执行。
+
+
+
+# 0x08 Make的运行
+
+这一部分主要是make这个命令是如何使用的，以及make有关参数的讲解。
+
+
+
+## -1- make的退出码
+
+make命令执行后有三个退出码：
+
+- **0**
+
+  表示成功执行。
+
+- **1**
+
+  如果make运行时出现任何错误，其返回1。
+
+- **2**
+
+  如果你使用了make的“-q”选项，并且make使得一些目标不需要更新，那么返回2。
+
+
+
+## -2- 指定Makefile
+
+GNU make找寻默认的Makefile的规则是在当前目录下依次找三个文件——“GNUmakefile”、“makefile”和“Makefile”。其按顺序找这三个文件，一旦找到，就开始读取这个文件并执行。
+
+如果希望make执行我们指定的makefile，那么可以使用make的 `-f` 或是 `--file` 参数（ `--makefile` 参数也行）。例如，我们有个makefile的名字是“hchen.mk”，那么，我们可以这样来让make来执行这个文件：
+
+```
+make –f hchen.mk
+```
+
+如果在make的命令行不只一次地使用了 `-f` 参数，那么，所有指定的makefile将会被连在一起传递给make执行。
+
+
+
+## -3- 指定目标
+
+一般来说，make的最终目标是makefile中的第一个目标，而其它目标一般是由这个目标连带出来的。这是make的默认行为。如果希望make以我们指定的目标为最终目标的话，就可以显式的指出你希望完成的目标，类似于`make clean`。
+
+任何在makefile中的目标都可以被指定成终极目标，但是除了以 `-` 打头，或是包含了 `=` 的目标，因为有这些字符的目标，会被解析成命令行参数或是变量。甚至没有被我们明确写出来的目标也可以成为make的终极目标，也就是说，只要make可以找到其隐含规则推导规则，那么这个隐含目标同样可以被指定成终极目标。
+
+
+
+有一个make的环境变量叫 `MAKECMDGOALS` ，这个变量中会存放你所指定的终极目标的列表，如果在命令行上，你没有指定目标，那么，这个变量是空值。这个变量可以让你使用在一些比较特殊的情形下。比如下面的例子：
+
+```
+sources = foo.c bar.c
+ifneq ( $(MAKECMDGOALS),clean)
+    include $(sources:.c=.d)
+endif
+```
+
+基于上面的这个例子，只要我们输入的命令不是“make clean”，那么makefile会自动包含“foo.d”和“bar.d”这两个makefile。
+
+使用指定终极目标的方法可以很方便地让我们编译我们的程序，例如下面这个例子：
+
+```
+.PHONY: all
+all: prog1 prog2 prog3 prog4
+```
+
+从这个例子中，我们可以看到，这个makefile中有四个需要编译的程序——“prog1”， “prog2”，“prog3”和 “prog4”，我们可以使用“make all”命令来编译所有的目标（如果把all置成第一个目标，那么只需执行“make”），我们也可以使用 “make prog2”来单独编译目标“prog2”。
+
+即然make可以指定所有makefile中的目标，那么也包括“伪目标”，于是我们可以根据这种性质来让我们的makefile根据指定的不同的目标来完成不同的事。在Unix世界中，软件发布时，特别是GNU这种开源软件的发布时，其makefile都包含了编译、安装、打包等功能。我们可以参照这种规则来书写我们的makefile中的目标。
+
+- all:这个伪目标是所有目标的目标，其功能一般是编译所有的目标。
+- clean:这个伪目标功能是删除所有被make创建的文件。
+- install:这个伪目标功能是安装已编译好的程序，其实就是把目标执行文件拷贝到指定的目标中去。
+- print:这个伪目标的功能是例出改变过的源文件。
+- tar:这个伪目标功能是把源程序打包备份。也就是一个tar文件。
+- dist:这个伪目标功能是创建一个压缩文件，一般是把tar文件压成Z文件。或是gz文件。
+- TAGS:这个伪目标功能是更新所有的目标，以备完整地重编译使用。
+- check和test:这两个伪目标一般用来测试makefile的流程。
+
+
+
+## -2- 检查规则
+
+有时候，我们不想让我们的makefile中的规则执行起来，我们只想检查一下我们的命令，或是执行的序列。于是我们可以使用make命令的下述参数：
+
+- `-n`, `--just-print`, `--dry-run`, `--recon`
+
+  不执行参数，这些参数只是打印命令，不管目标是否更新，把规则和连带规则下的命令打印出来，但不执行，这些参数对于我们调试makefile很有用处。
+
+- `-t`, `--touch`
+
+  这个参数的意思就是把目标文件的时间更新，但不更改目标文件。也就是说，make假装编译目标，但不是真正的编译目标，只是把目标变成已编译过的状态。
+
+- `-q`, `--question`
+
+  这个参数的行为是找目标的意思，也就是说，如果目标存在，那么其什么也不会输出，当然也不会执行编译，如果目标不存在，其会打印出一条出错信息。
+
+- `-W <file>`, `--what-if=<file>`, `--assume-new=<file>`, `--new-file=<file>`
+
+  这个参数需要指定一个文件。一般是是源文件（或依赖文件），Make会根据规则推导来运行依赖于这个文件的命令，一般来说，可以和“-n”参数一同使用，来查看这个依赖文件所发生的规则命令。
+
+另外一个很有意思的用法是结合 `-p` 和 `-v` 来输出makefile被执行时的信息（这个将在后面讲述）。
+
+
+
+## -3- make参数
+
+下面列举了所有GNU make 3.80版的参数定义。不过还是推荐去查看make的手册，这样可以得到最准确的解释。
+
+- `-b`, `-m`
+
+  这两个参数的作用是忽略和其它版本make的兼容性。
+
+- `-B`, `--always-make`
+
+  认为所有的目标都需要更新（重编译）。
+
+- `-C` *<dir>*, `--directory`=*<dir>*
+
+  指定读取makefile的目录。如果有多个“-C”参数，make的解释是后面的路径以前面的作为相对路径，并以最后的目录作为被指定目录。如：“make -C ~hchen/test -C prog”等价于“make -C ~hchen/test/prog”。
+
+- `-debug`[=*<options>*]
+
+  输出make的调试信息。它有几种不同的级别可供选择，如果没有参数，那就是输出最简单的调试信息。下面是<options>的取值：a: 也就是all，输出所有的调试信息。（会非常的多）b: 也就是basic，只输出简单的调试信息。即输出不需要重编译的目标。v: 也就是verbose，在b选项的级别之上。输出的信息包括哪个makefile被解析，不需要被重编译的依赖文件（或是依赖目标）等。i: 也就是implicit，输出所有的隐含规则。j: 也就是jobs，输出执行规则中命令的详细信息，如命令的PID、返回码等。m: 也就是makefile，输出make读取makefile，更新makefile，执行makefile的信息。
+
+- `-d`
+
+  相当于“–debug=a”。
+
+- `-e`, `--environment-overrides`
+
+  指明环境变量的值覆盖makefile中定义的变量的值。
+
+- `-f`=*<file>*, `--file`=*<file>*, `--makefile`=*<file>*
+
+  指定需要执行的makefile。
+
+- `-h`, `--help`
+
+  显示帮助信息。
+
+- `-i` , `--ignore-errors`
+
+  在执行时忽略所有的错误。
+
+- `-I` *<dir>*, `--include-dir`=*<dir>*
+
+  指定一个被包含makefile的搜索目标。可以使用多个“-I”参数来指定多个目录。
+
+- `-j` [*<jobsnum>*], `--jobs`[=*<jobsnum>*]
+
+  指同时运行命令的个数。如果没有这个参数，make运行命令时能运行多少就运行多少。如果有一个以上的“-j”参数，那么仅最后一个“-j”才是有效的。（注意这个参数在MS-DOS中是无用的）
+
+- `-k`, `--keep-going`
+
+  出错也不停止运行。如果生成一个目标失败了，那么依赖于其上的目标就不会被执行了。
+
+- `-l` *<load>*, `--load-average`[=*<load>*], `-max-load`[=*<load>*]
+
+  指定make运行命令的负载。
+
+- `-n`, `--just-print`, `--dry-run`, `--recon`
+
+  仅输出执行过程中的命令序列，但并不执行。
+
+- `-o` *<file>*, `--old-file`=*<file>*, `--assume-old`=*<file>*
+
+  不重新生成的指定的<file>，即使这个目标的依赖文件新于它。
+
+- `-p`, `--print-data-base`
+
+  输出makefile中的所有数据，包括所有的规则和变量。这个参数会让一个简单的makefile都会输出一堆信息。如果你只是想输出信息而不想执行makefile，你可以使用“make -qp”命令。如果你想查看执行makefile前的预设变量和规则，你可以使用 “make –p –f /dev/null”。这个参数输出的信息会包含着你的makefile文件的文件名和行号，所以，用这个参数来调试你的 makefile会是很有用的，特别是当你的环境变量很复杂的时候。
+
+- `-q`, `--question`
+
+  不运行命令，也不输出。仅仅是检查所指定的目标是否需要更新。如果是0则说明要更新，如果是2则说明有错误发生。
+
+- `-r`, `--no-builtin-rules`
+
+  禁止make使用任何隐含规则。
+
+- `-R`, `--no-builtin-variabes`
+
+  禁止make使用任何作用于变量上的隐含规则。
+
+- `-s`, `--silent`, `--quiet`
+
+  在命令运行时不输出命令的输出。
+
+- `-S`, `--no-keep-going`, `--stop`
+
+  取消“-k”选项的作用。因为有些时候，make的选项是从环境变量“MAKEFLAGS”中继承下来的。所以你可以在命令行中使用这个参数来让环境变量中的“-k”选项失效。
+
+- `-t`, `--touch`
+
+  相当于UNIX的touch命令，只是把目标的修改日期变成最新的，也就是阻止生成目标的命令运行。
+
+- `-v`, `--version`
+
+  输出make程序的版本、版权等关于make的信息。
+
+- `-w`, `--print-directory`
+
+  输出运行makefile之前和之后的信息。这个参数对于跟踪嵌套式调用make时很有用。
+
+- `--no-print-directory`
+
+  禁止“-w”选项。
+
+- `-W` *<file>*, `--what-if`=*<file>*, `--new-file`=*<file>*, `--assume-file`=*<file>*
+
+  假定目标<file>;需要更新，如果和“-n”选项使用，那么这个参数会输出该目标更新时的运行动作。如果没有“-n”那么就像运行UNIX的“touch”命令一样，使得<file>;的修改时间为当前时间。
+
+- `--warn-undefined-variables`
+
+  只要make发现有未定义的变量，那么就输出警告信息。
+
+
 
 
 
