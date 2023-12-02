@@ -1,6 +1,6 @@
 var imgDataPath = "image.json"; // 图片所在相册、高宽、名称
-var imgPath = "https://gcore.jsdelivr.net/gh/GoooForward/picture@main/gallery/original-image/"; // 原图访问路径
-var imgThumbPath = "https://gcore.jsdelivr.net/gh/GoooForward/picture@main/gallery/mini-image/"; // 缩略图访问路径
+var imgPath = "https://gcore.jsdelivr.net/gh/GoooForward/blog@source/images/original-image/photo/"; // 原图访问路径
+var imgThumbPath = "https://gcore.jsdelivr.net/gh/GoooForward/blog@source/images/mini-image/photo/"; // 缩略图访问路径
 
 var windowWidth =
   window.innerWidth ||
