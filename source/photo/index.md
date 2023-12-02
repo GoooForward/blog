@@ -2,14 +2,10 @@
 title: 摄影
 subtitle: ''
 excerpt: ''
-banner_img: /img/my_background.jpg
-math: false
-mermaid: false
-category_bar: false
-comments: false
+banner_img: /img/cover.jpg
 lazyload: true
 hide: false
-date: 2022-11-19 09:04:03
+date: 2023-12-01 19:04:03
 layout: photo
 index_img:
 tags:

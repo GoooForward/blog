@@ -1,6 +1,6 @@
 var imgDataPath = "image.json"; // 图片所在相册、高宽、名称
-var imgPath = "https://weichao-io-1257283924.cos.ap-beijing.myqcloud.com/qldownload/%E5%8D%9A%E5%AE%A2/"; // 原图访问路径
-var imgThumbPath = "https://weichao-io-1257283924.cos.ap-beijing.myqcloud.com/qldownload/%E5%8D%9A%E5%AE%A2/%E7%BC%A9%E7%95%A5%E5%9B%BE/"; // 缩略图访问路径
+var imgPath = "https://gcore.jsdelivr.net/gh/GoooForward/picture@main/gallery/original-image/"; // 原图访问路径
+var imgThumbPath = "https://gcore.jsdelivr.net/gh/GoooForward/picture@main/gallery/mini-image/"; // 缩略图访问路径
 
 var windowWidth =
   window.innerWidth ||
@@ -87,9 +87,9 @@ const photo = {
         name,
         imgName,
         imgPath,
-	    imgThumbPath,
+	      imgThumbPath,
         imgNameWithPattern,
-		imgThumbNameWithPattern,
+		    imgThumbNameWithPattern,
       };
       li += this.constructHtml(imgOptions);
     });
@@ -133,9 +133,9 @@ const photo = {
           name,
           imgName,
           imgPath,
-		  imgThumbPath,
+		      imgThumbPath,
           imgNameWithPattern,
-		  imgThumbNameWithPattern,
+		      imgThumbNameWithPattern,
         };
         li += self.constructHtml(imgOptions);
       });
