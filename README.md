@@ -1,4 +1,4 @@
-# Yuweiの碎碎念
+# TYW's blog
 
 [GitHub](https://goooforward.github.io/blog/)
 
