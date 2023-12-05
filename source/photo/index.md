@@ -39,4 +39,4 @@ updated:
 </style>
 
 <div id="imageTab"></div>
-<div class="ImageGrid"></div>：
+<div class="ImageGrid"></div>
