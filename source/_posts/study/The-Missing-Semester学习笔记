@@ -1,0 +1,136 @@
+---
+title: Makefile学习笔记
+date: 2023-12-13 17:47:00
+updated: {{ date }}
+hide: true
+tags: 
+categories: 学习
+---
+
+
+
+
+
+# 0x00 资料
+
+[The Missing Semester of Your CS Education 中文版](https://missing-semester-cn.github.io/)
+
+https://www.bilibili.com/video/BV16h4y1471u/
+
+
+
+
+
+# 0x01 Shell
+
+
+
+## -1-  Shell是什么
+
+在我的认知里，首先要区分两个概念，一个是shell，一个是终端(Termial)，也叫终端仿真器。shell是用户和操作系统的中间层，用来解释传入的命令。而终端是用来与用户交互的应用程序，它负责的是将内容显示给用户，用户输入的内容先传递给终端，然后终端传递给shell，shell解析命令后再与操作系统交互。所以总结一下就是：Shell是操作系统与用户的一个中间层，Shell负责解析用户的命令，并且将命令交给操作系统执行。
+
+shell有很多种，最常见的是bash，它也是Unix下的默认shell，除此之外还有zsh、fish等shell。
+
+
+
+## -2- Shell 如何知道要执行什么
+
+当我们输入date给shell时，shell如何知道要给我返回一个日期的呢？
+
+我的理解是这样的，shell的命令分两种，一种是shell内建的，也就是shell出生自带的，例如cd、alias、echo等，这些命令是由shell解释器本身的代码实现的，另一种是可执行文件，这些可执行文件有些是系统预装的，基本上所有的Unix系统都会有，例如mkdir、ls等，还有一些可执行文件是用户安装的，例如qq、vscode等。
+
+当我们输入一个命令时，Shell会按照如下顺序查找该命令
+
+1. **内建命令（Built-in Commands）：** Shell 首先检查命令是否是内建命令，如果是内建命令，则直接由 shell 解释器执行，而不需要启动一个新的进程。
+2. **别名（Aliases）：** 如果命令是一个别名，shell 会将其替换为相应的命令。
+3. **函数（Functions）：** 如果命令是一个函数，shell 会执行该函数。
+4. **外部命令（External Commands）：** 如果以上都不匹配，shell 会在系统的 PATH 路径中查找可执行文件。如果找到了匹配的外部命令，shell 就会启动一个新的进程来执行它。
+
+如果想查看一个命令是什么类型可以使用`type`命令
+
+```shell
+tangyuwei@Ubuntu2204:~$ type cd
+cd 是 shell 内建
+tangyuwei@Ubuntu2204:~$ type ls
+ls 是 "ls --color=auto" 的别名
+tangyuwei@Ubuntu2204:~$ type mkdir
+mkdir 是 /usr/bin/mkdir 
+```
+
+
+
+环境变量PATH告诉shell应该去哪里寻找外部命令的可执行文件，使用`echo $PATH`可以查看当前的环境变量
+
+```shell
+tangyuwei@Ubuntu2204:~$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/tangyuwei/software/nodejs/node-v18.18.1-linux-x64/bin
+```
+
+可以看到，PATH这个环境变量是不同的目录以`:`隔开的，shell查找外部命令时会按照顺序直到找到第一个对应的可执行文件为止
+
+
+
+## -3- Linux 文件信息
+
+使用`ls -l`可以查看文件以及目录的更多信息，例如
+
+```shell
+tangyuwei@Ubuntu2204:~/myfile/project$ ls -l
+总计 24
+drwxrwxr-x 13 tangyuwei tangyuwei 4096 12月  4 22:12 blog
+drwxrwxr-x  5 tangyuwei tangyuwei 4096 12月 13 17:23 CS-self-learning
+drwxrwxr-x  3 tangyuwei tangyuwei 4096 12月 13 17:28 dotfiles
+drwxrwxr-x  5 tangyuwei tangyuwei 4096 12月 12 23:49 eBook
+drwxrwxr-x  5 tangyuwei tangyuwei 4096 10月 24 21:37 ics2022
+drwxrwxr-x  7 tangyuwei tangyuwei 4096 12月  2 04:17 picture
+-rw-rw-r--  1 tangyuwei tangyuwei    0 12月 13 20:27 test.py
+```
+
+这些信息的含意如下
+
+1. **文件类型和权限（File Type and Permissions）：** 第一列显示了文件类型和访问权限。这 10 个字符的含义是：
+   - `d` 表示目录，`-` 表示普通文件。
+   - 接下来的 9 个字符分为三组，每组 3 个字符分别表示文件所有者（Owner）、文件所属组（Group）、其他用户（Others）的读（r）、写（w）、执行（x）权限。
+2. **硬链接数（Number of Hard Links）：** 第二列表示与此文件或目录相关联的硬链接数。对于目录，硬链接数包括该目录中的子目录数。
+3. **文件所有者（Owner）：** 第三列是文件或目录的所有者。
+4. **文件所属组（Group）：** 第四列是文件或目录所属的组。
+5. **文件大小（File Size）：** 第五列是文件或目录的大小，以字节为单位。对于目录，这通常是目录本身占用磁盘空间的大小。
+6. **修改时间（Modification Time）：** 后续列显示文件或目录的最后修改时间。这里显示的时间格式可能因系统而异。
+7. **文件或目录名称（File or Directory Name）：** 最后一列是文件或目录的名称。
+
+这里要注意的是对于目录来说，`ls -l`查看的文件大小通常都是4096,这是这个目录本身所占用的磁盘大小，而非其中所有文件占用磁盘大小之和，这与Windows平台有所不同，如果想要查看目录下所有文件大小之和，可以使用`du -h -d 1`，其中参数-h是指human-readable，以方便人阅读的形式展示；-d是指定最大文件深度。
+
+
+
+## -4- 认识标准流
+
+在Unix中，存在三个标准stream，标准输入流STDIN，标准输出流STDOUT，标准错误流STDERR。当我们在终端中输入内容时，字符会先进入缓存区，当我们按下回车时，示意输入完成之后，缓存区的内容就会传递到标准输入流中，Shell就从标准输入中获取到了我们输入的内容。而当命令执行完成后要输出结果时，也就会通过标准输出流传递给终端，然后终端将其加载到屏幕缓冲区，然后被用户看见。最后一个标准错误流是当程序出现异常输出错误信息时，会通过标准错误流传递，我认为其设计的主要目的是为了与标准输出流分开，避免污染标准输出。（以上是我的个人理解）
+
+在终端中，我们可以组合不同的工具，使用管道，重定向等功能，可以将不同的工具进行组合。Unix的一个设计哲学是，一个工具只做一件事，但是把一件事做到极致，用户通过组合不同的工具来实现它们的目的
+
+### 重定向 `< file` &`> file`
+
+重定向很好理解，它的含意就是将文件中的内容传递到标准输入或者是从标准输出中读取内容并写入到文件。
+
+```shell
+missing:~$ echo hello > hello.txt
+missing:~$ cat hello.txt
+hello
+missing:~$ cat < hello.txt
+hello
+missing:~$ cat < hello.txt > hello2.txt
+missing:~$ cat hello2.txt
+hello
+```
+
+值得注意的是，使用重定向写入文件时，会将文件中的内容完全覆盖。如果希望保留文件中原本的内容，就应该使用追加`>>`。一个很常见的例子就是在.bashrc中添加配置：
+
+```shell
+echo "alias ll='ls -l'" >> ~/.bashrc
+```
+
+如果在这个例子中使用重定向`>`的话，那么之前配置的.bashrc的内容就全没了，只剩下了刚刚配置的一条别名了。~~是的，我干过这种蠢事~~
+
+### 管道 `|`
+
+前面的重定向和追加是针对于文件的流处理功能，实际使用中，管道可能是更加常用的。管道的含意是将前一个命令的标准输出做为后一个命令的标准输入。使用管道，可以组合各种各样的工具，
