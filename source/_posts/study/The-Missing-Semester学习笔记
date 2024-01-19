@@ -108,7 +108,7 @@ drwxrwxr-x  7 tangyuwei tangyuwei 4096 12月  2 04:17 picture
 
 在终端中，我们可以组合不同的工具，使用管道，重定向等功能，可以将不同的工具进行组合。Unix的一个设计哲学是，一个工具只做一件事，但是把一件事做到极致，用户通过组合不同的工具来实现它们的目的
 
-### 重定向 `< file` &`> file`
+### (1) 重定向 `<` &`> `
 
 重定向很好理解，它的含意就是将文件中的内容传递到标准输入或者是从标准输出中读取内容并写入到文件。
 
@@ -123,6 +123,8 @@ missing:~$ cat hello2.txt
 hello
 ```
 
+### (2) 追加`>>`
+
 值得注意的是，使用重定向写入文件时，会将文件中的内容完全覆盖。如果希望保留文件中原本的内容，就应该使用追加`>>`。一个很常见的例子就是在.bashrc中添加配置：
 
 ```shell
@@ -131,6 +133,76 @@ echo "alias ll='ls -l'" >> ~/.bashrc
 
 如果在这个例子中使用重定向`>`的话，那么之前配置的.bashrc的内容就全没了，只剩下了刚刚配置的一条别名了。~~是的，我干过这种蠢事~~
 
-### 管道 `|`
+### (3) 管道`|`
 
-前面的重定向和追加是针对于文件的流处理功能，实际使用中，管道可能是更加常用的。管道的含意是将前一个命令的标准输出做为后一个命令的标准输入。使用管道，可以组合各种各样的工具，
+前面的重定向和追加是针对于文件的流处理功能，实际使用中，管道可能是更加常用的。管道的含意是将前一个命令的标准输出做为后一个命令的标准输入。使用管道，可以组合各种各样的工具。
+
+```shell
+tangyuwei@Ubuntu:~$ cat ~/.vimrc|grep tabstop
+set tabstop=4       " 设置制表符宽度为4个空格
+```
+
+关于这部分，第四章有更加详细的介绍
+
+
+
+## -5- shebang
+
+在这章最后的习题中，提到了[shebang](https://zh.wikipedia.org/wiki/Shebang)。shebang是一个以`#!`组成的字符学序列，其出现在文本文件的第一行的前两个字符。在文件中存在Shebang的情况下，类Unix操作系统的程序加载器会分析Shebang后的内容，将这些内容作为解释器指令，并调用该指令，并将载有Shebang的文件路径作为该解释器的参数。也就是说，用户可以shebang来决定使用什么解释器来解释文件。这里还要提到的一点是，linux下并不以后缀名区分文件，这点与windows平台是不同的。你甚至可以用.sh后缀名去命名python脚本，也可以用.py后缀去命名一个shell脚本。执行该脚本文件时，操作系统还是会根据shebang来决定用什么解释器。
+
+```shell
+tangyuwei@Ubuntu:~$ cat test.py 
+#!/bin/bash
+echo hello
+tangyuwei@Ubuntu:~$ ll test.py 
+-rwxrwxr-x 1 tangyuwei tangyuwei 23 12月 14 10:49 test.py*
+tangyuwei@Ubuntu:~$ ./test.py 
+hello
+```
+
+
+
+# 0x02 Shell 工具和脚本
+
+这节课主要是简单介绍了一下shell脚本语言，并且分享了一些常用的shell工具。
+
+
+
+## -1- shell脚本
+
+大多数shell都有自己的脚本语言，课程中介绍的是以bash为例的，因为bash的应用较为广泛
+
+### (1)shell变量
+
+bash中变量赋值的语法是`foo=bar`，这里的等号两边是不能有空格的，在bash中，空格用于分隔参数。如果一定要将带空格的字符串赋值给变量，就要用引号`‘`或者`“`，又或者使用转义字符。变量的引用使用`$`，变量名外面的花括号是可选的，加不加都行，加花括号是为了帮助解释器识别变量的边界。
+
+```shell
+tangyuwei@Ubuntu:~$ foo=hello world
+找不到命令 “world”，但可以通过以下软件包安装它：
+sudo snap install world
+tangyuwei@Ubuntu:~$ foo=hello\ world
+tangyuwei@Ubuntu:~$ echo $foo
+hello world
+tangyuwei@Ubuntu:~$ foo='hello world'
+tangyuwei@Ubuntu:~$ echo $foo
+hello world
+tangyuwei@Ubuntu:~$ foo="hello world"
+tangyuwei@Ubuntu:~$ echo $foo
+hello world
+```
+
+对于字符串，单引号和双引号的含义并不相同。以`'`定义的字符串为原义字符串，其中的变量不会被转义，而 `"`定义的字符串会将变量值进行替换。
+
+```shell
+tangyuwei@Ubuntu:~$ foo=bar
+tangyuwei@Ubuntu:~$ echo '$foo'
+$foo
+tangyuwei@Ubuntu:~$ echo "$foo"
+bar
+```
+
+shell中的变量名只能包含字母、数字和下划线。字母大小写敏感，不能包含其他特殊字符。不能以数字开头，但可以包含数字。
+
+
+
+### (2)shell字符串
