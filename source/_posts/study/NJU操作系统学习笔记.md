@@ -154,3 +154,72 @@ int xchg(volatile int *addr, int newval) {
 
 
 
+有了这条指令之后，想要实现锁来保护线程就很容易了
+
+![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note_image/image-20240122212714200.png)
+
+​	一个自旋锁的实现：
+
+```c
+int table = YES;
+
+void lock() {
+retry:
+  int got = xchg(&table, NOPE);
+  if (got == NOPE)
+    goto retry;
+  assert(got == YES);
+}
+
+void unlock() {
+  xchg(&table, YES)
+}
+```
+
+```c
+int locked = 0;
+void lock() { while (xchg(&locked, 1)) ; }
+void unlock() { xchg(&locked, 0); }
+```
+
+自旋锁的本质就是一个公共变量，成功获得这个变量的线程有运行下去。而实现这个锁的前提条件就是成功实现原子的xchg指令，这条指令保证了不可能同时有两个线程同时获得这个资源。
+
+
+
+* 自旋锁的优势在于它的实现足够简单，不需要操作系统的参与，不需要陷入内核
+* 自旋锁的劣势在于它的本质其实是一致循环去判断是否获得了锁，在某个线程长时间占据某个锁的时候，其他的锁还是在不断的判断，这就会造成cpu很大浪费
+
+![](/home/tangyuwei/.config/Typora/typora-user-images/image-20240122214236170.png)
+
+
+
+## -3- 互斥锁
+
+互斥锁借助了操作系统的调度，实现了长临界区。操作系统实现了两个系统调用
+
+- ```
+  syscall(SYSCALL_lock, &lk);
+  ```
+
+  - 试图获得 `lk`，但如果失败，就切换到其他线程
+
+- ```
+  syscall(SYSCALL_unlock, &lk);
+  ```
+
+  - 释放 `lk`，如果有等待锁的线程就唤醒
+
+借助系统调用，可以避免自旋锁的空转问题。而操作系统自身借助自旋锁，保证自身是调度过程是原子的
+
+
+
+## -4- Futex
+
+futex是结合了自旋锁和互斥锁各自的优势的一种锁
+
+![](/home/tangyuwei/.config/Typora/typora-user-images/image-20240122215139630.png)
+
+
+
+# 0x13 系统调用和Shell
+
