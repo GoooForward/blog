@@ -191,6 +191,8 @@ void unlock() { xchg(&locked, 0); }
 
 ![](/home/tangyuwei/.config/Typora/typora-user-images/image-20240122214236170.png)
 
+![image-20240130170507384](/home/tangyuwei/.config/Typora/typora-user-images/image-20240130170507384.png)
+
 
 
 ## -3- 互斥锁
@@ -218,6 +220,14 @@ void unlock() { xchg(&locked, 0); }
 futex是结合了自旋锁和互斥锁各自的优势的一种锁
 
 ![](/home/tangyuwei/.config/Typora/typora-user-images/image-20240122215139630.png)
+
+
+
+
+
+
+
+
 
 
 
