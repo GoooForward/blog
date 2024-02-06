@@ -186,7 +186,7 @@ struct file_operations {
 
 
 
-# 0x02 LED灯驱动开发实验c d
+# 0x02 LED灯驱动开发实验
 
 
 
@@ -197,8 +197,74 @@ Linux使用的是虚拟内存,MMU可以将512MB的物理内存映射为2^32=4GB�
 在`arch/arm/include/asm/io.h`中
 
 ```c
+#define ioremap(cookie,size) __arm_ioremap((cookie), (size), MT_DEVICE)
 
-    
+void __iomem * __arm_ioremap(phys_addr_t phys_addr, size_t size, unsigned int mtype)
+{
+	return arch_ioremap_caller(phys_addr, size, mtype,__builtin_return_address(0));
+}
 ```
 
-c dc d
+ioremap 是个宏，有两个参数：cookie 和 size，真正起作用的是函数__arm_ioremap
+
+**phys_addr**：要映射的物理起始地址。
+
+**size**：要映射的内存空间大小。
+
+**mtype**：ioremap 的类型，可以选择 MT_DEVICE、MT_DEVICE_NONSHARED、MT_DEVICE_CACHED 和 MT_DEVICE_WC，ioremap 函数选择 MT_DEVICE。
+
+```c
+void iounmap (volatile void __iomem *addr)
+```
+
+iounmap 只有一个参数 addr，此参数就是要取消映射的虚拟地址空间首地址
+
+
+
+## -2- IO内存访问
+
+同样在在`arch/arm/include/asm/io.h`中
+
+* **读操作函数**
+
+```c
+u8 readb(const volatile void __iomem *addr)
+u16 readw(const volatile void __iomem *addr)
+u32 readl(const volatile void __iomem *addr)
+```
+
+readb、readw 和 readl 这三个函数分别对应 8bit、16bit 和 32bit 读操作，参数 addr 就是要读取写内存地址，返回值就是读取到的数据。
+
+* **写操作函数**
+
+```c
+void writeb(u8 value, volatile void __iomem *addr)
+void writew(u16 value, volatile void __iomem *addr)
+void writel(u32 value, volatile void __iomem *addr)
+```
+
+writeb、writew 和 writel 这三个函数分别对应 8bit、16bit 和 32bit 写操作，参数 value 是要写入的数值，addr 是要写入的地址。
+
+
+
+# 0x03 新字符设备驱动
+
+
+
+## 0x01 分配和释放设备号
+
+老版本的设备号需要先确认主设备号然后再注册,这就带来了两个问题:
+
+1. 需要事先确认哪些设备号未被使用
+2. 占用一个主设备号之后其所有的次设备号就都被使用掉了
+
+
+
+因此Linux在内核中提供了管理设备号的接口,使用设备号先向内核申请,让内核来管理设备号
+
+
+
+```
+
+```
+
