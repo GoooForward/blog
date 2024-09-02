@@ -1,0 +1,915 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/logo.png">
+  <link rel="icon" href="/blog/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="tangyuwei">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 学习资料Learn Regex the Easy Way 正则表达式30分钟入门教程 正则表达式在线测试工具 轻松学习正则表达式 0x01 什么是正则表达式维基上解释如下：  正则表达式（英语：Regular expression，常简写为regex、regexp），又称规律表达式、正则表示式、正则表示法、规则表达式、常规表示法，是计算机科学计算机科学)概念，用简单字符串来描述、匹配文中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式学习笔记">
+<meta property="og:url" content="https://goooforward.github.io/blog/2023/10/31/study/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="TYW&#39;s blog">
+<meta property="og:description" content="0x00 学习资料Learn Regex the Easy Way 正则表达式30分钟入门教程 正则表达式在线测试工具 轻松学习正则表达式 0x01 什么是正则表达式维基上解释如下：  正则表达式（英语：Regular expression，常简写为regex、regexp），又称规律表达式、正则表示式、正则表示法、规则表达式、常规表示法，是计算机科学计算机科学)概念，用简单字符串来描述、匹配文中">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-10-31T07:33:00.000Z">
+<meta property="article:modified_time" content="2023-10-31T07:33:00.000Z">
+<meta property="article:author" content="tangyuwei">
+<meta property="article:tag" content="regex">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>正则表达式学习笔记 - TYW&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"goooforward.github.io","root":"/blog/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>TYW&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/photo/" target="_self">
+                <i class="iconfont icon-image"></i>
+                <span>摄影</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/blog/img/cover_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">正则表达式学习笔记</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-31 15:33" pubdate>
+          2023年10月31日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          42 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">正则表达式学习笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="0x00-学习资料"><a href="#0x00-学习资料" class="headerlink" title="0x00 学习资料"></a>0x00 学习资料</h1><p><a target="_blank" rel="noopener" href="https://github.com/ziishaned/learn-regex/blob/master/translations/README-cn.md">Learn Regex the Easy Way</a></p>
+<p><a target="_blank" rel="noopener" href="https://deerchao.cn/tutorials/regex/regex.htm">正则表达式30分钟入门教程</a></p>
+<p><a target="_blank" rel="noopener" href="https://c.runoob.com/front-end/854/">正则表达式在线测试工具</a></p>
+<p><a target="_blank" rel="noopener" href="https://doc.yonyoucloud.com/doc/wiki/project/regex/index.html">轻松学习正则表达式</a></p>
+<h1 id="0x01-什么是正则表达式"><a href="#0x01-什么是正则表达式" class="headerlink" title="0x01 什么是正则表达式"></a>0x01 什么是正则表达式</h1><p>维基上解释如下：</p>
+<blockquote>
+<p><strong>正则表达式</strong>（英语：Regular expression，常简写为regex、regexp），又称<strong>规律表达式</strong>、<strong>正则表示式</strong>、<strong>正则表示法</strong>、<strong>规则表达式</strong>、<strong>常规表示法</strong>，是计算机科学计算机科学)概念，用简单字符串来描述、匹配文中全部匹配指定格式的字符串字符串，现在很多文本编辑器文本编辑器都支持用正则表达式搜索、取代匹配指定格式的字符串。</p>
+</blockquote>
+<p>个人理解：</p>
+<p>正则表示式是一种用来描述字符串匹配模式的语法，使用正则表达式可以从字符串中找到符合匹配模式的结果。这里的匹配模式是指某种自定的规则，该规则描述了你想要的结果在整个字符串中出现的规律。使用正则表达式就类似在windows平台下使用的通配符*、？，但是其功能要强大得多，同时语法也丰富得多。</p>
+<h1 id="0x02-基本匹配"><a href="#0x02-基本匹配" class="headerlink" title="0x02 基本匹配"></a>0x02 基本匹配</h1><p>最基本的匹配就是输入什么就匹配什么， 例如：一个正则表达式 <code>the</code>，它表示一个规则：由字母<code>t</code>开始，接着是<code>h</code>，再接着是<code>e</code>。</p>
+<p>正则表达式是大小写敏感的，所以<code>the</code>不会匹配<code>The</code>。</p>
+<blockquote>
+<p>“the” &#x3D;&gt; The fat cat sat on <strong>the</strong> mat.</p>
+</blockquote>
+<p>PS：书写正则表达式时，通常会将模式的语法写在<code>/pattern/</code>两个斜杠之间，用来标识其使用正则表达式</p>
+<h1 id="0x03-元字符"><a href="#0x03-元字符" class="headerlink" title="0x03 元字符"></a>0x03 元字符</h1><p>在基本匹配中，有些字符无法通过基本匹配的方式直接匹配，这些字符是元字符。元字符不代表他们本身的字面意思，他们都有特殊的含义。以下是一些元字符的介绍：</p>
+<table>
+<thead>
+<tr>
+<th>元字符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.</td>
+<td>句号匹配任意单个字符除了换行符。</td>
+</tr>
+<tr>
+<td>[ ]</td>
+<td>字符类。匹配方括号内的任意字符。</td>
+</tr>
+<tr>
+<td>[^ ]</td>
+<td>否定字符类。匹配除了方括号里的任意字符</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配&gt;&#x3D;0个重复的在*号之前的字符。</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配&gt;&#x3D;1个重复的+号前的字符。</td>
+</tr>
+<tr>
+<td>?</td>
+<td>标记?之前的字符为可选.</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>匹配num个大括号之前的字符或字符集 (n &lt;&#x3D; num &lt;&#x3D; m).</td>
+</tr>
+<tr>
+<td>(xyz)</td>
+<td>字符集，匹配与 xyz 完全相等的字符串.</td>
+</tr>
+<tr>
+<td>|</td>
+<td>或运算符，匹配符号前或后的字符.</td>
+</tr>
+<tr>
+<td>\</td>
+<td>转义字符,用于匹配一些保留的字符 &#96;[ ] ( ) { } . * + ? ^ $ \</td>
+</tr>
+<tr>
+<td>^</td>
+<td>从开始行开始匹配.</td>
+</tr>
+<tr>
+<td>$</td>
+<td>从末端开始匹配.</td>
+</tr>
+</tbody></table>
+<h2 id="1-点运算符"><a href="#1-点运算符" class="headerlink" title="-1- 点运算符."></a>-1- 点运算符<code>.</code></h2><p>点运算符表示任意<strong>单个</strong>字符，这里要注意两点，</p>
+<ul>
+<li>点运算符代表至少有一个字符，也就是点运算符至少是占一位的</li>
+<li>点运算符不匹配换换行符<code>\r</code>、<code>\n</code>，要匹配全体字符，要使用<code>(.|\r|\n)</code></li>
+</ul>
+<blockquote>
+<p>“.ar” &#x3D;&gt; The <strong>car</strong> <strong>par</strong>ked in the <strong>gar</strong>age.</p>
+</blockquote>
+<h2 id="2-字符类"><a href="#2-字符类" class="headerlink" title="-2- 字符类[]"></a>-2- 字符类<code>[]</code></h2><p>方括号用来指定一个字符类，字符类表示的是该集合中的任意<strong>一个</strong>元素，无论字符类中包含了多少个字符，在匹配时也只占一位。</p>
+<blockquote>
+<p>“[Tt]he” &#x3D;&gt; <strong>The</strong> car parked in <strong>the</strong> garage.</p>
+</blockquote>
+<p>在字符类中，大部分元字符是失效的，这些元字符在方括号内只表示它们字符本身，但是<code>-</code>和<code>^</code>和<code>\</code>有其他含义。</p>
+<ul>
+<li><p><code>-</code>表示一个字符范围，指定从其前一位的ASCII值到其后一位的ASCII值的中间的全部字符，常用的有[A-Z]表示全部大写字母，[a-z]表示全部小写字母，[0-9]表示全部数字。</p>
+</li>
+<li><p>如果想要表示<code>-</code>本身，可以将其放在字符类的第一位或者最后一位，如果一定要将其放在字符类的两个字符中间，可以使用转义字符<code>\</code>来表示其本身。</p>
+</li>
+<li><p>表示转义字符<code>\</code>本身在字符类内依然要用<code>\\</code>来表示。</p>
+</li>
+</ul>
+<h2 id="3-否定字符类"><a href="#3-否定字符类" class="headerlink" title="-3- 否定字符类[^]"></a>-3- 否定字符类<code>[^]</code></h2><p>否定字符类就是反选字符类中的元素，也就是字符类中的元素都排除掉，和字符类一样，否定字符类也是只占<strong>一位</strong>的。</p>
+<p>否定字符类也是代表的也是一个集合中的某一个元素，只是该集合是通过在全部字符集中排除掉一部分得到的。</p>
+<p>其他元字符在否定字符类的含义与在元字符内是一样的，如果想表示<code>^</code>字符，并且一定要将其放在字符类的第一位，可以使用转义字符来表示</p>
+<blockquote>
+<p>“[^c]ar” &#x3D;&gt; The car <strong>par</strong>ked in the <strong>gar</strong>age.</p>
+</blockquote>
+<h2 id="4-重复次数"><a href="#4-重复次数" class="headerlink" title="-4- 重复次数"></a>-4- 重复次数</h2><p>表示重复次数的元字符有三个，分别是</p>
+<ul>
+<li><p>*号</p>
+<p>匹配在*号之前出现的字符0次及0次以上（大于等于0次），与点运算符连用<code>.*</code>可以匹配所有字符串</p>
+<blockquote>
+<p>“[a-z]<em>“ &#x3D;&gt; T*<em>he</em></em> <strong>car</strong> <strong>parked</strong> <strong>in</strong> <strong>the</strong> <strong>garage</strong> </p>
+</blockquote>
+</li>
+<li><p>+号</p>
+<p>匹配在+号之前出现的字符1次及1次以上（大于等于1）</p>
+<blockquote>
+<p>“c.+t” &#x3D;&gt; The fat <strong>cat sat on the mat</strong>.</p>
+</blockquote>
+</li>
+<li><p>?号</p>
+<p>匹配在?号之前出现的字符可能出现也可能不出现（0次或1次）</p>
+<blockquote>
+<p>“[T]?he” &#x3D;&gt; <strong>The</strong> car is parked in t<strong>he</strong> garage.</p>
+</blockquote>
+</li>
+</ul>
+<p>以上三种符号均可以与字符类以及否定字符类连用</p>
+<h2 id="5-自定义重复次数"><a href="#5-自定义重复次数" class="headerlink" title="-5- 自定义重复次数{}"></a>-5- 自定义重复次数<code>&#123;&#125;</code></h2><p> <code>&#123;&#125;</code> 是一个量词，常用来限定一个或一组字符可以重复出现的次数。</p>
+<p>例如， 表达式 <code>[0-9]&#123;2,3&#125;</code> 匹配最少 2 位最多 3 位 0~9 的数字。<code>?</code>号等价于<code>&#123;0,1&#125;</code>。</p>
+<p>可以省略第二个参数。 例如，<code>[0-9]&#123;2,&#125;</code> 匹配至少两位 0~9 的数字。<code>*</code>号等价于<code>&#123;0,&#125;</code>，<code>+</code>号等价于<code>&#123;1,&#125;</code>。</p>
+<p>如果逗号也省略掉则表示重复固定的次数。 例如，<code>[0-9]&#123;3&#125;</code> 匹配3位数字</p>
+<h2 id="6-字符集"><a href="#6-字符集" class="headerlink" title="-6- 字符集()"></a>-6- 字符集<code>()</code></h2><p>字符集是一组写在 <code>()</code> 中的子模式。<code>()</code> 中包含的内容将会被看成一个整体。例如, 表达式 <code>(ab)*</code> 匹配连续出现 0 或更多个 <code>ab</code>。如果没有使用 <code>()</code> ，那么表达式 <code>ab*</code> 将匹配连续出现 0 或更多个 <code>b</code> 。再比如之前说的 <code>&#123;&#125;</code> 是用来表示前面一个字符出现指定次数。但如果在 <code>&#123;&#125;</code> 前加上特征标群 <code>()</code> 则表示整个标群内的字符重复 N 次。</p>
+<h2 id="7-或运算符"><a href="#7-或运算符" class="headerlink" title="-7- 或运算符|"></a>-7- 或运算符<code>|</code></h2><p>或运算符就是表示或者的意思，表示运算符前后元素二选其一，但是二者必须选其一。或运算符<code>|</code>的优先级最低</p>
+<blockquote>
+<p>“(T|t)he|car” &#x3D;&gt; <strong>The</strong> <strong>car</strong> is parked in <strong>the</strong> garage.</p>
+</blockquote>
+<h2 id="8-转义字符"><a href="#8-转义字符" class="headerlink" title="-8- 转义字符\"></a>-8- 转义字符<code>\</code></h2><p>转义字符与其在C语言中的用法很像，反斜线 <code>\</code> 在表达式中用于转码紧跟其后的字符。对于特殊字符 <code>&#123; &#125; [ ] / \ + * . $ ^ | ?</code> 这些，如果想要表达其本身字符的含义则要在其前面加上反斜线 <code>\</code>。</p>
+<p>对于一些控制字符，如回车，空格之类的，也需要使用转义字符加字母来表示；此外，正则表达式还定义了一些字符集的简写，也需要用到转义字符</p>
+<table>
+<thead>
+<tr>
+<th>简写</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\w</td>
+<td>匹配所有字母数字，等同于 <code>[a-zA-Z0-9_]</code></td>
+</tr>
+<tr>
+<td>\W</td>
+<td>匹配所有非字母数字，即符号，等同于： <code>[^\w]</code></td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配数字： <code>[0-9]</code></td>
+</tr>
+<tr>
+<td>\D</td>
+<td>匹配非数字： <code>[^\d]</code></td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配所有空格字符，等同于： <code>[\t\n\f\r\p&#123;Z&#125;]</code></td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配所有非空格字符： <code>[^\s]</code></td>
+</tr>
+<tr>
+<td>\b</td>
+<td>匹配单词的开始或结束</td>
+</tr>
+<tr>
+<td>\B</td>
+<td>匹配不是单词开头或结束的位置</td>
+</tr>
+<tr>
+<td>\f</td>
+<td>匹配一个换页符</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>匹配一个换行符</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>匹配一个回车符</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>匹配一个制表符</td>
+</tr>
+<tr>
+<td>\v</td>
+<td>匹配一个垂直制表符</td>
+</tr>
+<tr>
+<td>\p</td>
+<td>匹配 CR&#x2F;LF（等同于 <code>\r\n</code>），用来匹配 DOS 行终止符</td>
+</tr>
+</tbody></table>
+<h2 id="9-锚点"><a href="#9-锚点" class="headerlink" title="-9- 锚点"></a>-9- 锚点</h2><p>锚点有两个<code>^</code>和<code>$</code>，锚点可以规定匹配位置，<code>^</code>是从头指定开头，<code>$</code>指定结尾</p>
+<p>例如，<code>^(T|t)he</code> 匹配以 <code>The</code> 或 <code>the</code> 开头的字符串。</p>
+<blockquote>
+<p>“^(T|t)he” &#x3D;&gt; <strong>The</strong> car is parked in the garage.</p>
+</blockquote>
+<p>例如，<code>(at\.)$</code> 匹配以 <code>at.</code> 结尾的字符串。</p>
+<blockquote>
+<p>“(at.)$” &#x3D;&gt; The fat cat. sat. on the m<strong>at.</strong></p>
+</blockquote>
+<h1 id="0x04-零宽断言"><a href="#0x04-零宽断言" class="headerlink" title="0x04 零宽断言"></a>0x04 零宽断言</h1><p>前面的大部分语法都是用来描述用来想要匹配本身是怎么样的，但是有时我们还希望描述被匹配到的字符串的位置，这时就需要用到零宽断言。零宽断言与前面的<code>^</code>，<code>$</code>，<code>\b</code>，<code>\B</code>类似，都是用于描述被匹配模式的位置信息的，可以用来控制想要的字符串前后需要有或者不能有什么。</p>
+<p>之所以叫零宽断言，可能是因为该语法本身不参与匹配，只用于限定想要匹配的字符串的位置，所以其宽度为零。</p>
+<p>零宽断言的支持和正则引擎有关，有些引擎不支持零宽断言。这里的几种断言的英文名其实比中文名更能够表明其含义。</p>
+<ul>
+<li><code>(?=exp)</code>零宽正向先行断言(lookahead)</li>
+<li><code>(?!exp)</code>零宽负向先行断言(negative lookahead)</li>
+<li><code>(?&lt;=exp)</code>零宽正回顾后发断言(lookbehind)</li>
+<li><code>(?&lt;!exp)</code>零宽负回顾后发断言(negative lookbehind)</li>
+</ul>
+<h2 id="1-零宽正向先行断言-lookahead"><a href="#1-零宽正向先行断言-lookahead" class="headerlink" title="-1- 零宽正向先行断言(lookahead)"></a>-1- 零宽正向先行断言(lookahead)</h2><p><code>(?=exp)</code>，它断言自身出现的位置的后面能匹配表达式exp</p>
+<p>例如，<code>\b\w+(?=ing\b)</code>，就会匹配以ing结尾的单词<strong>前面部分</strong>，需要注意，零宽断言自己断言本身是不参与匹配的</p>
+<blockquote>
+<p>“\b\w+(?&#x3D;ing\b)” &#x3D;&gt; I’m <strong>sing</strong>ing while you’re <strong>danc</strong>ing</p>
+</blockquote>
+<h2 id="2-零宽正回顾后发断言-lookbehind"><a href="#2-零宽正回顾后发断言-lookbehind" class="headerlink" title="-2- 零宽正回顾后发断言(lookbehind)"></a>-2- 零宽正回顾后发断言(lookbehind)</h2><p><code>(?&lt;=exp)</code>，它断言自身出现的位置的前面能匹配表达式 exp。比如<code>(?&lt;=\bre)\w+\b</code>会匹配以 re 开头的单词的后半部分(除了 re 以外的部分)，例如在查找 reading a book 时，它匹配 ading。</p>
+<blockquote>
+<p>“(?&lt;&#x3D;\bre)\w+\b” &#x3D;&gt; re<strong>ading</strong> a book</p>
+</blockquote>
+<h2 id="3-零宽负向先行断言-negative-lookahead"><a href="#3-零宽负向先行断言-negative-lookahead" class="headerlink" title="-3- 零宽负向先行断言(negative lookahead)"></a>-3- 零宽负向先行断言(negative lookahead)</h2><p><code>(?!exp)</code>，与零宽正向先行断言相反，它断言的是此位置的后面不能匹配表达式 exp。</p>
+<p>例如：<code>\d&#123;3&#125;(?!\d)</code>匹配三位数字，而且这三位数字的后面不能是数字；<code>\b((?!abc)\w)+\b</code>匹配不包含连续字符串 abc 的单词。</p>
+<h2 id="4-零宽负回顾后发断言-negative-lookbehind"><a href="#4-零宽负回顾后发断言-negative-lookbehind" class="headerlink" title="-4- 零宽负回顾后发断言(negative lookbehind)"></a>-4- 零宽负回顾后发断言(negative lookbehind)</h2><p><code>(?&lt;!exp)</code>，同理，零宽负回顾后发断言也就指断言位置的前面不能出现表达式exp</p>
+<p>例如：<code>(?&lt;![a-z])\d&#123;7&#125;</code>匹配前面不是小写字母的七位数字。</p>
+<h1 id="0x05-修饰符（标记）"><a href="#0x05-修饰符（标记）" class="headerlink" title="0x05 修饰符（标记）"></a>0x05 修饰符（标记）</h1><p>标记不写在正则表达式里，标记位于表达式之外，格式为<code>/pattern/flags</code></p>
+<h2 id="1-修饰符g"><a href="#1-修饰符g" class="headerlink" title="-1- 修饰符g"></a>-1- 修饰符<code>g</code></h2><p>global - 全局匹配，g 修饰符可以查找字符串中所有的匹配项。默认情况下（不带g），正则匹配会在找到第一个结果时停止，如果加上修饰符g，则会查找整个字符串，找到所有的匹配项。</p>
+<h2 id="2-修饰符i"><a href="#2-修饰符i" class="headerlink" title="-2- 修饰符i"></a>-2- 修饰符<code>i</code></h2><p>ignore - 不区分大小写，i修饰符指定匹配时不区分大小写</p>
+<h2 id="3-修饰符m"><a href="#3-修饰符m" class="headerlink" title="-3- 修饰符m"></a>-3- 修饰符<code>m</code></h2><p>multi line - 多行匹配，修改锚点元字符<code>^</code>和<code>$</code>的含义，使其锚定为每行的开头和结尾。</p>
+<blockquote>
+<p>“&#x2F;.at(.)?$&#x2F;“ &#x3D;&gt; The fat<br>                        cat sat<br>                        on the <strong>mat.</strong></p>
+</blockquote>
+<blockquote>
+<p>“&#x2F;.at(.)?$&#x2F;gm” &#x3D;&gt; The <strong>fat</strong><br>                              cat <strong>sat</strong><br>                              on the <strong>mat.</strong></p>
+</blockquote>
+<h2 id="4-修饰符s"><a href="#4-修饰符s" class="headerlink" title="-4- 修饰符s"></a>-4- 修饰符<code>s</code></h2><p>Singleline - 单行匹配，修改<code>.</code>元字符的含义，使其可以匹配所有的字符（包括<code>\n</code>换行符），在这种模式下，一篇文章可以被看作一行字符串，换行符<code>\n</code>也只是该行中的一个字符罢了。</p>
+<blockquote>
+<p>需要注意的是，单行模式与多行匹配是可以同时使用的，它们二者并不冲突，因为它们针对的元字符都是不同的，同时使用这两个修饰符，就只是同时修改了<code>^</code> <code>$</code> <code>.</code>的含义。</p>
+</blockquote>
+<h1 id="0x06-贪婪和懒惰"><a href="#0x06-贪婪和懒惰" class="headerlink" title="0x06 贪婪和懒惰"></a>0x06 贪婪和懒惰</h1><p>通常情况下，正则匹配时会选择匹配尽可能多的字符，这中匹配策略被称为贪婪匹配。如果我们希望匹配时匹配最少的字符，就需要用<code>?</code>将匹配策略换为懒惰匹配，<code>?</code>添加在重复次数元字符的后面。</p>
+<p>来看一个例子：aabbcb，使用<code>a.*b</code>匹配时，会匹配所有的字符，也就是aabbcb，但是如果使用懒惰匹配<code>a.*?b</code>，则会匹配aab（字符1-3）和ab（字符2-3）。</p>
+<p>这里要注意的是，为什么懒惰匹配的结果不只是ab（字符2-3）呢，这时因为正则匹配中有一条规律的优先级比贪婪和懒惰要高：最先开始的匹配拥有最高的优先权，由于第一个a最先匹配，所以其拥有最高的优先级，因此可以不受贪婪和懒惰策略的影响。</p>
+<table>
+<thead>
+<tr>
+<th>懒惰限定符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>*?</td>
+<td>重复任意次，但是尽可能少重复</td>
+</tr>
+<tr>
+<td>+?</td>
+<td>重复1次或更多次，但是尽可能少重复</td>
+</tr>
+<tr>
+<td>??</td>
+<td>重复0次或1次，但是尽可能少重复</td>
+</tr>
+<tr>
+<td>{n,m}?</td>
+<td>重复n到m次，但是尽可能少重复</td>
+</tr>
+<tr>
+<td>{n,}?</td>
+<td>重复n次或更多次，但是尽可能少重复</td>
+</tr>
+</tbody></table>
+<h1 id="END"><a href="#END" class="headerlink" title="-END-"></a>-END-</h1>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/regex/" class="print-no-link">#regex</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>正则表达式学习笔记</div>
+      <div>https://goooforward.github.io/blog/2023/10/31/study/正则表达式学习笔记/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>tangyuwei</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年10月31日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/blog/2023/11/06/study/Makefile%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Makefile学习笔记">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Makefile学习笔记</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2023/10/21/study/%E8%AE%B0%E5%BD%95%E9%85%8D%E7%BD%AETypora+PicGo+GitHub%E5%9B%BE%E5%BA%8A%E5%86%99%E5%8D%9A%E5%AE%A2%E5%B7%A5%E5%85%B7/" title="记录配置Typora+PicGo+GitHub图床写博客工具">
+                        <span class="hidden-mobile">记录配置Typora+PicGo+GitHub图床写博客工具</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a>Powered by<a> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a>Theme</a> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

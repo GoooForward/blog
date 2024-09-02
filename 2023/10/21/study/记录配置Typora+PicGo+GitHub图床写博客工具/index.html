@@ -1,0 +1,779 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/logo.png">
+  <link rel="icon" href="/blog/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="tangyuwei">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 引言在之前已经搭建好了博客的框架，现在就差博文了。正所谓磨刀不误砍柴工，在写博客之前，准备一个趁手的工具很重要。对于写博客来说，主要就是解决两个问题，第一个是用哪个markdown编辑器，二就是图片的保存方案。下面就聊聊为什么选择Typora+PicGo+GitHub这套组合来进行博客写作，以及记录我的配置过程。 0x01 方案选择-1- markdown编辑器首先说markdown编辑">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录配置Typora+PicGo+GitHub图床写博客工具">
+<meta property="og:url" content="https://goooforward.github.io/blog/2023/10/21/study/%E8%AE%B0%E5%BD%95%E9%85%8D%E7%BD%AETypora+PicGo+GitHub%E5%9B%BE%E5%BA%8A%E5%86%99%E5%8D%9A%E5%AE%A2%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:site_name" content="TYW&#39;s blog">
+<meta property="og:description" content="0x00 引言在之前已经搭建好了博客的框架，现在就差博文了。正所谓磨刀不误砍柴工，在写博客之前，准备一个趁手的工具很重要。对于写博客来说，主要就是解决两个问题，第一个是用哪个markdown编辑器，二就是图片的保存方案。下面就聊聊为什么选择Typora+PicGo+GitHub这套组合来进行博客写作，以及记录我的配置过程。 0x01 方案选择-1- markdown编辑器首先说markdown编辑">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310251506592.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310251509098.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230150149.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025202653090.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025202845916.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025203039991.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025203300229.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025203722658.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025192018530.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025192612648.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025194941228.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025200122451.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025201525131.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310261005743.png">
+<meta property="article:published_time" content="2023-10-21T02:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-21T02:00:00.000Z">
+<meta property="article:author" content="tangyuwei">
+<meta property="article:tag" content="Typora">
+<meta property="article:tag" content="PicGo">
+<meta property="article:tag" content="图床">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310251506592.png">
+  
+  
+  
+  <title>记录配置Typora+PicGo+GitHub图床写博客工具 - TYW&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"goooforward.github.io","root":"/blog/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>TYW&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/photo/" target="_self">
+                <i class="iconfont icon-image"></i>
+                <span>摄影</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/blog/img/cover_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">记录配置Typora+PicGo+GitHub图床写博客工具</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-21 10:00" pubdate>
+          2023年10月21日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          50 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">记录配置Typora+PicGo+GitHub图床写博客工具</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="0x00-引言"><a href="#0x00-引言" class="headerlink" title="0x00 引言"></a>0x00 引言</h1><p>在之前已经搭建好了博客的框架，现在就差博文了。正所谓磨刀不误砍柴工，在写博客之前，准备一个趁手的工具很重要。对于写博客来说，主要就是解决两个问题，第一个是用哪个markdown编辑器，二就是图片的保存方案。下面就聊聊为什么选择Typora+PicGo+GitHub这套组合来进行博客写作，以及记录我的配置过程。</p>
+<h1 id="0x01-方案选择"><a href="#0x01-方案选择" class="headerlink" title="0x01 方案选择"></a>0x01 方案选择</h1><h2 id="1-markdown编辑器"><a href="#1-markdown编辑器" class="headerlink" title="-1- markdown编辑器"></a>-1- markdown编辑器</h2><p>首先说markdown编辑器，我第一次接触到markdown是无意中在网上冲浪时认识到了notion这款笔记软件，当时我还只接触过doc这种富文本格式的文本以及txt无格式的纯文本，第一次接触markdown这种轻量级的标记语言仿佛是打开了新世界的大门，它太好用了，既不像doc那样臃肿，又不像txt那样完全没有格式，它的语法突出一个恰到好处，够用！notion固然是个很好用的软件，但是用他来写博客还是有些问题，首先是因为它不仅仅只是markdown编辑器，它还支持很多的其他功能，像日历、看板这些，而这些功能在其他的markdown编辑器中就不支持了，降低了它的可移植性；其次是对于图片的保存，notion之类的软件通常都是将图片上传到自身的图床平台，而这些为自身软件搭建的图床当然都是不支持外链访问的，因此导出为markdown就必须将图片打包，否则图片就全挂了，这个后面再细说；最后一点就是notion并没有Linux版本，只能使用网页版，网页版不是不能用，但是确实不好用，这也是我后来放弃用飞书的原因。除了notion之外，一些国产的类notion软件我也都体验过，包括wolai,flowus ,飞书，这类软件都有notion的问题，因为说到底，这些软件都并非是专门的markdown编辑器，而是团队知识文档合作平台，只是支持了markdown文本格式，他们并非为了markdown而服务，并非这些软件做的不好，相反，他们都有各自的长处，但是写博客还是需要寻找其他的写作工具。</p>
+<blockquote>
+<p>使用Notion也能搭建个人博客，如果你感兴趣，可以去自行搜索了解</p>
+</blockquote>
+<p>市面上的markdown编辑器有很多，随便一搜就有一大把，但是他们大致分为两类，一类是源代码写作类型的，其中为代表的就是VScode（VScode原生是不支持预览md的，需要插件支持），包括CSDN的网页版的markdown编辑器也是这种类型。这一类优势是啥呢？可能是方便学习markdown语法？Maybe……反正我用Typora。</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310251506592.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>另一类是即使渲染类型的，其中最具代表的就是Typora。它最大的优点就是所见即所得，你输入的语法马上就会被渲染成对应的样式。当然，它的缺点就是现在Typora已经是收费软件了。当然，你依以在互联网上找到它过去的不收费版本，这里也提供一个免费版的下载链接：<a target="_blank" rel="noopener" href="https://babudiu.com/archives/typora">Typora 最后的免费版 全平台(win mac linux)下载</a></p>
+<p><strong>Typora的正版收费还是比较合理的，目前是<code>89元</code>人民币，如果有经济实力还是建议大家支持正版。</strong></p>
+<p>除了Typora，还有一个开源软件<a target="_blank" rel="noopener" href="https://github.com/marktext/marktext">MarkText</a>，同样支持实施渲染markdown，有兴趣可以尝试一下。<del>不过我觉得Typora更好用</del></p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310251509098.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>以上的两类编辑器我都用过，萝卜青菜，各有所爱，我最终的选择还是Typora。</p>
+<h2 id="2-图片保存方案"><a href="#2-图片保存方案" class="headerlink" title="-2- 图片保存方案"></a>-2- 图片保存方案</h2><p>如今写博客肯定离不开图片，那图片的保存就成了一个问题。这个问题无非就两个解决方法，一是存在本地，而是存在云端。</p>
+<ul>
+<li><p>存在本地隐私性好，不用用担心安全性问题，稳定，但是用在博客上会影响网页的加载速度，并且联合markdown使用会降低md文件的可移植性，图片必须跟着md文件一起打包，这就会使md文件变得臃肿。</p>
+</li>
+<li><p>用于存放图片的服务器就被称为图床，图片存在图床上可移植性好，无论是放在网页上还是在不同的机器上图都不会挂，但是放在图床就意味着图片不在自己手上，这就意味着导致隐私差，安全性不好，只适合用于存放一些非关键图片。此外，图片加载还会受到网络环境的影响。</p>
+</li>
+</ul>
+<p>权衡利弊，我还是选择使用图床方案，主要是想探索一下图床的使用，其次也能保证md文件良好我移植性，方便搬移到不同的平台上。</p>
+<h2 id="3-图床的选择"><a href="#3-图床的选择" class="headerlink" title="-3- 图床的选择"></a>-3- 图床的选择</h2><p>图床的选择有很多，网上有很多对比的文章，我就不对比了，这里就讲一下我选择github作为图床的原因：</p>
+<ul>
+<li><p>免费，这是最主要的原因，因为我没钱</p>
+</li>
+<li><p>图片不易丢失，github至少在可遇见的未来应该还是不会倒闭的，对比那些小图床服务商，github应该是不会突然跑路的</p>
+</li>
+<li><p>gitee太烂了，我起初是想将图片放在gitee上的，因为毕竟gitee服务器在国内，加载速度还是快太多了，但是gitee对于免费用户的限制太多了，最重要的是现在gitee会封外链访问了，已经无法作为图床使用了，除非你的博客只基于gitee的pages功能搭建。</p>
+<p>放一个知乎的问答：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/524089317">如何看待使用gitee大量屏蔽外链，之后不能在继续做图床了，对大家的影响大吗，这种情况会持续多久？</a></p>
+</li>
+</ul>
+<p>综上，我选择github作为博客的图床。</p>
+<blockquote>
+<p>如果有实力的话，还是建议选择云服务商的OSS存储服务，一般来说存储费都不高，费用高的是流量费，如果网站的浏览量不大的话，整体的费用还是可接受的，但是就是怕被人恶意刷量，还得折腾防小人。</p>
+</blockquote>
+<h2 id="4-PicGo"><a href="#4-PicGo" class="headerlink" title="-4- PicGo"></a>-4- PicGo</h2><p>OK，现在已经选好了图床和编辑器，还差一个工具将编辑器和图床联系起来，这个工具就是PicGo。PicGo可以被Typora调用，当你粘贴图片时，Typora会自动调用PicGo将图片上传，并且自动返回url。为什么选择PicGo呢？那是因为Typora官方支持的工具就是它，当然，PicGo也是足够好用的，并且它是开源的，在Win、Linux、MacOS都可以使用，支持的图床也足够丰富，还有插件可以扩展的它功能，所以大家几乎都使用它。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/PicGo">PicGo GitHub页面</a></p>
+<p><a target="_blank" rel="noopener" href="https://picgo.github.io/PicGo-Doc/">PicGo 使用指南</a></p>
+<h1 id="0x02-配置过程"><a href="#0x02-配置过程" class="headerlink" title="0x02 配置过程"></a>0x02 配置过程</h1><p>以下过程全程以Ubuntu 22.04为例,其他系统大同小异。</p>
+<h2 id="1-安装Typora"><a href="#1-安装Typora" class="headerlink" title="-1- 安装Typora"></a>-1- 安装Typora</h2><p>首先，需要获取安装包，在linux环境下是deb格式的，使用如下命令对安装进行解包安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo dpkg -i Typora_Linux_xxxx_amd64.deb <br></code></pre></td></tr></table></figure>
+
+<p>输入密码，就安装完成了</p>
+<h2 id="2-准备GitHub仓库"><a href="#2-准备GitHub仓库" class="headerlink" title="-2- 准备GitHub仓库"></a>-2- 准备GitHub仓库</h2><p>打开GitHub新建一个仓库，这个仓库和之前部署博客的仓库一样，必须选择公共仓库。</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230150149.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>ok，创建仓库完成后，图床就准备好了。It‘s too simple。</p>
+<h3 id="创建token"><a href="#创建token" class="headerlink" title="创建token"></a>创建token</h3><p>我们这里再顺手创建一个token，这个token就相当于github仓库的密码，可以用于访问你的仓库，之后配置picgo时会用到。</p>
+<p>首先来到github的setting页面，选择导航栏最下方的Developer setting（开发者设置）</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025202653090.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>然后选择Persional access tokens -&gt; Tokens(classic)</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025202845916.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>再然后选择上方的Generate new tokens -&gt; Generate new tokens(classic)</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025203039991.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>输入你的账户密码后会来到如下界面，这里的Note是用来给你的token取名字的，分别区分管理，Expiration是有效时间，时间越久风险越高，自行决定，不建议选择无限期。下面的权限只勾选上repo就行了，然后滑动到最底部，选择Generate token。</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025203300229.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>此时你就获得了一个token，它仅会以明文的形式展示这一次，当你关闭此页面你就再也没办法知道它是什么了，所以这里将它复制保存下来，之后配置PicGo时会用到。</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025203722658.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h2 id="3-安装PicGo"><a href="#3-安装PicGo" class="headerlink" title="-3- 安装PicGo"></a>-3- 安装PicGo</h2><p>打开<a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/PicGo">PicGo GitHub页面</a>，找到它的release</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025192018530.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>第一次来到这个界面我蒙了，因为我不知道下载哪一个，通常来说，linux的软件安装包是deb格式的拓展名，或者直接是打包好的二进制可执行程序，又或者是纯源码通过编译来安装。但是这里我找不到下载哪一个，通过一番搜索，发现这里有两个是linux下的安装包，一个扩展名为snap，这种安装包是基于snap这种新的包管理方式。对于这种包管理方式我也没接触过，浅浅地了解了一下，其优势是安全以及依赖自包含，其文件内包含了全部依赖的库。AppImage也是一种性质类似的安装包，其本质是一个压缩文件，其内也包含了全部的所需的运行库，因此安装这两个安装包不需要安装其他依赖。这里我下载AppImage，因为安装.snap安装包需要使用snap包管理工具，我当时不会。<br><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025192612648.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>下载完成后，赋予安装包可执行权限，使用命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo chmod +x PicGo-2.3.1.AppImage<br></code></pre></td></tr></table></figure>
+
+<p>或者右键 -&gt; 属性 -&gt; 权限 -&gt; 勾选运行执行权限</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025194941228.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>然后在终端直接<code>./PicGo-2.3.1.AppImage</code> 执行该安装包，发现会报错如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">dlopen(): error loading libfuse.so.2<br><br>AppImages require FUSE to run. <br>You might still be able to extract the contents of this AppImage <br>if you run it with the --appimage-extract option. <br>See https://github.com/AppImage/AppImageKit/wiki/FUSE <br>for more information<br></code></pre></td></tr></table></figure>
+
+<p>意思是我们执行该安装包缺少FUSE，但是我们可以使用<code>--appimage-extract</code>这个选项来提取该安装包。于是我们的命令就变成了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./PicGo-2.3.1.AppImage --appimage-extract<br></code></pre></td></tr></table></figure>
+
+<p>回车之后，安装包的文件就被提取出来了，生成了一个名为<code>squashfs-root</code>的文件夹，这个文件夹里就有我们要的picgo可执行文件了,在该目录下执行<code>./picgo</code>可以测试是否能打开PicGo，打开之后会在桌面生成一个小图标，看到这个图标就说明安装PicGo完成了。</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025200122451.png" srcset="/blog/img/loading.gif" lazyload></p>
+<blockquote>
+<p>PicGo有两个版本，一个是带图像界面的，可以通过UI交互的，也就是当前下载的这个。还有一个仅保留核心功能，通过命令行交互的PicGo-Core，PicGo其实也是对PicGo-Core的封装，但是增加了图像界面，更易用，而PicGo-Core使用起来更无感，但是使用门槛更高。大家可以根据使用习惯自行选择。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/PicGo/PicGo-Core">PicGo-Core GitHub界面</a></p>
+</blockquote>
+<h2 id="4-配置PicGo"><a href="#4-配置PicGo" class="headerlink" title="-4- 配置PicGo"></a>-4- 配置PicGo</h2><p>打开PicGo的主界面，先选择图床设置，再选择GitHub，然后编辑配置，就来到了图床配置界面。下面分别来讲解各项</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231025201525131.png" srcset="/blog/img/loading.gif" lazyload></p>
+<ul>
+<li><p>图床配置名：该配置的名称，随便取就行</p>
+</li>
+<li><p>设定仓库名：格式为<code>GitHub用户名/图床仓库名</code>，按照创建创建仓库时取得名字来就行</p>
+</li>
+<li><p>设定分支名：上传到仓库的哪个分支上，没修改的话默认是main</p>
+</li>
+<li><p>设定token：相当于密码，使用之前创建GitHub仓库时顺便创建的token</p>
+</li>
+<li><p>设定存储路径：想要图片存放在哪个文件夹下，不填默认是根目录，注前面不能有斜杠&#x2F;，最后的斜杠&#x2F;不能省略</p>
+</li>
+<li><p>设定自定义域名：此项不填，则你上传图片后获取的url是<code>https://raw.githubusercontent.com/用户名/仓库名/分支名/设定存储路径/文件名</code>，填写此项会替换掉前面的<code>https://raw.githubusercontent.com/用户名/仓库名/分支名</code>部分。</p>
+<p>通过这个功能，我们可以使用CDN加速，便于我们在国内访问GitHub图床。这里推荐jsDriver这个免费的CDN，因此这里的格式为<code>https://cdn.jsdelivr.net/gh/用户名/仓库名@分支名</code></p>
+</li>
+</ul>
+<p>配置好之后可以在上传区随便上传一张图片试试能否上传成功，能够成功上传就说明配置成功了。</p>
+<h3 id="CDN加速"><a href="#CDN加速" class="headerlink" title="CDN加速"></a>CDN加速</h3><p>CDN（<strong>C</strong>ontent <strong>D</strong>istribution <strong>N</strong>etwork），中文全称是内容分发网络，它的本质是部署多个服务器，用户请求资源时通过最近的服务器来分发资源，降低主服务器的压力，同时也能提升用户的体验。最开始我是没有配置CDN的，因为我都是开着魔法上网的，没有意识到国内网络访问github慢这个问题，直到我想看看博客的手机端的观看体验才发现图片根本加载不出来，这才意识到想要正常在国内访问github图床，就必须配置CDN。</p>
+<p>好在有免费的CDN服务可以白嫖，jsDeliver是一款开源的免费公共CDN，它可以为国内用户加速github的开源项目，所以也可以用来帮助我们加速我们的开源github图床。</p>
+<p>但是jsDeliver目前在国内的备案以及被撤销了，这个CDN的前途目前还不明，这也是这套方案中最薄弱的一环，目前还能正常使用，但是未来的监管如何，现在就无从知晓了。</p>
+<blockquote>
+<p>对于jsDeliver的过往可以看看这篇博文：<a target="_blank" rel="noopener" href="https://luotianyi.vc/6295.html">jsDelivr域名遭到DNS污染</a></p>
+</blockquote>
+<blockquote>
+<p> jsDelivr有很多的CDN赞助商共同支持，每一个服务商都会有自己的专有子域名，通过替换访问资源到其他的二级域名可以恢复访问。但这些CDN普遍速度一般，而且前途并不明朗，建议仅供临时使用。</p>
+<blockquote>
+<p>CloudFlare：<code>test1.jsdelivr.net</code><br>CloudFlare：<code>testingcf.jsdelivr.net</code><br>Fastly：<code>fastly.jsdelivr.net</code><br>GCORE：<code>gcore.jsdelivr.net</code></p>
+</blockquote>
+</blockquote>
+<h2 id="5-配置Typora"><a href="#5-配置Typora" class="headerlink" title="-5- 配置Typora"></a>-5- 配置Typora</h2><p>图床以及上传工具已经准备好了，下一步就是将PicGo配置到Typora中了。打开Typora，选择文件 -&gt; 偏好设置 -&gt; 图像，来到如下界面</p>
+<ul>
+<li><p><strong>插入图片时…</strong> ：选择上传图片，并且勾选前两项，最后一项插入时自动转译图片url也可以选上，它的含义是插入时将中文的文件名转译为纯西文文件名，这样可以兼容其他的markdown编辑器，也可以获得更好的移植性，但是会丧失图片名称的可读性，可以自行选择是否勾选。</p>
+</li>
+<li><p><strong>上传服务设定</strong> ：其中上传服务选择PicGo(app)，下面的PicGo路径不要点击后面的文件夹图标去选择，会识别不到picgo的可执行文件。这里找到你的PicGo的安装位置，将路径复制进去，然后在后面加上picgo这个可执行文件的文件名。</p>
+</li>
+</ul>
+<p>点击旁边的验证图片上传选项，会自动用一张typora的图标测试你的配置是否成功，如果此时上传成功了，那么整个配置过程就结束了。</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310261005743.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h1 id="0x03-总结"><a href="#0x03-总结" class="headerlink" title="0x03 总结"></a>0x03 总结</h1><p>虽然整个配置过程还是相对比较简单，网上也有大把的教程，但是过程中还是遇到了不少困难的，最开始就是不知道如何安装PicGo的Linux版本，确实从来没接触过snap和AppImage这两种安装方式；其次就是在Typora中指定PicGo路径时，在文件浏览器里死活找不到picgo的可执行文件，一度让我想要放弃使用PicGo，改用PicGo-Core，好在最后还是想到了直接手动输入对应路径。总的来说我还是太菜了，害得练啊。</p>
+<h1 id="END"><a href="#END" class="headerlink" title="-END-"></a>-END-</h1>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/Typora/" class="print-no-link">#Typora</a>
+      
+        <a href="/blog/tags/PicGo/" class="print-no-link">#PicGo</a>
+      
+        <a href="/blog/tags/%E5%9B%BE%E5%BA%8A/" class="print-no-link">#图床</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>记录配置Typora+PicGo+GitHub图床写博客工具</div>
+      <div>https://goooforward.github.io/blog/2023/10/21/study/记录配置Typora+PicGo+GitHub图床写博客工具/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>tangyuwei</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年10月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/blog/2023/10/31/study/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="正则表达式学习笔记">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">正则表达式学习笔记</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2023/10/15/study/%E8%AE%B0%E5%BD%95%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/" title="记录利用GitHub+Hexo搭建博客">
+                        <span class="hidden-mobile">记录利用GitHub+Hexo搭建博客</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a>Powered by<a> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a>Theme</a> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
