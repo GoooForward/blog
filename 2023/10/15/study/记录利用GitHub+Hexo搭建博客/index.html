@@ -1,0 +1,833 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/logo.png">
+  <link rel="icon" href="/blog/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="tangyuwei">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 引言之前在Internet冲浪时经常会搜到一些别人写的博客，通常国内普通人写博客往往是在平台之上创作，通过某乎、某某DN这样的平台。但是有时也能搜到一些个人博客，这些博客往往网页清爽，纯净无广告，有些博客还有些不错特效，抛开文章内容不谈，仅仅是如此清爽的页面就给了人良好的阅读体验。所以我便也想着整一个，这样就可以把自己写的一些垃圾扔在上面了，咱说整就整。 搭建一个博客的方法有很多，但是对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录利用GitHub+Hexo搭建博客">
+<meta property="og:url" content="https://goooforward.github.io/blog/2023/10/15/study/%E8%AE%B0%E5%BD%95%E5%88%A9%E7%94%A8GitHub+Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/index.html">
+<meta property="og:site_name" content="TYW&#39;s blog">
+<meta property="og:description" content="0x00 引言之前在Internet冲浪时经常会搜到一些别人写的博客，通常国内普通人写博客往往是在平台之上创作，通过某乎、某某DN这样的平台。但是有时也能搜到一些个人博客，这些博客往往网页清爽，纯净无广告，有些博客还有些不错特效，抛开文章内容不谈，仅仅是如此清爽的页面就给了人良好的阅读体验。所以我便也想着整一个，这样就可以把自己写的一些垃圾扔在上面了，咱说整就整。 搭建一个博客的方法有很多，但是对">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230150149.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230213736.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230241456.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230309151.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230332444.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230600315.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230611572.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230637169.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230657411.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191626076.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191636116.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191706912.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201545466.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201546103.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201550671.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250940950.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250944880.png">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310251113339.png">
+<meta property="article:published_time" content="2023-10-15T02:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-15T02:00:00.000Z">
+<meta property="article:author" content="tangyuwei">
+<meta property="article:tag" content="hexo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230150149.png">
+  
+  
+  
+  <title>记录利用GitHub+Hexo搭建博客 - TYW&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"goooforward.github.io","root":"/blog/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>TYW&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/photo/" target="_self">
+                <i class="iconfont icon-image"></i>
+                <span>摄影</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/blog/img/cover_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">记录利用GitHub+Hexo搭建博客</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-15 10:00" pubdate>
+          2023年10月15日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          59 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">记录利用GitHub+Hexo搭建博客</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="0x00-引言"><a href="#0x00-引言" class="headerlink" title="0x00 引言"></a>0x00 引言</h1><p>之前在Internet冲浪时经常会搜到一些别人写的博客，通常国内普通人写博客往往是在平台之上创作，通过某乎、某某DN这样的平台。但是有时也能搜到一些个人博客，这些博客往往网页清爽，纯净无广告，有些博客还有些不错特效，抛开文章内容不谈，仅仅是如此清爽的页面就给了人良好的阅读体验。所以我便也想着整一个，这样就可以把自己写的一些垃圾扔在上面了，咱说整就整。</p>
+<p>搭建一个博客的方法有很多，但是对于我这种纯小白来说，使用现成的方案显然是最方便滴。</p>
+<p>首先，搭建博客需要肯定需要一个服务器，当然最好的办法就是自己物理上组一台主机当服务器，然后再搞到一个公网IP，这样整个服务器都完全掌握在自己手里。但是这样的服务器需要大把的“米”，而且在2023年的今天，获取一个私人的公网的IPv4地址也是十分困难滴，因此PlanA PASS。</p>
+<p>随着云服务的发展，现如今通过租的方式来获取一个云服务器也是很容易的。但是云服务终究还是收费的，虽然各家云服务商都有新人优惠，但是小钱也是钱啊，咱这种玩玩而已的blog那自然是能省就省，等以后有钱有闲了再来研究研究这个方案。PlanB暂时放弃。</p>
+<p>那最后咱们选择的方案是啥呢？嘿嘿，就是利用GitHub提供的免费pages功能来搭建这个blog。GitHub给每个人的每个仓库都提供了这个page功能，我认为GitHub的原意应该是方便用户给每个项目搭建一个介绍页面，但是我们正好就可以利用这个功能来搭建一个人博客。</p>
+<p>OK，下面就记录一下我搭建这个blog的过程以及踩过的坑。</p>
+<h1 id="0x01-环境准备"><a href="#0x01-环境准备" class="headerlink" title="0x01 环境准备"></a>0x01 环境准备</h1><h2 id="0-安装git"><a href="#0-安装git" class="headerlink" title="-0- 安装git"></a>-0- 安装git</h2><p>这个太基础了，在windows平台下就去Internet下载对应的安装包，一直默认next就好。</p>
+<p>如果是在Ubuntu平台下，就用如下命令安装吧</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">sudo apt <span class="hljs-keyword">install</span> git<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="1-创建仓库"><a href="#1-创建仓库" class="headerlink" title="-1- 创建仓库"></a>-1- 创建仓库</h2><p>创建仓库没什么好说的（<del>如果不会就STFW吧</del>），但唯一要注意的是必须要创建公共仓库</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230150149.png" srcset="/blog/img/loading.gif" lazyload></p>
+<blockquote>
+<p> 其实如果不会魔法上网，无法使用Github，也可以使用国内的代码托管平台gitee，gitee同样提供pages的功能，但是必须先通过实名认证。但是我还是推荐先学会魔法</p>
+</blockquote>
+<h2 id="2-安装Node-js环境"><a href="#2-安装Node-js环境" class="headerlink" title="-2- 安装Node.js环境"></a>-2- 安装Node.js环境</h2><p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230213736.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>在<a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn">官网</a>上下载一下安装包，LTS是长期维护版，理论上更稳定；Current就是当前最新版。我这里就下载LTS版本了，因为我也用不上新特性。</p>
+<p>我使用的是Ubuntu 22.04，下载下来是一个tar.xz格式的压缩包，使用如下目录进行解压</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">tar -Jxf node-v18.18.1-linux-x64.tar.xz 		<span class="hljs-comment">#-J 指定xz压缩格式（必须大写J）-x 解压操作 -f 指定要解压的文件</span><br><span class="hljs-comment">#or</span><br>tar --xz -xf node-v18.18.1-linux-x64.tar.xz		<span class="hljs-comment">#我觉得这个更好记，就是不够优雅</span><br></code></pre></td></tr></table></figure>
+
+<p>解压之后就得到了Node.js的二进制可执行文件了，这就相当于windows下的portable版本的软件，解压即用，不用注册表等信息。</p>
+<p>如果是Windows下载下来应该是一个.exe的安装程序，就按照软件的正常安装步骤来就好。</p>
+<p>现在进入bin文件夹下就可以看到npm包管理软件的可执行文件了，接下来将该路径添加到系统的环境变量中，这样在其他的路径下也可以直接通过软件名来调用npm等软件了。在bin文件夹中执行如下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;export PATH=<span class="hljs-subst">$(pwd)</span>:<span class="hljs-variable">$PATH</span>&quot;</span> &gt;&gt; ~/.bashrc<br><span class="hljs-comment">#or</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;export PATH=[your-nodejs-bin-path]:<span class="hljs-variable">$PATH</span>&quot;</span> &gt;&gt; ~/.bashrc<br></code></pre></td></tr></table></figure>
+
+<p>然后加载一下bash配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.bashrc<br></code></pre></td></tr></table></figure>
+
+<p>这样就将该路径添加到了环境变量中了，下面安装Hexo。</p>
+<h2 id="3-安装Hexo"><a href="#3-安装Hexo" class="headerlink" title="-3- 安装Hexo"></a>-3- 安装Hexo</h2><p>Hexo是一个快速、简洁且高效的博客框架。hexo就相当于一个毛坯房，我们只需要装修就行了，不需要再打地基从平地起楼房。</p>
+<p>为什么选择Hexo框架而不是其他框架呢？对我来说，主要有以下几个优势：</p>
+<ul>
+<li>简单。hexo可以一键部署，命令简单，不需要复杂的操作，而且有中文的文档，最适合我这种纯小白了</li>
+<li>支持Markdown。Markdown太好用了，YYDS，谁用谁知道</li>
+<li>有许多的主题。颜值即正义，谁不想用好看的皮肤呢，自己写不出来，就直接clone大佬的主题，改个配置文件直接用，美滋滋</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/index.html">Hexo官网</a></p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230241456.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>执行如下命令安装Hexo</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo-cli -g 		<span class="hljs-comment">#-g 全局安装  </span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>hexo-cli中的cli是指command line interface版本，即命令行接口版本</p>
+</blockquote>
+<p>可以通过<code>hexo -v</code>命令来判断是否安装成功，如果看到了版本号就是安装成功</p>
+<hr>
+<p>PS：这里可能会有人安装失败，因为国内复杂的网络环境以及众所周知的GreatWall，如果你的网络无法反复连接到npm服务器，就很可能导致安装失败，可以尝试使用国内镜像的cnpm（请自行搜索使用）。</p>
+<p>OK，到这里搭建的环境就准备好了，下面就可以开始搭建工作了</p>
+<h1 id="0x02-操作步骤"><a href="#0x02-操作步骤" class="headerlink" title="0x02 操作步骤"></a>0x02 操作步骤</h1><h2 id="1-初始化文件夹"><a href="#1-初始化文件夹" class="headerlink" title="-1- 初始化文件夹"></a>-1- 初始化文件夹</h2><p>首先创建一个空文件夹，用于存放blog的文件，然后进入该文件夹中，用<code>hexo init</code>初始化文件夹</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> blog<br><span class="hljs-built_in">cd</span> blog<br>hexo init<br></code></pre></td></tr></table></figure>
+
+<p>此时，hexo会自动clone框架代码，目录结构如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">.<br>├── _config.landscape.yml	<span class="hljs-comment">#主题landscape的配置文件</span><br>├── _config.yml				<span class="hljs-comment">#整个网页的配置文件</span><br>├── node_modules<br>├── package.json<br>├── package-lock.json<br>├── scaffolds<br>├── <span class="hljs-built_in">source</span>					<span class="hljs-comment">#用于存放网页的源文件</span><br>└── themes					<span class="hljs-comment">#用于存放主题的源文件</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-配置网页"><a href="#2-配置网页" class="headerlink" title="-2- 配置网页"></a>-2- 配置网页</h2><p>在根目录下有一个_config.yml 文件，它描述了整个hexo博客框架的配置。我们可以在这个文件里修改网页的标题和副标题、是否开启代码高亮功能等等，具体的配置可以根据<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/configuration.html">hexo官方文档</a>，但是这里有一个url配置项很重要，留到后面再说。</p>
+<h2 id="3-预览网页"><a href="#3-预览网页" class="headerlink" title="-3- 预览网页"></a>-3- 预览网页</h2><p>其实初始化后，我们就已经获得了一个博客页面。使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo server<br><span class="hljs-comment">#or</span><br>hexo s			<span class="hljs-comment">#hexo可以自动补全</span><br></code></pre></td></tr></table></figure>
+
+<p>就可以在本地预览默认的博客样式，按Ctrl+C退出。</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230309151.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>使用<code>hexo cl</code>可以清除掉hexo生成的静态网页，清除之后通过<code>hexo g</code>可以重新生成网页。</p>
+<p>hexo的命令并不多，使用<code>hexo help</code>可以看到hexo的命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">clean     Remove generated files and cache.                                   <br>config    Get or <span class="hljs-built_in">set</span> configurations.                                          <br>deploy    Deploy your website.                                                <br>generate  Generate static files.<br><span class="hljs-built_in">help</span>      Get <span class="hljs-built_in">help</span> on a <span class="hljs-built_in">command</span>.<br>init      Create a new Hexo folder.<br>list      List the information of the site<br>migrate   Migrate your site from other system to Hexo.<br>new       Create a new post.<br>publish   Moves a draft post from _drafts to _posts folder.<br>render    Render files with renderer plugins.<br>server    Start the server.<br>version   Display version information.<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="4-部署网页"><a href="#4-部署网页" class="headerlink" title="-4- 部署网页"></a>-4- 部署网页</h2><p>现在我们已经获得了一个网页，但是还是只能在本地浏览，如何将其放到github中呢？这时就需要编辑配置文件了。</p>
+<p>打开博客根目录下的 _config.yml 文件，找到deploy项，按如下格式修改</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">deploy:</span> <br>  <span class="hljs-attr">type:</span> <span class="hljs-string">git</span> <br>  <span class="hljs-attr">repo:</span> <span class="hljs-string">your-git-link</span><br>  <span class="hljs-attr">branch:</span> <span class="hljs-string">your-pages-branch</span><br></code></pre></td></tr></table></figure>
+
+<p>其中</p>
+<ol>
+<li>type选择git</li>
+<li>repo是指你github上的博客仓库链接</li>
+</ol>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230332444.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>这里如果选择SSH链接，需要提前生成ssh id_rsa的公钥，并且添加到github上，如果没有添加的话就请STFW吧</p>
+<p>由于github改版，如果选择HTTP链接，现在已经不能直接通过帐号密码访问到仓库了，必须要生成一个token，通过token做密码才能访问到仓库，而这个token只会在生成时以明文的形式显示一次，并且很难记。所以这里最推荐的是配置公钥后使用SSH，如果非要使用HTTPS链接，又不想每次都输入密码，这里也有一个曲线救国的方法，就是开启git的记住密码功能，这样只用输入一次之后就可以不用输入了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#开启git全局记住密码</span><br>git config --global credential.helper store<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>branch是指你想要将git提交到哪个分支上。这里我推荐仓库创建两个分支，一个pages用于存放静态网页资源，一个source用于存放整个blog的源文件。这里的配置应该选择用于存放网页资源的pages分支。所以我的配置如下</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">deploy:</span> <br>  <span class="hljs-attr">type:</span> <span class="hljs-string">git</span> <br>  <span class="hljs-attr">repo:</span> <span class="hljs-string">git@github.com:GoooForward/blog.git</span><br>  <span class="hljs-attr">branch:</span> <span class="hljs-string">pages</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>修改好配置文件后保存退出，使用<code>hexo d</code>将网页资源push到仓库上时会发现报错了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">tangyuwei@legion:~/blog$ hexo d<br>INFO  Validating config<br>ERROR Deployer not found: git<br></code></pre></td></tr></table></figure>
+
+<p>这是因为我们选择了git来部署页面，而hexo此时还不知道git是什么，因此要安装一个插件</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ada">npm install hexo-deployer-git <span class="hljs-comment">--save</span><br>#<span class="hljs-comment">--save 是指将插件安装到项目的node_modules目录下，并且写入依赖</span><br></code></pre></td></tr></table></figure>
+
+<p>安装好插件之后再执行<code>hexo d</code>就能成功将网页资源push到仓库的对应分支了</p>
+<hr>
+<p>然后，来到github的对应仓库页面，选择Settings -&gt; Pages -&gt; Branch -&gt; 选择分支 -&gt; Save。</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230600315.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230611572.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>保存后，Github就会开始部署该分支上的网页了，这个过程需要一段时间，可以在Actions页面看到部署进度</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230637169.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>成功部署之后就可以回到之前的pages页面访问你的Blog了</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230657411.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h3 id="踩坑一"><a href="#踩坑一" class="headerlink" title="踩坑一"></a>踩坑一</h3><p>当你兴致勃勃的打开你的博客页面时，大概率要失望了，因为你会发现页面的排版是乱的，并且图片资源加载不出来，但是文字的链接还是在的。</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191626076.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>这就是我踩到的第一个坑了，当时一直搞不清楚是什么原因导致的。使用<code>hexo s</code>在本地预览是正常的，但是部署到github上就会出现排版混乱。使用firefox的F12开发者工具查看网络请求，可以看到资源都没有找到</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191636116.png" srcset="/blog/img/loading.gif" lazyload></p>
+<hr>
+<p>经过一番search，终于找到了症结所在。回到本地的blog目录，编辑博客配置文件_config.yml，找到url的配置项，根据注释可以看到我们需要将github的博客页面的网址配置给url（注：url：后面有一个空格），还需要新增根目录项root并配置，其值为<code>/仓库名/</code>，其中前后的斜杠 &#x2F; 不能省。</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310191706912.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>编辑好配置文件之后，重新执行重新生成一次网页资源并部署，执行如下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo cl		<span class="hljs-comment">#清除项目</span><br>hexo g		<span class="hljs-comment">#重新生成项目</span><br>hexo d		<span class="hljs-comment">#部署项目</span><br></code></pre></td></tr></table></figure>
+
+<p>执行后等待github重新部署网页完成，此时再打开博客网页就会发现和之前预览的页面是一样的了。</p>
+<p>其实_config.yml中还有很多和页面相关的配置，包括代码高亮，页面名称等等，可以自行根据官方文档进行配置。</p>
+<h1 id="0x03-主题美化"><a href="#0x03-主题美化" class="headerlink" title="0x03 主题美化"></a>0x03 主题美化</h1><p>虽然hexo自带的landspace主题也还不错，但是还是缺少一些个性。hexo的一大优势就是支持更换主题，我们可以直接在github上clone大佬的开源主题，然后部署到我们自己的博客上，前人栽树，后人乘凉啊。</p>
+<h2 id="1-下载主题"><a href="#1-下载主题" class="headerlink" title="-1- 下载主题"></a>-1- 下载主题</h2><p>Hexo有一个官方的<a target="_blank" rel="noopener" href="https://hexo.io/themes/">主题站</a>，里面收录了很多的优质主题，这些主题提供了预览页面和github仓库主页，这里也推荐三个比较喜欢的主题</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next">NexT</a>  <a target="_blank" rel="noopener" href="https://theme-next.js.org/">预览</a></li>
+</ul>
+<p>​		这可能是最出名的hexo主题之一了，在github有高达8k的star。它的功能很强大，还有很多开发者为其开发了插件，如果不知道选什么主题，用NexT肯定不会是一个错误的选择</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201545466.png" srcset="/blog/img/loading.gif" lazyload alt="image-20231020154556334"></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/fluid-dev/hexo-theme-fluid">Fluid</a> <a target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/">预览</a></li>
+</ul>
+<p>​		一款国人大佬开发的hexo主题，也是我现在使用的主题。这款主题在github上也有6.4K的star，这款主题对国人很友好，不光文档是中文的，连配置文件里的注释都用中文写好了</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201546103.png" srcset="/blog/img/loading.gif" lazyload></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a> <a target="_blank" rel="noopener" href="https://arknights.theme.hexo.yue.zone/">预览</a></li>
+</ul>
+<p>​		老博士应该懂的都懂，有一说一，鹰角的UI设计的确是一流的</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310201550671.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>下载主题就直接将主题源文件clone到博客仓库下的themes文件夹，或者下载release的文件，将其解压到themes文件夹中。这里有一个点要注意，也是我踩的第二个坑</p>
+<h3 id="踩坑二"><a href="#踩坑二" class="headerlink" title="踩坑二"></a>踩坑二</h3><p>大多数的主题仓库名都是 <code>hexo-theme-主题名</code>，直接clone下来会自动创建一个以仓库名命名的文件夹，这里一定要看主题的文档，大部分的主题都会要求将这个文件夹重命名为主题名，或者直接在克隆时就给出目标文件夹，例如Arknights主题，其clone命令是</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/Yue-plus/hexo-theme-arknights.git themes/arknights<br></code></pre></td></tr></table></figure>
+
+
+
+<p>当时我就是因为看文档不仔细，忽略了clone命令最后的目标文件夹参数，导致下载的主题死活不生效，留下了粗心大意的泪水。</p>
+<h2 id="2-配置主题"><a href="#2-配置主题" class="headerlink" title="-2- 配置主题"></a>-2- 配置主题</h2><p>这部分的配置主要根据主题的文档来进行配置，不同的主题的配置项差异很大，这里需要注意的是要区分 <strong>主题的配置文件</strong> 和 <strong>hexo网页框架的配置文件</strong>，它们的名称都是_config.yml，在根目录下的是hexo网页的配置文件，在主题文件夹下的是主题的配置文件。在Hexo 5.0.0 版本以上，主题配置会优先使用博客目录下的<code>_config.主题名.yml</code> 文件。</p>
+<p>使用<code>hexo version</code>可以查看hexo版本</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250940950.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>主题配置完成之后，还要回到hexo网页的配置文件中修改theme的配置项</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310250944880.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>都配置好后就可以重新生成、预览、部署了，当然，最好先清除一下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo cl<br>hexo g<br>hexo s<br>hexo d<br></code></pre></td></tr></table></figure>
+
+<p>至此，大致的配置就完成了，就可以打开你的博客网页查看效果了。</p>
+<h1 id="0x04-使用方法"><a href="#0x04-使用方法" class="headerlink" title="0x04 使用方法"></a>0x04 使用方法</h1><h2 id="1-管理博文"><a href="#1-管理博文" class="headerlink" title="-1- 管理博文"></a>-1- 管理博文</h2><p>hexo 的博文的源格式是.md，其文件位置在&#x2F;source&#x2F;_posts&#x2F;下，你可以通过在这里新建md文件的形式来创建博文，也可以使用hexo的命令来新建博文，命令是</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haxe">hexo <span class="hljs-keyword">new</span> <span class="hljs-type">your_title</span>		<span class="hljs-meta">#注：title不包含.md后缀</span><br></code></pre></td></tr></table></figure>
+
+<p>使用该命令后就会在&#x2F;source&#x2F;_posts&#x2F;下创建一个your_title.md的文件，之后就可以在该文件内开始创作了</p>
+<p>同理，如果你想删除一篇博文，也只需要来到该文件夹下，删除该博文的md文件 或者 仅仅是把该博文的md文件移走即可</p>
+<h2 id="2-源文件同步"><a href="#2-源文件同步" class="headerlink" title="-2- 源文件同步"></a>-2- 源文件同步</h2><p>此前我们使用<code>hexo d</code>只会将网页的静态资源上传到github上，也就是source文件夹下的那些文件，但是如果你想对网页进行一些修改，缺少源文件是做不到的。为了在不同的电脑上都可以对网页作出修改，我们需要将源文件同步。</p>
+<p>还记得前面在部署时推荐创建两个分支吗，其中的source分支就是用来存储我们的源文件的。</p>
+<ul>
+<li><p>处理主题文件夹</p>
+<p>如果主题文件夹是通过git clone的方式下载下来的话，在主题的文件夹里会有一个.git的隐藏文件夹，我们需要删除该文件夹，或者将其改为其他名称，我将其重命名为_git。这是因为通过git clone方式下载的文件夹会被视为一个git仓库，在我们暂存整个博客根目录时，git会检测到仓库的嵌套，会自动忽略被嵌套的子仓库，导致最终上传的github的源文件中缺少了主题的源文件，这样的话，我们在其他的机器上clone源文件就获取不到完整的代码，还需要重新clone一次主题的源文件，这显然是更麻烦的，还可能会导致你的主题配置文件丢失。因此，我们通过改名或删除.git文件夹的方式来避免git将主题文件夹识别为一个git仓库。</p>
+</li>
+<li><p>初始化根目录</p>
+<p>来到博客的根目录，使用<code>git init</code>将该文件夹初始化为一个git仓库，然后使用<code>git add .</code>将所以文件暂存，然后使用<code>git commit</code>生成一笔提交。</p>
+</li>
+<li><p>添加远程服务器</p>
+<p>使用<code>git remote add origin [url]</code> 添加新的远程，其命名为origin（可以改），其url就是仓库的地址，ssh和http均可。</p>
+<p>然后pull同步一下，使用<code>git pull origin source --rebase</code> ,其中source是用于存放源文件的分支名，–rebase是指用rebase的方式处理冲突。</p>
+</li>
+<li><p>推送到远程服务器</p>
+<p>使用命令<code>git push origin HEAD:source</code>来推送到远程服务器的source分支。</p>
+</li>
+</ul>
+<p>成功之后就能在source分支中看到博客源文件了。</p>
+<p><img src="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202310251113339.png" srcset="/blog/img/loading.gif" lazyload></p>
+<blockquote>
+<p>这里需要注意的一点是，由于使用github部署网页必须使用公共仓库，因此将源代码推送到公共仓库的source分支后就意味着你的博客完全开源了，对于部分主题的博客上锁功能就失去意义了，如果你希望你的博客不完全开源的话，可以新建一个私有仓库，在添加远程服务器者一步中，将url替换为你的私有仓库的地址，就可以将代码推送到私有仓库了。</p>
+<p>其实也可以使用子模块等其他办法，我觉得更麻烦，就不推荐了。</p>
+</blockquote>
+<h1 id="END"><a href="#END" class="headerlink" title="-END-"></a>-END-</h1>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/hexo/" class="print-no-link">#hexo</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>记录利用GitHub+Hexo搭建博客</div>
+      <div>https://goooforward.github.io/blog/2023/10/15/study/记录利用GitHub+Hexo搭建博客/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>tangyuwei</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年10月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/blog/2023/10/21/study/%E8%AE%B0%E5%BD%95%E9%85%8D%E7%BD%AETypora+PicGo+GitHub%E5%9B%BE%E5%BA%8A%E5%86%99%E5%8D%9A%E5%AE%A2%E5%B7%A5%E5%85%B7/" title="记录配置Typora+PicGo+GitHub图床写博客工具">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">记录配置Typora+PicGo+GitHub图床写博客工具</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a>Powered by<a> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a>Theme</a> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

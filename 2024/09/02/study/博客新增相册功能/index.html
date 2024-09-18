@@ -1,0 +1,689 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/logo.png">
+  <link rel="icon" href="/blog/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="tangyuwei">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 前言很久没写过博客了，是的，摆烂了很久，以至于我重新打开这个博客时，已经忘记了当时是如何实现的这个相册功能，所以如今就将这个流程记录一遍。 0x01 部署流程由于我不懂JavaScript和前端，所以这个部署过程的原理我并没有搞清楚，这里只是记录流程 参考的是这篇博客 -1- 创建相册的页面在项目blog文件夹下执行 Hexo 命令： 1hexo new page &quot;photo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为Fluid新增相册功能">
+<meta property="og:url" content="https://goooforward.github.io/blog/2024/09/02/study/%E5%8D%9A%E5%AE%A2%E6%96%B0%E5%A2%9E%E7%9B%B8%E5%86%8C%E5%8A%9F%E8%83%BD/index.html">
+<meta property="og:site_name" content="TYW&#39;s blog">
+<meta property="og:description" content="0x00 前言很久没写过博客了，是的，摆烂了很久，以至于我重新打开这个博客时，已经忘记了当时是如何实现的这个相册功能，所以如今就将这个流程记录一遍。 0x01 部署流程由于我不懂JavaScript和前端，所以这个部署过程的原理我并没有搞清楚，这里只是记录流程 参考的是这篇博客 -1- 创建相册的页面在项目blog文件夹下执行 Hexo 命令： 1hexo new page &quot;photo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20240918210034185.png">
+<meta property="article:published_time" content="2024-09-02T14:00:00.000Z">
+<meta property="article:modified_time" content="2024-09-02T14:00:00.000Z">
+<meta property="article:author" content="tangyuwei">
+<meta property="article:tag" content="hexo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20240918210034185.png">
+  
+  
+  
+  <title>为Fluid新增相册功能 - TYW&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"goooforward.github.io","root":"/blog/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>TYW&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/photo/" target="_self">
+                <i class="iconfont icon-image"></i>
+                <span>摄影</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/blog/img/cover_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">为Fluid新增相册功能</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-02 22:00" pubdate>
+          2024年9月2日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          12k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          101 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">为Fluid新增相册功能</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h1><p>很久没写过博客了，是的，摆烂了很久，以至于我重新打开这个博客时，已经忘记了当时是如何实现的这个相册功能，所以如今就将这个流程记录一遍。</p>
+<h1 id="0x01-部署流程"><a href="#0x01-部署流程" class="headerlink" title="0x01 部署流程"></a>0x01 部署流程</h1><p>由于我不懂JavaScript和前端，所以这个部署过程的原理我并没有搞清楚，这里只是记录流程</p>
+<p>参考的是这篇<a target="_blank" rel="noopener" href="https://weichao.io/09dacc5ba02c/#fn:5">博客</a></p>
+<h2 id="1-创建相册的页面"><a href="#1-创建相册的页面" class="headerlink" title="-1- 创建相册的页面"></a>-1- 创建相册的页面</h2><p>在项目blog文件夹下执行 Hexo 命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmd">hexo new page &quot;photo&quot;<br></code></pre></td></tr></table></figure>
+
+<p>Hexo会自动创建 <code>source/photo</code>，里面有一个文件 <code>index.md</code>。</p>
+<p>这个<code>index.md</code>就是此描述了该页面的内容，其内容如下（注释由GLM AI生成）</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs markdown">---<br><span class="hljs-section"># 页面配置信息</span><br>title: 摄影 # 页面的标题<br>subtitle: &#x27;&#x27; # 页面的副标题，留空则不显示<br>excerpt: &#x27;&#x27; # 页面的摘要或简短描述，留空则不显示<br>banner<span class="hljs-emphasis">_img: /img/cover.jpg # 页面的横幅图片路径</span><br><span class="hljs-emphasis">lazyload: true # 图片是否启用懒加载，true为启用</span><br><span class="hljs-emphasis">hide: false # 是否隐藏该页面，false为不隐藏</span><br><span class="hljs-emphasis">date: 2023-12-01 19:04:03 # 页面的创建或更新日期</span><br><span class="hljs-emphasis">layout: photo # 页面的布局类型，此处为专门为照片设计的布局</span><br><span class="hljs-emphasis">index_</span>img: # 索引图片，用于在列表中展示的缩略图，留空则不显示<br>tags: # 页面的标签，用于分类和搜索，留空则不指定<br>categories: # 页面的分类，用于组织内容，留空则不指定<br><span class="hljs-section">updated: # 页面的更新日期，留空则不指定</span><br><span class="hljs-section">---</span><br><br><span class="hljs-section"># CSS样式定义</span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span></span><br>  /* 图片网格容器样式 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">  .ImageGrid &#123;</span><br><span class="hljs-emphasis">    width: 100%; /*</span> 宽度占满容器 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">    max-width: 1040px; /*</span> 最大宽度限制 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">    margin: 0 auto; /*</span> 水平居中 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">    text-align: center; /*</span> 文本居中 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">  &#125;</span><br><span class="hljs-emphasis">  /*</span> 图片卡片样式 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">  .card &#123;</span><br><span class="hljs-emphasis">    overflow: hidden; /*</span> 超出部分隐藏 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">    transition: .3s ease-in-out; /*</span> 过渡效果，持续时间和缓动函数 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">    border-radius: 8px; /*</span> 边框圆角 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">    background-color: #efefef; /*</span> 背景颜色 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">    padding: 1.4px; /*</span> 内边距 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">  &#125;</span><br><span class="hljs-emphasis">  /*</span> 图片在卡片中的样式 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">  .ImageInCard img &#123;</span><br><span class="hljs-emphasis">    padding: 0; /*</span> 图片内边距 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">    border-radius: 8px; /*</span> 图片圆角 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">    width:100%; /*</span> 图片宽度占满卡片 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">    height:100%; /*</span> 图片高度占满卡片 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">  &#125;</span><br><span class="hljs-emphasis">  /*</span> 暗色模式下的样式 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">  @media (prefers-color-scheme: dark) &#123;</span><br><span class="hljs-emphasis">    .card &#123;background-color: #333;&#125; /*</span> 暗色模式下卡片的背景颜色 <span class="hljs-emphasis">*/</span><br><span class="hljs-emphasis">  &#125;</span><br><span class="hljs-emphasis"><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></span></span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis"># HTML容器定义</span><br><span class="hljs-emphasis"><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;imageTab&quot;</span>&gt;</span></span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span> &lt;!-- 图片标签容器 --&gt;</span><br><span class="hljs-emphasis"><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;ImageGrid&quot;</span>&gt;</span></span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span> &lt;!-- 图片网格容器 --&gt;</span><br><span class="hljs-emphasis"></span><br></code></pre></td></tr></table></figure>
+
+<p>在 <code>_config.fluid.yml</code> 文件的 menu 里添加如下内容，这样就可以在页面右上角生成图标快速访问此页面了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20240918210034185.png" srcset="/blog/img/loading.gif" lazyload alt="image-20240918210034185"></p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-bullet">-</span> &#123; <span class="hljs-attr">key:</span> <span class="hljs-string">&quot;摄影&quot;</span>, <span class="hljs-attr">link:</span> <span class="hljs-string">&quot;/photo/&quot;</span>, <span class="hljs-attr">icon:</span> <span class="hljs-string">&quot;iconfont icon-image&quot;</span> &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-准备图片"><a href="#2-准备图片" class="headerlink" title="-2- 准备图片"></a>-2- 准备图片</h2><p>由于照片的展示是瀑布流的形式，所以需要先生成缩略图来加快页面加载，生成缩略图采用的是python脚本，将其放在了<code>tools</code>目录下</p>
+<p>需要用到pillow模块，所以需要先安装PIL</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmd">pip install pillow<br></code></pre></td></tr></table></figure>
+
+<p>其主要功能就是从同级的<code>ori_picture</code>目录下读取文件，生成缩略图后添加<code>_mini</code>文件名后缀，放入<code>mini_picture</code>目录下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br><br><span class="hljs-comment"># 创建目录用于存储生成的图片</span><br>save_dirname = <span class="hljs-string">&quot;mini_picture&quot;</span><br><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(save_dirname):<br>    os.mkdir(save_dirname)<br><br>dirname = <span class="hljs-string">&quot;ori_picture&quot;</span><br>imgs = [os.path.join(dirname, i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> os.listdir(dirname)]<br><br><span class="hljs-keyword">for</span> idx, img_path <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(imgs):<br>    <span class="hljs-keyword">if</span> img_path.endswith(<span class="hljs-string">&quot;jpg&quot;</span>) <span class="hljs-keyword">or</span> img_path.endswith(<span class="hljs-string">&quot;png&quot;</span>) <span class="hljs-keyword">or</span> img_path.endswith(<span class="hljs-string">&quot;jpeg&quot;</span>):<br>        original_filename, extension = os.path.splitext(os.path.basename(img_path))<br>        img = Image.<span class="hljs-built_in">open</span>(img_path)<br>        img.thumbnail((<span class="hljs-number">240</span>, <span class="hljs-number">480</span>))<br>        <br>        <span class="hljs-comment"># 构造新的文件名，加上 &quot;_mini&quot; 后缀</span><br>        new_filename = <span class="hljs-string">f&quot;<span class="hljs-subst">&#123;original_filename&#125;</span>_mini<span class="hljs-subst">&#123;extension&#125;</span>&quot;</span><br>        <br>        img.save(os.path.join(save_dirname, new_filename))<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-生成image-json"><a href="#3-生成image-json" class="headerlink" title="-3- 生成image.json"></a>-3- 生成image.json</h2><p>先安装image-size</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">npm i image-size<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>image-size 的功能是获取图片的宽高信息，不支持获取非图片格式的宽高，比如视频。</p>
+</blockquote>
+<p>然后使用 phototool.js 生成 image.json，脚本由来自<a target="_blank" rel="noopener" href="https://weichao.io/09dacc5ba02c/#%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF">为 Hexo + Fluid 博客添加承载相册的页面 - 『魏超』的 blog</a>，注释由GLM AI生成</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-meta">&quot;use strict&quot;</span>; <span class="hljs-comment">// 启用严格模式，确保代码运行在更严格的语法环境中</span><br><br><span class="hljs-keyword">const</span> sizeOf = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;image-size&#x27;</span>); <span class="hljs-comment">// 引入image-size模块，用于获取图片尺寸</span><br><span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path&#x27;</span>); <span class="hljs-comment">// 引入path模块，用于处理文件路径</span><br><span class="hljs-keyword">const</span> &#123; readdir, writeFileSync, stat &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>).<span class="hljs-property">promises</span>; <span class="hljs-comment">// 引入fs模块的Promise版本，用于异步文件操作</span><br><br><span class="hljs-keyword">const</span> imagesSrcPath = <span class="hljs-string">&#x27;images/original-image/&#x27;</span>; <span class="hljs-comment">// 原始图片存放路径</span><br><span class="hljs-keyword">const</span> imagesThumbPath = <span class="hljs-string">&#x27;images/mini-image/&#x27;</span>; <span class="hljs-comment">// 缩略图存放路径</span><br><span class="hljs-keyword">const</span> sourcePath = <span class="hljs-string">&#x27;source/&#x27;</span>; <span class="hljs-comment">// 输出JSON文件的路径</span><br><br><span class="hljs-comment">// 定义异步函数，处理每个图片页面</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">processPages</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        <span class="hljs-keyword">const</span> pageArr = <span class="hljs-keyword">await</span> <span class="hljs-title function_">readdir</span>(imagesSrcPath); <span class="hljs-comment">// 读取原始图片目录下的所有页面目录</span><br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> page <span class="hljs-keyword">of</span> pageArr) &#123; <span class="hljs-comment">// 遍历每个页面目录</span><br>            <span class="hljs-keyword">const</span> pageSrcPath = path.<span class="hljs-title function_">join</span>(imagesSrcPath, page); <span class="hljs-comment">// 构建当前页面的原始图片路径</span><br>            <span class="hljs-keyword">const</span> pageThumbPath = path.<span class="hljs-title function_">join</span>(imagesThumbPath, page); <span class="hljs-comment">// 构建当前页面的缩略图路径</span><br>            <span class="hljs-keyword">const</span> output = path.<span class="hljs-title function_">join</span>(sourcePath, page, <span class="hljs-string">&#x27;image.json&#x27;</span>); <span class="hljs-comment">// 构建输出JSON文件的路径</span><br>            <br>            <span class="hljs-keyword">const</span> filesInPage = <span class="hljs-keyword">await</span> <span class="hljs-title function_">readdir</span>(pageSrcPath); <span class="hljs-comment">// 读取当前页面目录下的所有相册目录</span><br><br>            <span class="hljs-keyword">let</span> imagesInPage = []; <span class="hljs-comment">// 初始化当前页面的图片信息数组</span><br><br>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> album <span class="hljs-keyword">of</span> filesInPage) &#123; <span class="hljs-comment">// 遍历每个相册目录</span><br>                <span class="hljs-keyword">const</span> albumSrcPath = path.<span class="hljs-title function_">join</span>(pageSrcPath, album); <span class="hljs-comment">// 构建当前相册的原始图片路径</span><br>                <span class="hljs-keyword">const</span> albumThumbPath = path.<span class="hljs-title function_">join</span>(pageThumbPath, album); <span class="hljs-comment">// 构建当前相册的缩略图路径</span><br>                <br>                <span class="hljs-keyword">try</span> &#123;<br>                    <span class="hljs-keyword">const</span> albumStat = <span class="hljs-keyword">await</span> <span class="hljs-title function_">stat</span>(albumSrcPath); <span class="hljs-comment">// 获取当前相册的文件状态</span><br><br>                    <span class="hljs-keyword">if</span> (albumStat.<span class="hljs-title function_">isDirectory</span>()) &#123; <span class="hljs-comment">// 如果是目录，则处理该相册</span><br>                        <span class="hljs-keyword">let</span> imagesInAlbum = &#123; <span class="hljs-attr">name</span>: album &#125;; <span class="hljs-comment">// 初始化当前相册的图片信息对象</span><br>                        <span class="hljs-keyword">let</span> children = []; <span class="hljs-comment">// 初始化当前相册的图片子项数组</span><br><br>                        <span class="hljs-keyword">const</span> imageFile = <span class="hljs-keyword">await</span> <span class="hljs-title function_">readdir</span>(albumSrcPath); <span class="hljs-comment">// 读取当前相册目录下的所有图片文件</span><br><br>                        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> file <span class="hljs-keyword">of</span> imageFile) &#123; <span class="hljs-comment">// 遍历每个图片文件</span><br>                            <span class="hljs-keyword">if</span> (path.<span class="hljs-title function_">extname</span>(file) !== <span class="hljs-string">&quot;.mp4&quot;</span>) &#123; <span class="hljs-comment">// 如果文件不是视频，则处理图片</span><br>                                <span class="hljs-keyword">const</span> dimensions = <span class="hljs-title function_">sizeOf</span>(path.<span class="hljs-title function_">join</span>(albumSrcPath, file)); <span class="hljs-comment">// 获取图片尺寸</span><br>                                <span class="hljs-comment">// 生成并添加缩略图信息</span><br>                                <span class="hljs-keyword">const</span> thumbnailName = file.<span class="hljs-title function_">replace</span>(path.<span class="hljs-title function_">extname</span>(file), <span class="hljs-string">&#x27;_mini&#x27;</span> + path.<span class="hljs-title function_">extname</span>(file));<br>                                children.<span class="hljs-title function_">push</span>(dimensions.<span class="hljs-property">width</span> + <span class="hljs-string">&#x27;.&#x27;</span> + dimensions.<span class="hljs-property">height</span> + <span class="hljs-string">&#x27; &#x27;</span> + file + <span class="hljs-string">&#x27; &#x27;</span> + thumbnailName);<br>                            &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 如果是视频文件，则处理对应的缩略图</span><br>                                <span class="hljs-keyword">const</span> dimensions = <span class="hljs-title function_">sizeOf</span>(path.<span class="hljs-title function_">join</span>(albumThumbPath, path.<span class="hljs-title function_">basename</span>(file, <span class="hljs-string">&quot;.mp4&quot;</span>) + <span class="hljs-string">&quot;.png&quot;</span>));<br>                                children.<span class="hljs-title function_">push</span>(dimensions.<span class="hljs-property">width</span> + <span class="hljs-string">&#x27;.&#x27;</span> + dimensions.<span class="hljs-property">height</span> + <span class="hljs-string">&#x27; &#x27;</span> + file + <span class="hljs-string">&#x27; &#x27;</span> + path.<span class="hljs-title function_">basename</span>(file, <span class="hljs-string">&quot;.mp4&quot;</span>) + <span class="hljs-string">&quot;.png&quot;</span>);<br>                            &#125;<br>                        &#125;<br><br>                        imagesInAlbum.<span class="hljs-property">children</span> = children; <span class="hljs-comment">// 将图片子项数组赋值给相册信息对象的children属性</span><br>                        imagesInPage.<span class="hljs-title function_">push</span>(imagesInAlbum); <span class="hljs-comment">// 将相册信息对象添加到当前页面的图片信息数组</span><br>                        <span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>); <span class="hljs-comment">// 引入fs模块，用于写入文件</span><br>						fs.<span class="hljs-title function_">writeFileSync</span>(output, <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(imagesInPage, <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;\t&quot;</span>)); <span class="hljs-comment">// 将当前页面的图片信息数组写入JSON文件</span><br><br>                    &#125;<br>                &#125; <span class="hljs-keyword">catch</span> (error) &#123;<br>                    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&quot;Error:&quot;</span>, error); <span class="hljs-comment">// 捕获并打印错误信息</span><br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125; <span class="hljs-keyword">catch</span> (error) &#123;<br>        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&quot;Error:&quot;</span>, error); <span class="hljs-comment">// 捕获并打印错误信息</span><br>    &#125;<br>&#125;<br><br><span class="hljs-title function_">processPages</span>(); <span class="hljs-comment">// 调用函数，开始处理图片页面</span><br><br></code></pre></td></tr></table></figure>
+
+<p>执行后会在 <code>source</code> 内对应页面的文件夹内生成 <code>image.json</code></p>
+<blockquote>
+<p>放在 <code>scripts</code> 内的 js 文件在执行 Hexo 部分命令 比如 <code>hexo s -d</code> 时会被自动执行。</p>
+</blockquote>
+<h2 id="4-加载图片到页面"><a href="#4-加载图片到页面" class="headerlink" title="-4- 加载图片到页面"></a>-4- 加载图片到页面</h2><p>现在图片和描述图片信息的json文件都准备好了，就差把图片加载到页面上了</p>
+<p>这里需要两个js脚本，一个是<code>injector.js</code>，用到了[<code>Hexo 注入器</code>](<a target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/advance/#fluid-%E6%B3%A8%E5%85%A5%E4%BB%A3%E7%A0%81">进阶用法 | Hexo Fluid 用户手册 (fluid-dev.com)</a>)，用于将 HTML 片段注入生成页面的 <code>&lt;head&gt;</code> 和 <code>&lt;body&gt;</code> 节点中。</p>
+<p>另一个是用于生成瀑布流形式的页面布局的<code>gallery.js</code></p>
+<p><strong>gallery.js</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> imgDataPath = <span class="hljs-string">&quot;image.json&quot;</span>; <span class="hljs-comment">// 图片数据文件路径，包含图片所在相册、高宽、名称等信息</span><br><span class="hljs-keyword">var</span> imgPath = <span class="hljs-string">&quot;https://gcore.jsdelivr.net/gh/GoooForward/blog@source/images/original-image/photo/&quot;</span>; <span class="hljs-comment">// 原图的网络访问路径</span><br><span class="hljs-keyword">var</span> imgThumbPath = <span class="hljs-string">&quot;https://gcore.jsdelivr.net/gh/GoooForward/blog@source/images/mini-image/photo/&quot;</span>; <span class="hljs-comment">// 缩略图的网络访问路径</span><br><br><span class="hljs-comment">// 获取窗口宽度，用于判断是否为手机端</span><br><span class="hljs-keyword">var</span> windowWidth = <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerWidth</span> || <span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">clientWidth</span> || <span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-property">clientWidth</span>;<br><span class="hljs-comment">// 根据窗口宽度设置图片显示宽度</span><br><span class="hljs-keyword">if</span> (windowWidth &lt; <span class="hljs-number">768</span>) &#123; <span class="hljs-comment">// 如果窗口宽度小于768px，认为是手机端</span><br>  <span class="hljs-keyword">var</span> imageWidth = <span class="hljs-number">145</span>; <span class="hljs-comment">// 图片显示宽度设置为145px</span><br>&#125; <span class="hljs-keyword">else</span> &#123;<br>  <span class="hljs-keyword">var</span> imageWidth = <span class="hljs-number">250</span>; <span class="hljs-comment">// 图片显示宽度设置为250px</span><br>&#125;<br><br><span class="hljs-keyword">const</span> photo = &#123;<br>  <span class="hljs-attr">page</span>: <span class="hljs-number">1</span>, <span class="hljs-comment">// 当前页面索引</span><br>  <span class="hljs-attr">init</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123; <span class="hljs-comment">// 初始化函数</span><br>    <span class="hljs-keyword">var</span> that = <span class="hljs-variable language_">this</span>;<br>    <span class="hljs-comment">// 使用jQuery的getJSON方法异步加载图片数据文件</span><br>    $.<span class="hljs-title function_">getJSON</span>(imgDataPath, <span class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) &#123;<br>      that.<span class="hljs-title function_">render</span>(that.<span class="hljs-property">page</span>, data); <span class="hljs-comment">// 渲染图片</span><br>      <span class="hljs-comment">//that.scroll(data); // 假设这里有滚动相关处理，已被注释</span><br>      that.<span class="hljs-title function_">eventListen</span>(data); <span class="hljs-comment">// 绑定事件监听</span><br>    &#125;);<br>  &#125;,<br>  <span class="hljs-attr">constructHtml</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">options</span>) &#123; <span class="hljs-comment">// 构建HTML字符串的函数</span><br>    <span class="hljs-comment">// 解构赋值获取参数</span><br>    <span class="hljs-keyword">const</span> &#123;<br>      imageWidth,<br>      imageX,<br>      imageY,<br>      name,<br>      imgPath,<br>      imgThumbPath,<br>      imgName,<br>      imgNameWithPattern,<br>      imgThumbNameWithPattern,<br>    &#125; = options;<br>    <span class="hljs-comment">// 构建图片卡片HTML元素</span><br>    <span class="hljs-keyword">const</span> htmlEle = <span class="hljs-string">`&lt;div class=&quot;card lozad&quot; style=&quot;width:<span class="hljs-subst">$&#123;imageWidth&#125;</span>px&quot;&gt;</span><br><span class="hljs-string">                  &lt;div class=&quot;ImageInCard&quot; style=&quot;height:<span class="hljs-subst">$&#123;</span></span><br><span class="hljs-subst"><span class="hljs-string">                    (imageWidth * imageY) / imageX</span></span><br><span class="hljs-subst"><span class="hljs-string">                  &#125;</span>px&quot;&gt;</span><br><span class="hljs-string">                    &lt;a data-fancybox=&quot;gallery&quot; href=&quot;<span class="hljs-subst">$&#123;imgPath&#125;</span><span class="hljs-subst">$&#123;name&#125;</span>/<span class="hljs-subst">$&#123;imgNameWithPattern&#125;</span>&quot;</span><br><span class="hljs-string">                          data-caption=&quot;<span class="hljs-subst">$&#123;imgName&#125;</span>&quot; title=&quot;<span class="hljs-subst">$&#123;imgName&#125;</span>&quot;&gt;</span><br><span class="hljs-string">                            &lt;img  class=&quot;lazyload&quot; data-src=&quot;<span class="hljs-subst">$&#123;imgThumbPath&#125;</span><span class="hljs-subst">$&#123;name&#125;</span>/<span class="hljs-subst">$&#123;imgThumbNameWithPattern&#125;</span>&quot;</span><br><span class="hljs-string">                            src=&quot;data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==&quot;</span><br><span class="hljs-string">                            onload=&quot;lzld(this)&quot;</span><br><span class="hljs-string">                            lazyload=&quot;auto&quot;&gt;</span><br><span class="hljs-string">                        &lt;/a&gt;</span><br><span class="hljs-string">                  &lt;/div&gt;</span><br><span class="hljs-string">                &lt;/div&gt;`</span>;<br>    <span class="hljs-keyword">return</span> htmlEle; <span class="hljs-comment">// 返回构建好的HTML字符串</span><br>  &#125;,<br>  <span class="hljs-attr">render</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">page, data = []</span>) &#123; <span class="hljs-comment">// 渲染图片的函数</span><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">data</span> = data; <span class="hljs-comment">// 将数据赋值给实例属性</span><br>    <span class="hljs-keyword">if</span> (!data.<span class="hljs-property">length</span>) <span class="hljs-keyword">return</span>; <span class="hljs-comment">// 如果没有数据，则直接返回</span><br>    <span class="hljs-keyword">var</span> html,<br>      imgNameWithPattern,<br>      imgThumbNameWithPattern,<br>      imgName,<br>      imageSize,<br>      imageX,<br>      imageY,<br>      li = <span class="hljs-string">&quot;&quot;</span>;<br><br>    <span class="hljs-keyword">let</span> liHtml = <span class="hljs-string">&quot;&quot;</span>; <span class="hljs-comment">// 初始化相册导航HTML</span><br>    <span class="hljs-keyword">let</span> contentHtml = <span class="hljs-string">&quot;&quot;</span>; <span class="hljs-comment">// 初始化相册内容HTML</span><br><br>    <span class="hljs-comment">// 遍历数据，构建相册导航和内容</span><br>    data.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item, index</span>) =&gt;</span> &#123;<br>      <span class="hljs-keyword">const</span> activeClass = index === <span class="hljs-number">0</span> ? <span class="hljs-string">&quot;active&quot;</span> : <span class="hljs-string">&quot;&quot;</span>; <span class="hljs-comment">// 判断是否为激活状态</span><br>      liHtml += <span class="hljs-string">`&lt;li class=&quot;nav-item&quot; role=&quot;presentation&quot;&gt;</span><br><span class="hljs-string">          &lt;a class=&quot;nav-link <span class="hljs-subst">$&#123;activeClass&#125;</span> photo-tab&quot; id=&quot;home-tab&quot; photo-uuid=&quot;<span class="hljs-subst">$&#123;item.name&#125;</span>&quot; data-toggle=&quot;tab&quot; href=&quot;#<span class="hljs-subst">$&#123;item.name&#125;</span>&quot;  role=&quot;tab&quot; aria-controls=&quot;<span class="hljs-subst">$&#123;item.name&#125;</span>&quot; aria-selected=&quot;true&quot;&gt;<span class="hljs-subst">$&#123;item.name&#125;</span>&lt;/a&gt;</span><br><span class="hljs-string">        &lt;/li&gt;`</span>;<br>    &#125;);<br>    <span class="hljs-comment">// 获取第一个相册的数据</span><br>    <span class="hljs-keyword">const</span> [initData = &#123;&#125;] = data;<br>    <span class="hljs-keyword">const</span> &#123; children = [], name &#125; = initData;<br>    <span class="hljs-comment">// 遍历相册中的图片，构建HTML</span><br>    children.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item, index</span>) =&gt;</span> &#123;<br>      imgNameWithPattern = item.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot; &quot;</span>)[<span class="hljs-number">1</span>];<br>      imgThumbNameWithPattern = item.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot; &quot;</span>)[<span class="hljs-number">2</span>];<br>      imgName = imgNameWithPattern.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot;.&quot;</span>)[<span class="hljs-number">0</span>];<br>      imageSize = item.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot; &quot;</span>)[<span class="hljs-number">0</span>];<br>      imageX = imageSize.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot;.&quot;</span>)[<span class="hljs-number">0</span>];<br>      imageY = imageSize.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot;.&quot;</span>)[<span class="hljs-number">1</span>];<br>      <span class="hljs-keyword">let</span> imgOptions = &#123;<br>        imageWidth,<br>        imageX,<br>        imageY,<br>        name,<br>        imgName,<br>        imgPath,<br>        imgThumbPath,<br>        imgNameWithPattern,<br>        imgThumbNameWithPattern,<br>      &#125;;<br>      li += <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">constructHtml</span>(imgOptions); <span class="hljs-comment">// 构建图片HTML</span><br>    &#125;);<br>    <span class="hljs-comment">// 构建相册内容HTML</span><br>    contentHtml += <span class="hljs-string">` &lt;div class=&quot;tab-pane fade show active&quot; id=&quot;<span class="hljs-subst">$&#123;initData.name&#125;</span>&quot; role=&quot;tabpanel&quot; aria-labelledby=&quot;home-tab&quot;&gt;<span class="hljs-subst">$&#123;li&#125;</span>&lt;/div&gt;`</span>; <span class="hljs-comment">// 添加第一个相册的内容HTML，并设置为激活状态</span><br><br>    <span class="hljs-keyword">const</span> ulHtml = <span class="hljs-string">`&lt;ul class=&quot;nav nav-tabs&quot; id=&quot;myTab&quot; role=&quot;tablist&quot;&gt;<span class="hljs-subst">$&#123;liHtml&#125;</span>&lt;/ul&gt;`</span>; <span class="hljs-comment">// 构建相册导航的HTML</span><br>    <span class="hljs-keyword">const</span> tabContent = <span class="hljs-string">`&lt;div class=&quot;tab-content&quot; id=&quot;myTabContent&quot;&gt;<span class="hljs-subst">$&#123;contentHtml&#125;</span>&lt;/div&gt;`</span>; <span class="hljs-comment">// 构建包含所有相册内容的HTML</span><br><br>    <span class="hljs-comment">// 将相册导航和内容添加到页面对应的元素中</span><br>    $(<span class="hljs-string">&quot;#imageTab&quot;</span>).<span class="hljs-title function_">append</span>(ulHtml);<br>    $(<span class="hljs-string">&quot;.ImageGrid&quot;</span>).<span class="hljs-title function_">append</span>(tabContent);<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">minigrid</span>(); <span class="hljs-comment">// 调用minigrid函数，初始化图片网格布局</span><br>  &#125;,<br>  <span class="hljs-attr">eventListen</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) &#123; <span class="hljs-comment">// 事件监听函数</span><br>    <span class="hljs-keyword">let</span> self = <span class="hljs-variable language_">this</span>;<br>    <span class="hljs-comment">// 监听标签页切换事件</span><br>    $(<span class="hljs-string">&#x27;a[data-toggle=&quot;tab&quot;]&#x27;</span>).<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;shown.bs.tab&quot;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) &#123;<br>      $(<span class="hljs-string">&quot;.ImageGrid&quot;</span>).<span class="hljs-title function_">empty</span>(); <span class="hljs-comment">// 清空当前图片网格内容</span><br>      <span class="hljs-keyword">const</span> selectId = $(e.<span class="hljs-property">target</span>).<span class="hljs-title function_">attr</span>(<span class="hljs-string">&quot;photo-uuid&quot;</span>); <span class="hljs-comment">// 获取被选中标签的相册ID</span><br>      <span class="hljs-keyword">const</span> selectedData = data.<span class="hljs-title function_">find</span>(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> data.<span class="hljs-property">name</span> === selectId) || &#123;&#125;; <span class="hljs-comment">// 从数据中找到被选中的相册数据</span><br>      <span class="hljs-keyword">const</span> &#123; children, name &#125; = selectedData; <span class="hljs-comment">// 解构赋值获取相册的图片数据</span><br>      <span class="hljs-keyword">let</span> li = <span class="hljs-string">&quot;&quot;</span>; <span class="hljs-comment">// 初始化相册内容HTML</span><br>      <span class="hljs-comment">// 遍历相册中的图片，构建HTML</span><br>      children.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item, index</span>) =&gt;</span> &#123;<br>        imgNameWithPattern = item.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot; &quot;</span>)[<span class="hljs-number">1</span>];<br>        imgThumbNameWithPattern = item.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot; &quot;</span>)[<span class="hljs-number">2</span>];<br>        imgName = imgNameWithPattern.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot;.&quot;</span>)[<span class="hljs-number">0</span>];<br>        imageSize = item.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot; &quot;</span>)[<span class="hljs-number">0</span>];<br>        imageX = imageSize.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot;.&quot;</span>)[<span class="hljs-number">0</span>];<br>        imageY = imageSize.<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot;.&quot;</span>)[<span class="hljs-number">1</span>];<br>        <span class="hljs-keyword">let</span> imgOptions = &#123;<br>          imageWidth,<br>          imageX,<br>          imageY,<br>          name,<br>          imgName,<br>          imgPath,<br>          imgThumbPath,<br>          imgNameWithPattern,<br>          imgThumbNameWithPattern,<br>        &#125;;<br>        li += self.<span class="hljs-title function_">constructHtml</span>(imgOptions); <span class="hljs-comment">// 构建图片HTML</span><br>      &#125;);<br>      <span class="hljs-comment">// 将构建好的相册内容HTML添加到页面对应的元素中</span><br>      $(<span class="hljs-string">&quot;.ImageGrid&quot;</span>).<span class="hljs-title function_">append</span>(li);<br>      self.<span class="hljs-title function_">minigrid</span>(); <span class="hljs-comment">// 重新初始化图片网格布局</span><br>    &#125;);<br>  &#125;,<br>  <span class="hljs-attr">minigrid</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123; <span class="hljs-comment">// 初始化图片网格布局的函数</span><br>    <span class="hljs-keyword">var</span> grid = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Minigrid</span>(&#123; <span class="hljs-comment">// 创建Minigrid实例</span><br>      <span class="hljs-attr">container</span>: <span class="hljs-string">&quot;.ImageGrid&quot;</span>, <span class="hljs-comment">// 网格容器的选择器</span><br>      <span class="hljs-attr">item</span>: <span class="hljs-string">&quot;.card&quot;</span>, <span class="hljs-comment">// 网格项的选择器</span><br>      <span class="hljs-attr">gutter</span>: <span class="hljs-number">12</span>, <span class="hljs-comment">// 网格项之间的间隔</span><br>    &#125;);<br>    grid.<span class="hljs-title function_">mount</span>(); <span class="hljs-comment">// 初始化网格布局</span><br>    <span class="hljs-comment">// 监听窗口大小变化事件，重新初始化网格布局</span><br>    $(<span class="hljs-variable language_">window</span>).<span class="hljs-title function_">resize</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>      grid.<span class="hljs-title function_">mount</span>();<br>    &#125;);<br>  &#125;,<br>&#125;;<br>photo.<span class="hljs-title function_">init</span>(); <span class="hljs-comment">// 调用photo对象的init方法，开始初始化过程</span><br><br></code></pre></td></tr></table></figure>
+
+<p><strong>injector.js</strong></p>
+<p>在 <code>layout: photo</code> 时会导入下面的 js 与 css，这里的 layout 就是 <code>index.md</code> 里的 layout，其中包括 <code>gallery.js</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> &#123; <span class="hljs-attr">root</span>: siteRoot = <span class="hljs-string">&quot;/&quot;</span> &#125; = hexo.<span class="hljs-property">config</span>;<br><span class="hljs-comment">// layout 为 photo的时候导入这些js与css</span><br>hexo.<span class="hljs-property">extend</span>.<span class="hljs-property">injector</span>.<span class="hljs-title function_">register</span>(<br>  <span class="hljs-string">&quot;body_end&quot;</span>,<br>  <span class="hljs-string">`</span><br><span class="hljs-string">  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css&quot;&gt;</span><br><span class="hljs-string">  &lt;script src=&quot;//cdn.jsdelivr.net/npm/minigrid@3.1.1/dist/minigrid.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="hljs-string">  &lt;script src=&quot;https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="hljs-string">  &lt;script src=&quot;https://cdn.bootcdn.net/ajax/libs/lazyloadjs/3.2.2/lazyload.js&quot;&gt;&lt;/script&gt;</span><br><span class="hljs-string">  &lt;script defer src=&quot;<span class="hljs-subst">$&#123;siteRoot&#125;</span>js/gallery.js&quot;&gt;&lt;/script&gt;</span><br><span class="hljs-string">  `</span>,<br>  <span class="hljs-string">&quot;photo&quot;</span><br>);<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>injector.js</code>放在scripts目录下，自动执行，将<code>gallery.js</code>注入到photo下的index页面中</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/hexo/" class="print-no-link">#hexo</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>为Fluid新增相册功能</div>
+      <div>https://goooforward.github.io/blog/2024/09/02/study/博客新增相册功能/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>tangyuwei</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2023/11/06/study/Makefile%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Makefile学习笔记">
+                        <span class="hidden-mobile">Makefile学习笔记</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a>Powered by<a> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a>Theme</a> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
