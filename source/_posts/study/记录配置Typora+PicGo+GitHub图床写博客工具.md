@@ -1,7 +1,7 @@
 ---
 title: 记录配置Typora+PicGo+GitHub图床写博客工具
 date: 2023-10-21 10:00:00
-updated: {{ date }}
+updated: 2024-09-18 22:36:42
 tags: 
   - Typora
   - PicGo

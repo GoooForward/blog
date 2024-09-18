@@ -1,7 +1,7 @@
 ---
 title: 记录利用GitHub+Hexo搭建博客
 date: 2023-10-15 10:00:00
-updated: {{ date }}
+updated: 2024-09-18 22:29:41
 tags: hexo
 categories: 学习
 ---
@@ -52,17 +52,7 @@ sudo apt install git
 
 ## -2- 安装Node.js环境
 
-什么是Node.js？咱也不知道啊，不知道就STFW呗。wiki上是这样说的：
-
-> *"Node.js 是能够在服务器端运行 JavaScript 的开放源代码、跨平台执行环境。"*
-
-在[Node.js的官网](https://nodejs.org/zh-cn)上也有这样一句话：
-
-> *"Node.js® is an open-source, cross-platform JavaScript runtime environment."*
-
 ![](https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20231018230213736.png)
-
-在Internet搜了一圈，大概了解了一下，浅显的理解为开源的JavaScript这个语言的运行环境，应该包括一些基本的运行库之类的。
 
 在[官网](https://nodejs.org/zh-cn)上下载一下安装包，LTS是长期维护版，理论上更稳定；Current就是当前最新版。我这里就下载LTS版本了，因为我也用不上新特性。
 

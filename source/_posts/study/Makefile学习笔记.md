@@ -1,8 +1,8 @@
 ---
 title: Makefile学习笔记
 date: 2023-11-06 10:59:00
-updated: {{ date }}
-#hide: true
+updated: 2024-09-18 22:29:28
+hide: false
 tags: 
   - make
   - makefiles
@@ -1388,6 +1388,7 @@ $(subst <from>,<to>,<text>)
 
   > ```
   > $(subst ee,EE,feet on the street)
+  > ```
 
 把 `feet on the street` 中的 `ee` 替换成 `EE` ，返回结果是 `fEEt on the strEEt` 。
 
