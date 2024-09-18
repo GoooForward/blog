@@ -27,7 +27,7 @@
 <meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202311171723215.png">
 <meta property="og:image" content="https://gcore.jsdelivr.net/gh/GoooForward/picture@main/note-image/202311171729951.png">
 <meta property="article:published_time" content="2023-11-06T02:59:00.000Z">
-<meta property="article:modified_time" content="2023-11-06T02:59:00.000Z">
+<meta property="article:modified_time" content="2024-09-18T15:30:51.000Z">
 <meta property="article:author" content="tangyuwei">
 <meta property="article:tag" content="make">
 <meta property="article:tag" content="makefiles">
@@ -237,7 +237,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          47k 字
+          45k 字
         
       </span>
     
@@ -248,7 +248,7 @@
         
         
         
-          393 分钟
+          378 分钟
         
       </span>
     
@@ -286,6 +286,14 @@
         <div id="board">
           <article class="post-content mx-auto">
             <h1 id="seo-header">Makefile学习笔记</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2024年9月18日 晚上
+                  
+                
+              </p>
             
             
               <div class="markdown-body">
@@ -817,427 +825,560 @@ vpath %.h ../headers
 </li>
 <li><p>示例：</p>
 <blockquote>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">$(subst ee,EE,feet on the street)<br><br>把 `feet on the street` 中的 `ee` 替换成 `EE` ，返回结果是 `fEEt on the strEEt` 。<br><br><br><br>### patsubst<br><br></code></pre></td></tr></table></figure></blockquote>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-variable">$(<span class="hljs-built_in">subst</span> ee,EE,feet on the street)</span><br></code></pre></td></tr></table></figure></blockquote>
 </li>
 </ul>
-<p>$(patsubst <pattern>,<replacement>,<text>)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>- 名称：模式字符串替换函数。<br><br>- 功能：查找 `&lt;text&gt;` 中的单词（单词以“空格”、“Tab”或“回车”“换行”分隔）是否符合模式 `&lt;pattern&gt;` ，如果匹配的话，则以 `&lt;replacement&gt;` 替换。这里， `&lt;pattern&gt;` 可以包括通配符 `%` ，表示任意长度的字串。如果 `&lt;replacement&gt;` 中也包含 `%` ，那么， `&lt;replacement&gt;` 中的这个 `%` 将是 `&lt;pattern&gt;` 中的那个 `%` 所代表的字串。（可以用 `\` 来转义，以 `\%` 来表示真实含义的 `%` 字符）<br><br>- 返回：函数返回被替换过后的字符串。<br><br>- 示例：<br><br></code></pre></td></tr></table></figure>
+<p>把 <code>feet on the street</code> 中的 <code>ee</code> 替换成 <code>EE</code> ，返回结果是 <code>fEEt on the strEEt</code> 。</p>
+<h3 id="patsubst"><a href="#patsubst" class="headerlink" title="patsubst"></a>patsubst</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">$(patsubst <span class="hljs-tag">&lt;<span class="hljs-name">pattern</span>&gt;</span>,<span class="hljs-tag">&lt;<span class="hljs-name">replacement</span>&gt;</span>,<span class="hljs-tag">&lt;<span class="hljs-name">text</span>&gt;</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>名称：模式字符串替换函数。</p>
+</li>
+<li><p>功能：查找 <code>&lt;text&gt;</code> 中的单词（单词以“空格”、“Tab”或“回车”“换行”分隔）是否符合模式 <code>&lt;pattern&gt;</code> ，如果匹配的话，则以 <code>&lt;replacement&gt;</code> 替换。这里， <code>&lt;pattern&gt;</code> 可以包括通配符 <code>%</code> ，表示任意长度的字串。如果 <code>&lt;replacement&gt;</code> 中也包含 <code>%</code> ，那么， <code>&lt;replacement&gt;</code> 中的这个 <code>%</code> 将是 <code>&lt;pattern&gt;</code> 中的那个 <code>%</code> 所代表的字串。（可以用 <code>\</code> 来转义，以 <code>\%</code> 来表示真实含义的 <code>%</code> 字符）</p>
+</li>
+<li><p>返回：函数返回被替换过后的字符串。</p>
+</li>
+<li><p>示例：</p>
 <blockquote>
-<p>$(patsubst %.c,%.o,x.c.c bar.c)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>把字串 `x.c.c bar.c` 符合模式 `%.c` 的单词替换成 `%.o` ，返回结果是 `x.c.o bar.o`<br><br><br><br>### strip<br><br></code></pre></td></tr></table></figure>
-<p>$(strip <string>)</p>
-</blockquote>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><span class="hljs-bullet">-</span> 名称：去空格函数。<br><br><span class="hljs-bullet">-</span> 功能：去掉 <span class="hljs-code">`&lt;string&gt;`</span> 字串中开头和结尾的空字符。<br><br><span class="hljs-bullet">-</span> 返回：返回被去掉空格的字符串值。<br><br><span class="hljs-bullet">-</span> 示例：<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">$(patsubst <span class="hljs-variable">%.c</span><span class="hljs-punctuation">,</span><span class="hljs-variable">%.o</span><span class="hljs-punctuation">,</span><span class="hljs-keyword">x</span>.<span class="hljs-keyword">c</span>.<span class="hljs-keyword">c</span> bar.<span class="hljs-keyword">c</span>)<br></code></pre></td></tr></table></figure></blockquote>
+</li>
+</ul>
+<p>把字串 <code>x.c.c bar.c</code> 符合模式 <code>%.c</code> 的单词替换成 <code>%.o</code> ，返回结果是 <code>x.c.o bar.o</code></p>
+<h3 id="strip"><a href="#strip" class="headerlink" title="strip"></a>strip</h3><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mel">$(<span class="hljs-keyword">strip</span> &lt;<span class="hljs-keyword">string</span>&gt;)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>名称：去空格函数。</p>
+</li>
+<li><p>功能：去掉 <code>&lt;string&gt;</code> 字串中开头和结尾的空字符。</p>
+</li>
+<li><p>返回：返回被去掉空格的字符串值。</p>
+</li>
+<li><p>示例：</p>
 <blockquote>
-<p>$(strip a b c )</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br> 把字串 `a b c ` 去掉开头和结尾的空格，结果是 `a b c`。<br><br><br><br>### findstring<br><br></code></pre></td></tr></table></figure>
-<p>$(findstring <find>,<in>)</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-variable">$(<span class="hljs-built_in">strip</span> a b c )</span><br></code></pre></td></tr></table></figure>
 </blockquote>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><span class="hljs-bullet">-</span> 名称：查找字符串函数<br><br><span class="hljs-bullet">-</span> 功能：在字串 <span class="hljs-code">`&lt;in&gt;`</span> 中查找 <span class="hljs-code">`&lt;find&gt;`</span> 字串。<br><br><span class="hljs-bullet">-</span> 返回：如果找到，那么返回 <span class="hljs-code">`&lt;find&gt;`</span> ，否则返回空字符串。<br><br><span class="hljs-bullet">-</span> 示例：<br><br></code></pre></td></tr></table></figure>
+<p>把字串 <code>a b c </code> 去掉开头和结尾的空格，结果是 <code>a b c</code>。</p>
+</li>
+</ul>
+<h3 id="findstring"><a href="#findstring" class="headerlink" title="findstring"></a>findstring</h3><figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">$(findstring &lt;<span class="hljs-built_in">find</span>&gt;,&lt;in&gt;)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>名称：查找字符串函数</p>
+</li>
+<li><p>功能：在字串 <code>&lt;in&gt;</code> 中查找 <code>&lt;find&gt;</code> 字串。</p>
+</li>
+<li><p>返回：如果找到，那么返回 <code>&lt;find&gt;</code> ，否则返回空字符串。</p>
+</li>
+<li><p>示例：</p>
 <blockquote>
-<p>$(findstring a,a b c)<br>$(findstring a,b c)</p>
-<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br>第一个函数返回 `a` 字符串，第二个返回空字符串<br><br><br><br>### filter<br><br></code></pre></td></tr></table></figure>
-<p>$(filter &lt;pattern…&gt;,<text>)</p>
-</blockquote>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>- 名称：过滤函数<br><br>- 功能：以 `&lt;pattern&gt;` 模式过滤 `&lt;text&gt;` 字符串中的单词，保留符合模式 `&lt;pattern&gt;` 的单词。可以有多个模式。<br><br>- 返回：返回符合模式 `&lt;pattern&gt;` 的字串。<br><br>- 示例：<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">$(findstring <span class="hljs-selector-tag">a</span>,<span class="hljs-selector-tag">a</span> <span class="hljs-selector-tag">b</span> c)<br>$(findstring <span class="hljs-selector-tag">a</span>,<span class="hljs-selector-tag">b</span> c)<br></code></pre></td></tr></table></figure></blockquote>
+</li>
+</ul>
+<p>第一个函数返回 <code>a</code> 字符串，第二个返回空字符串</p>
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h3><figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">$(<span class="hljs-built_in">filter</span> &lt;pattern...&gt;,&lt;<span class="hljs-built_in">text</span>&gt;)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>名称：过滤函数</p>
+</li>
+<li><p>功能：以 <code>&lt;pattern&gt;</code> 模式过滤 <code>&lt;text&gt;</code> 字符串中的单词，保留符合模式 <code>&lt;pattern&gt;</code> 的单词。可以有多个模式。</p>
+</li>
+<li><p>返回：返回符合模式 <code>&lt;pattern&gt;</code> 的字串。</p>
+</li>
+<li><p>示例：</p>
 <blockquote>
-<p>sources :&#x3D; foo.c bar.c baz.s ugh.h<br>foo: $(sources)<br>    cc $(filter %.c %.s,$(sources)) -o foo</p>
-<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs llvm"><br> `$(<span class="hljs-keyword">filter</span> <span class="hljs-variable">%.c</span> <span class="hljs-variable">%.s</span><span class="hljs-punctuation">,</span>$(sources))` 返回的值是 `foo.<span class="hljs-keyword">c</span> bar.<span class="hljs-keyword">c</span> baz.s` 。<br><br><br><br>### <span class="hljs-keyword">filter</span>-out<br><br></code></pre></td></tr></table></figure>
-<p>$(filter-out &lt;pattern…&gt;,<text>)</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs llvm">sources :<span class="hljs-operator">=</span> foo.<span class="hljs-keyword">c</span> bar.<span class="hljs-keyword">c</span> baz.s ugh.h<br><span class="hljs-symbol">foo:</span> $(sources)<br>    <span class="hljs-keyword">cc</span> $(<span class="hljs-keyword">filter</span> <span class="hljs-variable">%.c</span> <span class="hljs-variable">%.s</span><span class="hljs-punctuation">,</span>$(sources)) -o foo<br></code></pre></td></tr></table></figure>
 </blockquote>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>- 名称：反过滤函数<br><br>- 功能：以 `&lt;pattern&gt;` 模式过滤 `&lt;text&gt;` 字符串中的单词，去除符合模式 `&lt;pattern&gt;` 的单词。可以有多个模式。<br><br>- 返回：返回不符合模式 `&lt;pattern&gt;` 的字串。<br><br>- 示例：<br><br></code></pre></td></tr></table></figure>
+<p><code>$(filter %.c %.s,$(sources))</code> 返回的值是 <code>foo.c bar.c baz.s</code> 。</p>
+</li>
+</ul>
+<h3 id="filter-out"><a href="#filter-out" class="headerlink" title="filter-out"></a>filter-out</h3><figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">$(<span class="hljs-built_in">filter</span>-out &lt;pattern...&gt;,&lt;<span class="hljs-built_in">text</span>&gt;)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>名称：反过滤函数</p>
+</li>
+<li><p>功能：以 <code>&lt;pattern&gt;</code> 模式过滤 <code>&lt;text&gt;</code> 字符串中的单词，去除符合模式 <code>&lt;pattern&gt;</code> 的单词。可以有多个模式。</p>
+</li>
+<li><p>返回：返回不符合模式 <code>&lt;pattern&gt;</code> 的字串。</p>
+</li>
+<li><p>示例：</p>
 <blockquote>
-<p>objects&#x3D;main1.o foo.o main2.o bar.o<br>mains&#x3D;main1.o main2.o</p>
-<figure class="highlight julia"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs julia"><br> <span class="hljs-string">`<span class="hljs-subst">$(filter-out $(mains)</span>,<span class="hljs-subst">$(objects)</span>)`</span> 返回值是 <span class="hljs-string">`foo.o bar.o`</span> 。<br><br><br><br><span class="hljs-comment">### sort </span><br><br></code></pre></td></tr></table></figure>
-<p>$(sort <list>)</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">objects=main1<span class="hljs-selector-class">.o</span> foo<span class="hljs-selector-class">.o</span> main2<span class="hljs-selector-class">.o</span> bar<span class="hljs-selector-class">.o</span><br>mains=main1<span class="hljs-selector-class">.o</span> main2.o<br></code></pre></td></tr></table></figure>
 </blockquote>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><span class="hljs-bullet">-</span> 名称：排序函数<br><span class="hljs-bullet">-</span> 功能：给字符串 <span class="hljs-code">`&lt;list&gt;`</span> 中的单词排序（升序）。<br><span class="hljs-bullet">-</span> 返回：返回排序后的字符串。<br><span class="hljs-bullet">-</span> 示例： <span class="hljs-code">`$(sort foo bar lose)`</span> 返回 <span class="hljs-code">`bar foo lose`</span> 。<br><span class="hljs-bullet">-</span> 备注： <span class="hljs-code">`sort`</span> 函数会去掉 <span class="hljs-code">`&lt;list&gt;`</span> 中相同的单词。<br><br><br><br><span class="hljs-section">### word</span><br><br></code></pre></td></tr></table></figure>
-<p>$(word <n>,<text>)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>- 名称：取单词函数<br>- 功能：取字符串 `&lt;text&gt;` 中第 `&lt;n&gt;` 个单词。（从一开始）<br>- 返回：返回字符串 `&lt;text&gt;` 中第 `&lt;n&gt;` 个单词。如果 `&lt;n&gt;` 比 `&lt;text&gt;` 中的单词数要大，那么返回空字符串。<br>- 示例： `$(word <span class="hljs-number">2</span>, foo bar baz)` 返回值是 `bar` 。<br><br><br><br>### wordlist<br><br></code></pre></td></tr></table></figure>
-<p>$(wordlist <ss>,<e>,<text>)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>- 名称：取单词串函数<br>- 功能：从字符串 `&lt;text&gt;` 中取从 `&lt;ss&gt;` 开始到 `&lt;e&gt;` 的单词串。 `&lt;ss&gt;` 和 `&lt;e&gt;` 是一个数字。<br>- 返回：返回字符串 `&lt;text&gt;` 中从 `&lt;ss&gt;` 到 `&lt;e&gt;` 的单词字串。如果 `&lt;ss&gt;` 比 `&lt;text&gt;` 中的单词数要大，那么返回空字符串。如果 `&lt;e&gt;` 大于 `&lt;text&gt;` 的单词数，那么返回从 `&lt;ss&gt;` 开始，到 `&lt;text&gt;` 结束的单词串。<br>- 示例： `$(wordlist <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, foo bar baz)` 返回值是 `bar baz` 。<br><br><br><br>### words<br><br></code></pre></td></tr></table></figure>
-<p>$(words <text>)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>- 名称：单词个数统计函数<br>- 功能：统计 `&lt;text&gt;` 中字符串中的单词个数。<br>- 返回：返回 `&lt;text&gt;` 中的单词数。<br>- 示例： `$(words, foo bar baz)` 返回值是 `3` 。<br>- 备注：如果我们要取 `&lt;text&gt;` 中最后的一个单词，我们可以这样： `$(word $(words &lt;text&gt;),&lt;text&gt;)` 。<br><br><br><br>### firstword<br><br></code></pre></td></tr></table></figure>
-<p>$(firstword <text>)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>- 名称：首单词函数——firstword。<br>- 功能：取字符串 `&lt;text&gt;` 中的第一个单词。<br>- 返回：返回字符串 `&lt;text&gt;` 的第一个单词。<br>- 示例： `$(firstword foo bar)` 返回值是 `foo`。<br>- 备注：这个函数可以用 `word` 函数来实现： `$(word <span class="hljs-number">1</span>,&lt;text&gt;)` <br><br><br><br>以上，是所有的字符串操作函数，如果搭配混合使用，可以完成比较复杂的功能。这里，举一个现实中应用的例子。我们知道，make使用 `VPATH` 变量来指定“依赖文件”的搜索路径。于是，我们可以利用这个搜索路径来指定编译器对头文件的搜索路径参数 `CFLAGS` ，如：<br><br></code></pre></td></tr></table></figure>
-<p>override CFLAGS +&#x3D; $(patsubst %,-I%,$(subst :, ,$(VPATH)))</p>
-<figure class="highlight julia"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs julia"><br>如果我们的 <span class="hljs-string">`<span class="hljs-subst">$(VPATH)</span>`</span> 值是 <span class="hljs-string">`src:../headers`</span> ，那么 <span class="hljs-string">`<span class="hljs-subst">$(patsubst %,-I%,$(subst :, ,$(VPATH)</span>))`</span> 将返回 <span class="hljs-string">`-Isrc -I../headers`</span> ，这正是cc或gcc搜索头文件路径的参数。<br><br><br><br><br><br><span class="hljs-comment">## -3- 文件名操作函数</span><br><br>这些函数主要是处理文件名的。每个函数的参数字符串都会被当做一个或是一系列的文件名来对待。<br><br><span class="hljs-comment">### dir</span><br><br></code></pre></td></tr></table></figure>
-<p>$(dir &lt;names…&gt;)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>- 名称：取目录函数——dir。<br>- 功能：从文件名序列 `&lt;names&gt;` 中取出目录部分。目录部分是指最后一个反斜杠（ `/` ）之前的部分。如果没有反斜杠，那么返回 `./` 。<br>- 返回：返回文件名序列 `&lt;names&gt;` 的目录部分。<br>- 示例： `$(dir src/foo.c hacks)` 返回值是 `src/ ./` 。<br><br><br><br>### notdir<br><br></code></pre></td></tr></table></figure>
-<p>$(notdir &lt;names…&gt;)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>- 名称：取文件函数——notdir。<br>- 功能：从文件名序列 `&lt;names&gt;` 中取出非目录部分。非目录部分是指最後一个反斜杠（ `/` ）之后的部分。<br>- 返回：返回文件名序列 `&lt;names&gt;` 的非目录部分。<br><span class="hljs-title">- 示例:</span> `$(notdir src/foo.c hacks)` 返回值是 `foo.c hacks` 。<br><br><br><br>### suffix<br><br></code></pre></td></tr></table></figure>
-<p>$(suffix &lt;names…&gt;)</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><span class="hljs-bullet">-</span> 名称：取後缀函数——suffix。<br><span class="hljs-bullet">-</span> 功能：从文件名序列 <span class="hljs-code">`&lt;names&gt;`</span> 中取出各个文件名的后缀。<br><span class="hljs-bullet">-</span> 返回：返回文件名序列 <span class="hljs-code">`&lt;names&gt;`</span> 的后缀序列，如果文件没有后缀，则返回空字串。<br><span class="hljs-bullet">-</span> 示例： <span class="hljs-code">`$(suffix src/foo.c src-1.0/bar.c hacks)`</span> 返回值是 <span class="hljs-code">`.c .c`</span>。<br><br><br><br><span class="hljs-section">### basename</span><br><br></code></pre></td></tr></table></figure>
-<p>$(basename &lt;names…&gt;)</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><span class="hljs-bullet">-</span> 名称：取前缀函数——basename。<br><span class="hljs-bullet">-</span> 功能：从文件名序列 <span class="hljs-code">`&lt;names&gt;`</span> 中取出各个文件名的前缀部分。<br><span class="hljs-bullet">-</span> 返回：返回文件名序列 <span class="hljs-code">`&lt;names&gt;`</span> 的前缀序列，如果文件没有前缀，则返回空字串。<br><span class="hljs-bullet">-</span> 示例： <span class="hljs-code">`$(basename src/foo.c src-1.0/bar.c hacks)`</span> 返回值是 <span class="hljs-code">`src/foo src-1.0/bar hacks`</span> 。<br><br><br><br><span class="hljs-section">### addsuffix</span><br><br></code></pre></td></tr></table></figure>
-<p>$(addsuffix <suffix>,&lt;names…&gt;)</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><span class="hljs-bullet">-</span> 名称：加后缀函数——addsuffix。<br><span class="hljs-bullet">-</span> 功能：把后缀 <span class="hljs-code">`&lt;suffix&gt;`</span> 加到 <span class="hljs-code">`&lt;names&gt;`</span> 中的每个单词后面。<br><span class="hljs-bullet">-</span> 返回：返回加过后缀的文件名序列。<br><span class="hljs-bullet">-</span> 示例： <span class="hljs-code">`$(addsuffix .c,foo bar)`</span> 返回值是 <span class="hljs-code">`foo.c bar.c`</span> 。<br><br><br><br><span class="hljs-section">### addprefix</span><br><br></code></pre></td></tr></table></figure>
-<p>$(addprefix <prefix>,&lt;names…&gt;)</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><span class="hljs-bullet">-</span> 名称：加前缀函数——addprefix。<br><span class="hljs-bullet">-</span> 功能：把前缀 <span class="hljs-code">`&lt;prefix&gt;`</span> 加到 <span class="hljs-code">`&lt;names&gt;`</span> 中的每个单词前面。<br><span class="hljs-bullet">-</span> 返回：返回加过前缀的文件名序列。<br><span class="hljs-bullet">-</span> 示例： <span class="hljs-code">`$(addprefix src/,foo bar)`</span> 返回值是 <span class="hljs-code">`src/foo src/bar`</span> 。<br><br><br><br><span class="hljs-section">### join</span><br><br></code></pre></td></tr></table></figure>
-<p>$(join <list1>,<list2>)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>- 名称：连接函数——join。<br>- 功能：把 `&lt;list2&gt;` 中的单词对应地加到 `&lt;list1&gt;` 的单词后面。如果 `&lt;list1&gt;` 的单词个数要比 `&lt;list2&gt;` 的多，那么， `&lt;list1&gt;` 中的多出来的单词将保持原样。如果 `&lt;list2&gt;` 的单词个数要比 `&lt;list1&gt;` 多，那么， `&lt;list2&gt;` 多出来的单词将被复制到 `&lt;list1&gt;` 中。<br>- 返回：返回连接过后的字符串。<br>- 示例： `$(join aaa bbb , <span class="hljs-number">111</span> <span class="hljs-number">222</span> <span class="hljs-number">333</span>)` 返回值是 `aaa111 bbb222 <span class="hljs-number">333</span>` 。<br><br><br><br>## -<span class="hljs-number">4</span>- foreach 函数<br><br>foreach是一个用于循环的函数，它的语法规则：<br><br></code></pre></td></tr></table></figure>
-<p>$(foreach <var>,<list>,<text>)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>这个函数的意思是，把参数 `&lt;list&gt;` 中的单词逐一取出放到参数 `&lt;var&gt;` 所指定的变量中，然后再执行 `&lt;text&gt;` 所包含的表达式。每一次 `&lt;text&gt;` 会返回一个字符串，循环过程中， `&lt;text&gt;` 的所返回的每个字符串会以空格分隔，最后当整个循环结束时， `&lt;text&gt;` 所返回的每个字符串所组成的整个字符串（以空格分隔）将会是foreach函数的返回值。<br><br>所以， `&lt;var&gt;` 最好是一个变量名， `&lt;list&gt;` 可以是一个表达式，而 `&lt;text&gt;` 中一般会使用 `&lt;var&gt;` 这个参数来依次枚举 `&lt;list&gt;` 中的单词。举个例子：<br><br></code></pre></td></tr></table></figure>
-<p>names :&#x3D; a b c d</p>
-<p>files :&#x3D; $(foreach n,$(names),$(n).o)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>上面的例子中， `$(name)` 中的单词会被挨个取出，并存到变量 `n` 中， `$(n).o` 每次根据 `$(n)` 计算出一个值，这些值以空格分隔，最后作为foreach函数的返回，所以， `$(files)` 的值是 `a.o b.o c.o d.o` 。<br><br>注意，foreach中的 `&lt;var&gt;` 参数是一个临时的局部变量，foreach函数执行完后，参数 `&lt;var&gt;` 的变量将不在作用，其作用域只在foreach函数当中。<br><br><br><br>## -<span class="hljs-number">5</span>- if函数<br><br>if函数很像GNU的make所支持的条件语句——ifeq（参见前面所述的章节），if函数的语法是：<br><br></code></pre></td></tr></table></figure>
-<p>$(if <condition>,<then-part>)</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs"><br>或是<br><br></code></pre></td></tr></table></figure>
-<p>$(if <condition>,<then-part>,<else-part>)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>可见，if函数可以包含“else”部分，或是不含。即if函数的参数可以是两个，也可以是三个。 `&lt;condition&gt;` 参数是if的表达式，如果其返回的为非空字符串，那么这个表达式就相当于返回真，于是， `&lt;then-part&gt;` 会被计算，否则 `&lt;else-part&gt;` 会被计算。<br><br>而if函数的返回值是，如果 `&lt;condition&gt;` 为真（非空字符串），那个 `&lt;then-part&gt;` 会是整个函数的返回值，如果 `&lt;condition&gt;` 为假（空字符串），那么 `&lt;else-part&gt;` 会是整个函数的返回值，此时如果 `&lt;else-part&gt;` 没有被定义，那么，整个函数返回空字串。<br><br>所以， `&lt;then-part&gt;` 和 `&lt;else-part&gt;` 只会有一个被计算。<br><br>举个例子：<br><br></code></pre></td></tr></table></figure>
-<h1 id="定义一个变量"><a href="#定义一个变量" class="headerlink" title="定义一个变量"></a>定义一个变量</h1><p>DEBUG &#x3D; 1</p>
-<h1 id="使用-if-函数进行条件判断"><a href="#使用-if-函数进行条件判断" class="headerlink" title="使用 if 函数进行条件判断"></a>使用 if 函数进行条件判断</h1><p>CFLAGS &#x3D; $(if $(filter 1,$(DEBUG)),-g -Wall,-O2)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>在这个例子中，`CFLAGS`的值会更具`DEBUG`变量的值来选择，如果其值为<span class="hljs-number">1</span>，则会选择`-g -Wall`，否则会选择`-O2`。<br><br><br><br>## -<span class="hljs-number">6</span>- call函数<br><br>call函数可以调用你自定义的参数化函数，你可以写一个非常复杂的表达式，这个表达式中，你可以定义许多参数，然后你可以call函数来向这个表达式传递参数。它的语法是：<br><br></code></pre></td></tr></table></figure>
-<p>$(call <function-name>,<parm1>,<parm2>,…,<parmn>)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>当执行这个函数时，会把参数 `&lt;parm1&gt;` 、 `&lt;parm2&gt;` 、 `&lt;parm3&gt;` 依次传入自定义的函数中的变量，最后的自定义函数返回值就是call函数的返回值。关于这个自定义函数，其变量通常用`$(<span class="hljs-number">1</span>)` `$(<span class="hljs-number">2</span>)` `$(<span class="hljs-number">3</span>)`(以此类推)来表示传入的第<span class="hljs-number">1</span>个、第<span class="hljs-number">2</span>个、第<span class="hljs-number">3</span>个参数。举个例子更好理解<br><br></code></pre></td></tr></table></figure>
-<h1 id="定义一个简单的函数，用于连接两个字符串"><a href="#定义一个简单的函数，用于连接两个字符串" class="headerlink" title="定义一个简单的函数，用于连接两个字符串"></a>定义一个简单的函数，用于连接两个字符串</h1><p>concat &#x3D; $(1)$(2)</p>
-<h1 id="使用-call-函数调用定义的函数"><a href="#使用-call-函数调用定义的函数" class="headerlink" title="使用 call 函数调用定义的函数"></a>使用 call 函数调用定义的函数</h1><p>result :&#x3D; $(call concat, Hello, World)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>在这个例子中，concat就是一个我们自定义的简单函数，它接受两个参数`$(<span class="hljs-number">1</span>)` 和`$(<span class="hljs-number">2</span>)`，并把它们按顺序连起来。所以最终如result的结果是`HelloWorld`<br><br>再举个例子<br><br></code></pre></td></tr></table></figure>
-<p>reverse &#x3D;  $(2) $(1)</p>
-<p>foo &#x3D; $(call reverse,a,b)</p>
-<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs nsis"><br>此时的 <span class="hljs-string">`foo`</span> 的值就是 <span class="hljs-string">`b a`</span> 。<br><br>需要注意：在向 <span class="hljs-keyword">call</span> 函数传递参数时要尤其注意空格的使用。<span class="hljs-keyword">call</span> 函数在处理参数时，第<span class="hljs-number">2</span>个及其之后的参数中的空格会被保留，因而可能造成一些奇怪的效果。因而在向<span class="hljs-keyword">call</span>函数提供参数时，最安全的做法是去除所有多余的空格。<br><br><br><br><span class="hljs-comment">## -7- origin函数</span><br><br>origin函数不像其它的函数，他并不操作变量的值，他只是告诉你你的这个变量是哪里来的？其语法是：<br><br></code></pre></td></tr></table></figure>
-<p>$(origin <variable>)</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br><span class="hljs-title">注意， `&lt;variable&gt;` 是变量的名字，不应该是引用。所以你最好不要在 `&lt;variable&gt;` 中使用`$` 字符。Origin函数会以其返回值来告诉你这个变量的“出生情况”，下面，是origin函数的返回值:</span><br><br>- `undefined`<br><br>  如果 `&lt;variable&gt;` 从来没有定义过，origin函数返回这个值 `undefined`<br><br>- `default`<br><br>  如果 `&lt;variable&gt;` 是一个默认的定义，比如“CC”这个变量，这种变量我们将在后面讲述。<br><br>- `environment`<br><br>  如果 `&lt;variable&gt;` 是一个环境变量，并且当Makefile被执行时， `-e` 参数没有被打开。<br><br>- `file`<br><br>  如果 `&lt;variable&gt;` 这个变量被定义在Makefile中。<br><br>- `command line`<br><br>  如果 `&lt;variable&gt;` 这个变量是被命令行定义的。<br><br>- `override`<br><br>  如果 `&lt;variable&gt;` 是被override指示符重新定义的。<br><br>- `automatic`<br><br>  如果 `&lt;variable&gt;` 是一个命令运行中的自动化变量。关于自动化变量将在前面介绍过了。<br><br>这些信息对于我们编写Makefile是非常有用的，例如，假设我们有一个Makefile其包了一个定义文件 Make.def，在 Make.def中定义了一个变量“bletch”，而我们的环境中也有一个环境变量“bletch”，此时，我们想判断一下，如果变量来源于环境，那么我们就把之重定义了，如果来源于Make.def或是命令行等非环境的，那么我们就不重新定义它。于是，在我们的Makefile中，我们可以这样写：<br><br></code></pre></td></tr></table></figure>
-<p>ifdef bletch<br>    ifeq “$(origin bletch)” “environment”<br>        bletch &#x3D; barf, gag, etc.<br>    endif<br>endif</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>当然，你也许会说，使用 `override` 关键字不就可以重新定义环境中的变量了吗？为什么需要使用这样的步骤？是的，我们用 `override` 是可以达到这样的效果，可是 `override` 过于粗暴，它同时会把从命令行定义的变量也覆盖了，而我们只想重新定义环境传来的，而不想重新定义命令行传来的。<br><br><br><br>## -<span class="hljs-number">8</span>- shell函数<br><br>shell函数就是用来执行shell命令的函数。它的参数是操作系统的shell命令，操作系统的标准输出会作为函数的返回值，可以用来给变量赋值，也可以用于函数的嵌套。<br><br></code></pre></td></tr></table></figure>
-<p>contents :&#x3D; $(shell cat foo)<br>files :&#x3D; $(shell echo *.c)</p>
-<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gauss"><br>除了<span class="hljs-built_in">shell</span>函数之外，直接在<span class="hljs-built_in">shell</span>命令前后加上反引号`，这样同样也能执行<span class="hljs-built_in">shell</span>命令。<br><br></code></pre></td></tr></table></figure>
-<p>contents :&#x3D; <code>cat foo</code><br>files :&#x3D; <code>echo *.c</code></p>
-<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs gauss"><br>注意，这个函数会新生成一个<span class="hljs-built_in">Shell</span>程序来执行命令，所以你要注意其运行性能，如果你的Makefile中有一些比较复杂的规则，并大量使用了这个函数，那么对于你的系统性能是有害的。特别是Makefile的隐式规则可能会让你的<span class="hljs-built_in">shell</span>函数执行的次数比你想像的多得多。<br><br><br><br><span class="hljs-meta">## -9- 控制make函数</span><br><br><span class="hljs-built_in">make</span>提供了一些函数来控制<span class="hljs-built_in">make</span>的运行。通常，你需要检测一些运行Makefile时的运行时信息，并且根据这些信息来决定，你是让<span class="hljs-built_in">make</span>继续执行，还是停止。<br><br></code></pre></td></tr></table></figure>
-<p>$(error &lt;text …&gt;)</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><br>产生一个致命的错误， `&lt;<span class="hljs-built_in">text</span> ...&gt;` 是错误信息。注意，<span class="hljs-keyword">error</span>函数不会在一被使用就会产生错误信息，所以如果你把其定义在某个变量中，并在后续的脚本中使用这个变量，那么也是可以的。例如：<br><br>示例一：<br><br></code></pre></td></tr></table></figure>
-<p>ifdef ERROR_001<br>    $(error error is $(ERROR_001))<br>endif</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs"><br>示例二：<br><br></code></pre></td></tr></table></figure>
-<p>ERR &#x3D; $(error found an error!)</p>
-<p>.PHONY: err</p>
-<p>err: $(ERR)</p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stata"><br>示例一会在变量ERROR_001定义了后执行时产生<span class="hljs-keyword">error</span>调用，而示例二则在目录<span class="hljs-keyword">err</span>被执行时才发生<span class="hljs-keyword">error</span>调用。<br><br></code></pre></td></tr></table></figure>
-<p>$(warning &lt;text …&gt;)</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br>这个函数很像error函数，只是它并不会让make退出，只是输出一段警告信息，而make继续执行。<br><br><br><br><span class="hljs-section"># 0x08 Make的运行</span><br><br>这一部分主要是make这个命令是如何使用的，以及make有关参数的讲解。<br><br><br><br><span class="hljs-section">## -1- make的退出码</span><br><br>make命令执行后有三个退出码：<br><br><span class="hljs-bullet">-</span> <span class="hljs-strong">**0**</span><br><br>  表示成功执行。<br><br><span class="hljs-bullet">-</span> <span class="hljs-strong">**1**</span><br><br>  如果make运行时出现任何错误，其返回1。<br><br><span class="hljs-bullet">-</span> <span class="hljs-strong">**2**</span><br><br>  如果你使用了make的“-q”选项，并且make使得一些目标不需要更新，那么返回2。<br><br><br><br><span class="hljs-section">## -2- 指定Makefile</span><br><br>GNU make找寻默认的Makefile的规则是在当前目录下依次找三个文件——“GNUmakefile”、“makefile”和“Makefile”。其按顺序找这三个文件，一旦找到，就开始读取这个文件并执行。<br><br>如果希望make执行我们指定的makefile，那么可以使用make的 <span class="hljs-code">`-f`</span> 或是 <span class="hljs-code">`--file`</span> 参数（ <span class="hljs-code">`--makefile`</span> 参数也行）。例如，我们有个makefile的名字是“hchen.mk”，那么，我们可以这样来让make来执行这个文件：<br><br></code></pre></td></tr></table></figure>
-<p>make –f hchen.mk</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs go"><br>如果在<span class="hljs-built_in">make</span>的命令行不只一次地使用了 <span class="hljs-string">`-f`</span> 参数，那么，所有指定的makefile将会被连在一起传递给<span class="hljs-built_in">make</span>执行。<br><br><br><br>## <span class="hljs-number">-3</span>- 指定目标<br><br>一般来说，<span class="hljs-built_in">make</span>的最终目标是makefile中的第一个目标，而其它目标一般是由这个目标连带出来的。这是<span class="hljs-built_in">make</span>的默认行为。如果希望<span class="hljs-built_in">make</span>以我们指定的目标为最终目标的话，就可以显式的指出你希望完成的目标，类似于<span class="hljs-string">`make clean`</span>。<br><br>任何在makefile中的目标都可以被指定成终极目标，但是除了以 <span class="hljs-string">`-`</span> 打头，或是包含了 <span class="hljs-string">`=`</span> 的目标，因为有这些字符的目标，会被解析成命令行参数或是变量。甚至没有被我们明确写出来的目标也可以成为<span class="hljs-built_in">make</span>的终极目标，也就是说，只要<span class="hljs-built_in">make</span>可以找到其隐含规则推导规则，那么这个隐含目标同样可以被指定成终极目标。<br><br><br><br>有一个<span class="hljs-built_in">make</span>的环境变量叫 <span class="hljs-string">`MAKECMDGOALS`</span> ，这个变量中会存放你所指定的终极目标的列表，如果在命令行上，你没有指定目标，那么，这个变量是空值。这个变量可以让你使用在一些比较特殊的情形下。比如下面的例子：<br><br></code></pre></td></tr></table></figure>
-<p>sources &#x3D; foo.c bar.c<br>ifneq ( $(MAKECMDGOALS),clean)<br>    include $(sources:.c&#x3D;.d)<br>endif</p>
-<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs excel"><br>基于上面的这个例子，只要我们输入的命令不是“make <span class="hljs-built_in">clean</span>”，那么makefile会自动包含“foo.d”和“bar.d”这两个makefile。<br><br>使用指定终极目标的方法可以很方便地让我们编译我们的程序，例如下面这个例子：<br><br></code></pre></td></tr></table></figure>
-<p>.PHONY: all<br>all: prog1 prog2 prog3 prog4</p>
-<pre><code class="hljs">
-从这个例子中，我们可以看到，这个makefile中有四个需要编译的程序——“prog1”， “prog2”，“prog3”和 “prog4”，我们可以使用“make all”命令来编译所有的目标（如果把all置成第一个目标，那么只需执行“make”），我们也可以使用 “make prog2”来单独编译目标“prog2”。
-
-即然make可以指定所有makefile中的目标，那么也包括“伪目标”，于是我们可以根据这种性质来让我们的makefile根据指定的不同的目标来完成不同的事。在Unix世界中，软件发布时，特别是GNU这种开源软件的发布时，其makefile都包含了编译、安装、打包等功能。我们可以参照这种规则来书写我们的makefile中的目标。
-
-- all:这个伪目标是所有目标的目标，其功能一般是编译所有的目标。
-- clean:这个伪目标功能是删除所有被make创建的文件。
-- install:这个伪目标功能是安装已编译好的程序，其实就是把目标执行文件拷贝到指定的目标中去。
-- print:这个伪目标的功能是例出改变过的源文件。
-- tar:这个伪目标功能是把源程序打包备份。也就是一个tar文件。
-- dist:这个伪目标功能是创建一个压缩文件，一般是把tar文件压成Z文件。或是gz文件。
-- TAGS:这个伪目标功能是更新所有的目标，以备完整地重编译使用。
-- check和test:这两个伪目标一般用来测试makefile的流程。
-
-
-
-## -2- 检查规则
-
-有时候，我们不想让我们的makefile中的规则执行起来，我们只想检查一下我们的命令，或是执行的序列。于是我们可以使用make命令的下述参数：
-
-- `-n`, `--just-print`, `--dry-run`, `--recon`
-
-  不执行参数，这些参数只是打印命令，不管目标是否更新，把规则和连带规则下的命令打印出来，但不执行，这些参数对于我们调试makefile很有用处。
-
-- `-t`, `--touch`
-
-  这个参数的意思就是把目标文件的时间更新，但不更改目标文件。也就是说，make假装编译目标，但不是真正的编译目标，只是把目标变成已编译过的状态。
-
-- `-q`, `--question`
-
-  这个参数的行为是找目标的意思，也就是说，如果目标存在，那么其什么也不会输出，当然也不会执行编译，如果目标不存在，其会打印出一条出错信息。
-
-- `-W &lt;file&gt;`, `--what-if=&lt;file&gt;`, `--assume-new=&lt;file&gt;`, `--new-file=&lt;file&gt;`
-
-  这个参数需要指定一个文件。一般是是源文件（或依赖文件），Make会根据规则推导来运行依赖于这个文件的命令，一般来说，可以和“-n”参数一同使用，来查看这个依赖文件所发生的规则命令。
-
-另外一个很有意思的用法是结合 `-p` 和 `-v` 来输出makefile被执行时的信息（这个将在后面讲述）。
-
-
-
-## -3- make参数
-
-下面列举了所有GNU make 3.80版的参数定义。不过还是推荐去查看make的手册，这样可以得到最准确的解释。
-
-- `-b`, `-m`
-
-  这两个参数的作用是忽略和其它版本make的兼容性。
-
-- `-B`, `--always-make`
-
-  认为所有的目标都需要更新（重编译）。
-
-- `-C` *&lt;dir&gt;*, `--directory`=*&lt;dir&gt;*
-
-  指定读取makefile的目录。如果有多个“-C”参数，make的解释是后面的路径以前面的作为相对路径，并以最后的目录作为被指定目录。如：“make -C ~hchen/test -C prog”等价于“make -C ~hchen/test/prog”。
-
-- `-debug`[=*&lt;options&gt;*]
-
-  输出make的调试信息。它有几种不同的级别可供选择，如果没有参数，那就是输出最简单的调试信息。下面是&lt;options&gt;的取值：a: 也就是all，输出所有的调试信息。（会非常的多）b: 也就是basic，只输出简单的调试信息。即输出不需要重编译的目标。v: 也就是verbose，在b选项的级别之上。输出的信息包括哪个makefile被解析，不需要被重编译的依赖文件（或是依赖目标）等。i: 也就是implicit，输出所有的隐含规则。j: 也就是jobs，输出执行规则中命令的详细信息，如命令的PID、返回码等。m: 也就是makefile，输出make读取makefile，更新makefile，执行makefile的信息。
-
-- `-d`
-
-  相当于“–debug=a”。
-
-- `-e`, `--environment-overrides`
-
-  指明环境变量的值覆盖makefile中定义的变量的值。
-
-- `-f`=*&lt;file&gt;*, `--file`=*&lt;file&gt;*, `--makefile`=*&lt;file&gt;*
-
-  指定需要执行的makefile。
-
-- `-h`, `--help`
-
-  显示帮助信息。
-
-- `-i` , `--ignore-errors`
-
-  在执行时忽略所有的错误。
-
-- `-I` *&lt;dir&gt;*, `--include-dir`=*&lt;dir&gt;*
-
-  指定一个被包含makefile的搜索目标。可以使用多个“-I”参数来指定多个目录。
-
-- `-j` [*&lt;jobsnum&gt;*], `--jobs`[=*&lt;jobsnum&gt;*]
-
-  指同时运行命令的个数。如果没有这个参数，make运行命令时能运行多少就运行多少。如果有一个以上的“-j”参数，那么仅最后一个“-j”才是有效的。（注意这个参数在MS-DOS中是无用的）
-
-- `-k`, `--keep-going`
-
-  出错也不停止运行。如果生成一个目标失败了，那么依赖于其上的目标就不会被执行了。
-
-- `-l` *&lt;load&gt;*, `--load-average`[=*&lt;load&gt;*], `-max-load`[=*&lt;load&gt;*]
-
-  指定make运行命令的负载。
-
-- `-n`, `--just-print`, `--dry-run`, `--recon`
-
-  仅输出执行过程中的命令序列，但并不执行。
-
-- `-o` *&lt;file&gt;*, `--old-file`=*&lt;file&gt;*, `--assume-old`=*&lt;file&gt;*
-
-  不重新生成的指定的&lt;file&gt;，即使这个目标的依赖文件新于它。
-
-- `-p`, `--print-data-base`
-
-  输出makefile中的所有数据，包括所有的规则和变量。这个参数会让一个简单的makefile都会输出一堆信息。如果你只是想输出信息而不想执行makefile，你可以使用“make -qp”命令。如果你想查看执行makefile前的预设变量和规则，你可以使用 “make –p –f /dev/null”。这个参数输出的信息会包含着你的makefile文件的文件名和行号，所以，用这个参数来调试你的 makefile会是很有用的，特别是当你的环境变量很复杂的时候。
-
-- `-q`, `--question`
-
-  不运行命令，也不输出。仅仅是检查所指定的目标是否需要更新。如果是0则说明要更新，如果是2则说明有错误发生。
-
-- `-r`, `--no-builtin-rules`
-
-  禁止make使用任何隐含规则。
-
-- `-R`, `--no-builtin-variabes`
-
-  禁止make使用任何作用于变量上的隐含规则。
-
-- `-s`, `--silent`, `--quiet`
-
-  在命令运行时不输出命令的输出。
-
-- `-S`, `--no-keep-going`, `--stop`
-
-  取消“-k”选项的作用。因为有些时候，make的选项是从环境变量“MAKEFLAGS”中继承下来的。所以你可以在命令行中使用这个参数来让环境变量中的“-k”选项失效。
-
-- `-t`, `--touch`
-
-  相当于UNIX的touch命令，只是把目标的修改日期变成最新的，也就是阻止生成目标的命令运行。
-
-- `-v`, `--version`
-
-  输出make程序的版本、版权等关于make的信息。
-
-- `-w`, `--print-directory`
-
-  输出运行makefile之前和之后的信息。这个参数对于跟踪嵌套式调用make时很有用。
-
-- `--no-print-directory`
-
-  禁止“-w”选项。
-
-- `-W` *&lt;file&gt;*, `--what-if`=*&lt;file&gt;*, `--new-file`=*&lt;file&gt;*, `--assume-file`=*&lt;file&gt;*
-
-  假定目标&lt;file&gt;;需要更新，如果和“-n”选项使用，那么这个参数会输出该目标更新时的运行动作。如果没有“-n”那么就像运行UNIX的“touch”命令一样，使得&lt;file&gt;;的修改时间为当前时间。
-
-- `--warn-undefined-variables`
-
-  只要make发现有未定义的变量，那么就输出警告信息。
-
-
-
-
-
-
-
-
-
-
-
-# 附录
-
-
-
-## 库文件相关问答
-
-以下回答来自ChatGPT 3.5
-
-**Q：为什么目标要写成archive.a(member.o)这样**
-
-&gt;A：在GNU Make中，`archive.a(member.o)` 表示静态库（archive）中的一个成员（member），这种表示方式通常用于静态库的构建和维护。这里的 `archive.a` 是一个静态库文件，`member.o` 是该静态库中的一个对象文件。
-&gt;
-&gt;这种语法的用途主要是对静态库进行精确的成员管理。你可以使用这种形式来指定只从静态库中提取或添加特定的对象文件，而不是整个静态库。
-&gt;
-&gt;例如，在构建时，你可能只想要将某个对象文件加入静态库，而不是整个重新构建静态库。类似地，在一些规则中，你可能只关心特定的库成员。
-&gt;
-&gt;语法为 `archive.a(member.o)` 提供了精细的控制，使你能够指定与静态库关联的特定文件。这对于大型项目，特别是库的管理，非常有用。
-
-**Q：帮我解释一下库文件**
-
-&gt; A：库文件（Library）是一种包含可重用代码的二进制文件集合。这些文件包含已经编译好的对象代码，可以由程序员在其项目中引用，以便重用这些代码而不必重新编写。库文件的目的是提供一种模块化的方式来组织和共享代码。
-&gt;
-&gt; 有两种主要类型的库文件：
-&gt;
-&gt; 1. **静态库（Static Library）：** 静态库是一组已编译的目标文件的集合，这些目标文件在链接时会被直接合并到最终的可执行文件中。它的文件扩展名通常是 `.a`（在Unix/Linux系统）或 `.lib`（在Windows系统）。
-&gt;
-&gt;    静态库的优点是在链接时会将库中的代码嵌入到可执行文件中，使得最终的可执行文件独立于库文件。缺点是如果多个程序使用相同的静态库，它们都会有一份该库的拷贝，可能导致可执行文件较大。
-&gt;
-&gt; 2. **动态库（Dynamic Library）：** 动态库是一组已编译的目标文件的集合，它在运行时被加载到内存中，并可以被多个程序共享。它的文件扩展名通常是 `.so`（在Unix/Linux系统）或 `.dll`（在Windows系统）。
-&gt;
-&gt;    动态库的优点是多个程序可以共享同一份库，从而减小可执行文件的大小。缺点是程序在运行时需要确保动态库的存在，并且在不同的系统中可能需要处理不同的动态库版本和依赖关系。
-&gt;
-&gt; 在编写程序时，程序员可以通过链接器（Linker）将库文件与他们的代码链接起来。库文件中的代码可以包括函数、变量、类等，使得程序员可以使用这些库提供的功能而不必重新实现。库文件对于代码的组织和复用非常重要，它们提供了一种有效的方式来管理和共享代码。
-
-**Q：我可否理解成  库文件就是一类目标文件.o的集合**
-
-&gt; A：是的，你理解得很正确。库文件可以看作是一组目标文件（`.o` 文件）的集合。这些目标文件都是通过编译源代码而生成的，然后链接在一起形成一个库文件。库文件中的目标文件包含了已编译的代码，如函数、变量等，可以被其他程序或库引用。
-&gt;
-&gt; 在静态库的情况下，这些目标文件在链接时会被直接合并到可执行文件中。在动态库的情况下，库文件在运行时被加载到内存中，并且多个程序可以共享同一份动态库。
-&gt;
-&gt; 因此，你可以将库文件视为一种组织和打包已编译代码的方式，以便于在不同的项目中进行共享和重用。
-
-**Q：在C语言中经常调用的printf函数是否已经编译为了库文件**
-
-&gt; A：是的，`printf` 函数通常包含在标准C库（Standard C Library）中，这是一个包含许多常见C语言函数的库。在大多数C编译器中，`printf` 函数的实现是作为库的一部分提供的。
-&gt;
-&gt; 对于大多数操作系统和编译器，C语言的标准库通常是由系统提供的。在Unix和Linux系统上，标准C库通常是 `libc`（例如，`glibc` 是GNU C库的实现）。在Windows系统上，标准C库是 Microsoft C Runtime Library（CRT）。
-&gt;
-&gt; 当你使用 `printf` 函数时，编译器会知道在标准C库中查找这个函数的实现。在链接过程中，编译器会将标准C库链接到你的程序中，以确保 `printf` 等函数能够正确地被调用。
-&gt;
-&gt; 在编写C程序时，你通常不需要显式链接标准C库，因为这通常是默认的。然而，在某些情况下，可能需要确保正确地链接了标准C库，特别是在一些嵌入式系统或裸机编程的场景中。
-
-**Q：那库文件的源文件为什么还存在呢**
-
-&gt; A：在软件开发中，库文件（静态库或动态库）的源文件通常是为了提供库的源代码，以便进行编译、调试、理解实现细节等目的。源文件通常以扩展名 `.c`（C语言源文件）或 `.cpp`（C++语言源文件）为结尾。
-&gt;
-&gt; 以下是为什么库文件的源文件仍然存在的一些原因：
-&gt;
-&gt; 1. **调试和分析：** 当开发者遇到问题时，有时需要查看库的源代码以进行调试和分析。源文件的可读性使得开发者能够理解库的实现细节，有助于定位和修复问题。
-&gt;
-&gt; 2. **自定义编译：** 有时，开发者可能希望使用不同的编译选项或对库进行一些修改，并重新编译库。在这种情况下，库的源文件是必需的。
-&gt;
-&gt; 3. **构建特定版本：** 在某些情况下，开发者可能需要构建特定版本的库，这可能需要访问库的源代码。
-&gt;
-&gt; 4. **学习和教育：** 学习和教育是另一个常见的原因。库的源代码可以作为学习编程、学习算法、学习库的实现方式的资源。
-&gt;
-&gt; 请注意，库的用户通常只需要库的二进制形式（静态库或动态库）以及相应的头文件（包含库的函数声明等），而不需要库的完整源代码。因此，发布库时，通常只提供二进制形式和头文件。然而，在开发阶段，库的源代码是非常重要的资源。
-
-**Q：在linux上，编译器如何根据头文件确定到对应的库文件呢，编译器如何区分是库文件的头文件还是用户自己编写的头文件呢**
-
-&gt;A：在Linux上，编译器（例如 GCC）如何找到对应的库文件与头文件有关。以下是一些关键的概念：
-&gt;
-&gt;1. **头文件（Header Files）：** 头文件通常具有 `.h` 扩展名，包含了函数声明、结构体定义、常量等。头文件用于在源代码中声明函数或引入库的声明，以便编译器在编译时能够正确理解和验证对这些函数的调用。
-&gt;
-&gt;2. **库文件（Library Files）：** 库文件通常包含已编译的二进制代码，例如静态库（`.a`）或动态库（`.so`）。库文件提供了函数的实现，而头文件提供了函数的声明。
-&gt;
-&gt;3. **搜索路径：** 编译器使用一组搜索路径来查找头文件和库文件。这些路径包括系统默认路径和用户自定义路径。默认路径可能包括 `/usr/include` 用于头文件，以及 `/usr/lib` 或 `/usr/lib64` 用于库文件。
-&gt;
-&gt;    - **头文件搜索路径：** 编译器使用 `-I` 选项指定额外的头文件搜索路径，例如 `-I/path/to/headers`。
-&gt;    
-&gt;    - **库文件搜索路径：** 编译器使用 `-L` 选项指定额外的库文件搜索路径，例如 `-L/path/to/libs`。
-&gt;
-&gt;4. **库命名约定：** 在Linux中，库文件的命名约定通常是 `lib&lt;name&gt;.a` 或 `lib&lt;name&gt;.so`，其中 `&lt;name&gt;` 是库的名字。例如，`libm.a` 或 `libm.so`。
-&gt;
-&gt;5. **链接器选项：** 在链接阶段，使用 `-l` 选项指定要链接的库。例如，`-lm` 表示链接数学库。链接器在搜索库文件时会根据命名约定自动查找合适的库文件。
-&gt;
-&gt;    - **静态库：** 使用 `-l&lt;name&gt;` 表示链接静态库。例如，`-lmylib` 表示链接 `libmylib.a`。
-&gt;    
-&gt;    - **动态库：** 使用 `-l&lt;name&gt;` 表示链接动态库。例如，`-lmylib` 表示链接 `libmylib.so`。
-&gt;
-&gt;在编译器搜索头文件和库文件时，它会按照特定的顺序和规则查找，通常按照用户指定的路径、系统默认路径以及一些标准路径。如果头文件或库文件在搜索路径中找不到，编译器将生成相应的错误信息。
-&gt;
-&gt;对于区分库文件的头文件和用户自己编写的头文件，通常没有直接的方式。编译器根据搜索路径和命名约定来查找文件。如果头文件在系统默认路径或用户指定的路径中，并且符合命名约定，编译器就会找到它。因此，要确保头文件和库文件的名字不会与系统标准或其他库冲突。
-
-**Q：还是之前那个问题，编译器在预编译完成之后，以stdio.h为例，在编译printf这个函数时，编译器为什么知道该函数已经被编译为库函数了而非是.c的源码呢**
-
-&gt;A：当编译器在预处理和编译阶段处理源代码时，它会遇到 `#include &lt;stdio.h&gt;` 这样的预处理指令。这个指令告诉编译器去系统的标准头文件路径中查找 `stdio.h` 文件并将其内容插入到源代码中。
-&gt;
-&gt;`stdio.h` 是标准C库头文件，其中包含了 `printf` 函数的声明。在预处理和编译阶段，编译器并不关心这个函数是如何实现的，它只需要知道函数的声明以便在后续阶段进行类型检查。
-&gt;
-&gt;在链接阶段，编译器会生成目标文件（`.o` 文件）包含了对 `printf` 函数的引用。然后，在链接器阶段，链接器会将目标文件与库文件链接在一起，以解析对 `printf` 的引用。
-&gt;
-&gt;如果是静态库，链接器会从静态库文件中提取 `printf` 函数的实现，并将其嵌入最终的可执行文件中。如果是动态库，链接器会在运行时动态加载动态库，并将 `printf` 函数的地址解析为在库中的实现。
-&gt;
-&gt;在这个过程中，编译器并不关心 `printf` 函数的具体实现是来自源代码还是库文件。它只关心函数的声明以及如何将对该函数的引用解析为实际的代码。这就是为什么在编译时，编译器并不需要源代码，而只需要头文件的原因。
-
-**Q：还是没懂，再详细解释一下**
-
-&gt; A：好的，让我更详细地解释一下整个过程。
-&gt;
-&gt; 1. **预处理阶段：**
-&gt;    - 在预处理阶段，编译器会执行一系列的预处理操作，其中之一是处理 `#include` 指令。当编译器遇到 `#include &lt;stdio.h&gt;` 时，它会查找系统的标准头文件路径，找到 `stdio.h` 文件并将其内容插入源代码中。这是为了让编译器知道标准库中函数的声明，比如 `printf`。
-&gt;
-&gt; 2. **编译阶段：**
-&gt;    - 在编译阶段，编译器会将源代码翻译成汇编代码。这一阶段中，编译器只关注函数的声明，而不需要关心函数的实现。所以，在这个阶段，它并不需要 `printf` 函数的源代码，只需要知道函数的声明，即函数的原型（prototype）。
-&gt;
-&gt; 3. **链接阶段：**
-&gt;    - 在链接阶段，编译器生成目标文件（通常是 `.o` 文件）。这个文件包含了对 `printf` 函数的引用，但并不包含函数的实现。
-&gt;    - 接下来，链接器将目标文件与库文件链接在一起。对于 `printf` 函数，它来自于标准C库（`libc`）。链接器会从标准C库中提取 `printf` 函数的实现，然后将其嵌入最终的可执行文件中。
-&gt;    - 如果是静态库，整个 `printf` 函数的实现将被嵌入到可执行文件中。
-&gt;    - 如果是动态库，链接器会在可执行文件中留下一个引用，告诉操作系统在运行时需要动态加载 `libc.so`，并在内存中解析 `printf` 函数的地址。
-&gt;
-&gt; 4. **运行时阶段：**
-&gt;    - 当你运行可执行文件时，操作系统会负责动态加载库（如果是动态库），并解析函数的地址。
-&gt;    - 在程序执行过程中，实际的 `printf` 函数代码从库文件加载到内存中，并被调用。
-&gt;
-&gt; 总结起来，编译器在编译阶段并不关心函数的具体实现，而是通过头文件获取函数的声明。在链接阶段，实际的函数实现会被链接到可执行文件中，无论是嵌入到可执行文件中（静态库）还是在运行时动态加载（动态库）。
-
-**Q：链接器将目标文件与库文件链接在一起。对于 printf 函数，它来自于标准C库（libc）。链接器会从标准C库中提取 printf 函数的实现，然后将其嵌入最终的可执行文件中。 在这个过程中，链接器为什么知道printf来自库文件而非其他的目标文件呢**
-
-&gt; A：在链接阶段，链接器并不是根据函数名直接知道一个函数是来自库文件还是其他目标文件。链接器主要通过符号解析（Symbol Resolution）的过程来确定符号（如函数名）的来源。这个过程包括以下几个步骤：
-&gt;
-&gt; 1. **符号表（Symbol Table）：** 在目标文件和库文件中都包含有符号表，记录了文件中定义和引用的符号。符号可以是函数、变量或其他标识符。
-&gt;
-&gt; 2. **符号解析：** 链接器会遍历目标文件和库文件，查找每个文件中定义和引用的符号，并建立一个符号表的全局视图。
-&gt;
-&gt; 3. **符号匹配：** 当链接器遇到一个引用的符号（如 `printf`）时，它会在符号表中查找这个符号的定义。如果找到了，链接器就能确定这个符号是来自某个库文件或目标文件。
-&gt;
-&gt; 4. **库的搜索：** 如果链接器在已知的目标文件中找不到符号的定义，它会继续搜索库文件。链接器会按照命令行参数的顺序搜索库，直到找到符号的定义或者遍历完所有的库。
-&gt;
-&gt; 在 `printf` 的例子中，链接器首先在目标文件中查找 `printf` 的定义。如果找不到，它会继续搜索链接时指定的库文件，其中通常包括标准C库（`libc`）。
-&gt;
-&gt; 关键点在于符号的定义和引用。如果目标文件或库文件中定义了 `printf`，链接器就能找到这个定义。如果没有，链接器就会在库文件中继续搜索。这是为什么在链接时需要指定库文件的原因，以便链接器知道从哪里找到缺失的符号。
-
-**Q：也就是说，即使我包含了stdio.h的头文件，但是我在某个.c中实现了printf的函数，那在链接时，printf最终就会指向我所编写的printf函数**
-
-&gt; A：是的，你理解得对。在链接阶段，链接器会根据符号解析的过程来确定最终引用的符号的实现。如果你在某个 `.c` 文件中实现了 `printf` 函数，并且在其他文件中引用了 `printf`，链接器会选择使用你自己实现的 `printf` 函数而不是标准C库中的版本。
-&gt;
-&gt; 这种情况下，链接器会将你的 `.c` 文件编译生成的目标文件（`.o` 文件）与其他目标文件进行链接，生成最终的可执行文件。在这个过程中，符号解析确保所有引用的符号都能找到对应的定义。
-&gt;
-&gt; 这也说明了为什么在C语言中，通常将函数的声明放在头文件中，而将函数的定义放在 `.c` 文件中。头文件用于在编译阶段提供函数的声明，以便在其他文件中引用。然后，在链接阶段，链接器根据符号解析将这些引用与实际的定义连接起来。
-
-
-
-# -END-
-</code></pre>
-
+<p><code>$(filter-out $(mains),$(objects))</code> 返回值是 <code>foo.o bar.o</code> 。</p>
+</li>
+</ul>
+<h3 id="sort"><a href="#sort" class="headerlink" title="sort"></a>sort</h3><figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">$(<span class="hljs-built_in">sort</span> &lt;list&gt;)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>名称：排序函数</li>
+<li>功能：给字符串 <code>&lt;list&gt;</code> 中的单词排序（升序）。</li>
+<li>返回：返回排序后的字符串。</li>
+<li>示例： <code>$(sort foo bar lose)</code> 返回 <code>bar foo lose</code> 。</li>
+<li>备注： <code>sort</code> 函数会去掉 <code>&lt;list&gt;</code> 中相同的单词。</li>
+</ul>
+<h3 id="word"><a href="#word" class="headerlink" title="word"></a>word</h3><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">$(<span class="hljs-built_in">word</span> &lt;n&gt;,&lt;<span class="hljs-built_in">text</span>&gt;)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>名称：取单词函数</li>
+<li>功能：取字符串 <code>&lt;text&gt;</code> 中第 <code>&lt;n&gt;</code> 个单词。（从一开始）</li>
+<li>返回：返回字符串 <code>&lt;text&gt;</code> 中第 <code>&lt;n&gt;</code> 个单词。如果 <code>&lt;n&gt;</code> 比 <code>&lt;text&gt;</code> 中的单词数要大，那么返回空字符串。</li>
+<li>示例： <code>$(word 2, foo bar baz)</code> 返回值是 <code>bar</code> 。</li>
+</ul>
+<h3 id="wordlist"><a href="#wordlist" class="headerlink" title="wordlist"></a>wordlist</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">$(wordlist <span class="hljs-tag">&lt;<span class="hljs-name">ss</span>&gt;</span>,<span class="hljs-tag">&lt;<span class="hljs-name">e</span>&gt;</span>,<span class="hljs-tag">&lt;<span class="hljs-name">text</span>&gt;</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>名称：取单词串函数</li>
+<li>功能：从字符串 <code>&lt;text&gt;</code> 中取从 <code>&lt;ss&gt;</code> 开始到 <code>&lt;e&gt;</code> 的单词串。 <code>&lt;ss&gt;</code> 和 <code>&lt;e&gt;</code> 是一个数字。</li>
+<li>返回：返回字符串 <code>&lt;text&gt;</code> 中从 <code>&lt;ss&gt;</code> 到 <code>&lt;e&gt;</code> 的单词字串。如果 <code>&lt;ss&gt;</code> 比 <code>&lt;text&gt;</code> 中的单词数要大，那么返回空字符串。如果 <code>&lt;e&gt;</code> 大于 <code>&lt;text&gt;</code> 的单词数，那么返回从 <code>&lt;ss&gt;</code> 开始，到 <code>&lt;text&gt;</code> 结束的单词串。</li>
+<li>示例： <code>$(wordlist 2, 3, foo bar baz)</code> 返回值是 <code>bar baz</code> 。</li>
+</ul>
+<h3 id="words"><a href="#words" class="headerlink" title="words"></a>words</h3><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">$(<span class="hljs-built_in">words</span> &lt;<span class="hljs-built_in">text</span>&gt;)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>名称：单词个数统计函数</li>
+<li>功能：统计 <code>&lt;text&gt;</code> 中字符串中的单词个数。</li>
+<li>返回：返回 <code>&lt;text&gt;</code> 中的单词数。</li>
+<li>示例： <code>$(words, foo bar baz)</code> 返回值是 <code>3</code> 。</li>
+<li>备注：如果我们要取 <code>&lt;text&gt;</code> 中最后的一个单词，我们可以这样： <code>$(word $(words &lt;text&gt;),&lt;text&gt;)</code> 。</li>
+</ul>
+<h3 id="firstword"><a href="#firstword" class="headerlink" title="firstword"></a>firstword</h3><figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">$(firstword &lt;<span class="hljs-built_in">text</span>&gt;)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>名称：首单词函数——firstword。</li>
+<li>功能：取字符串 <code>&lt;text&gt;</code> 中的第一个单词。</li>
+<li>返回：返回字符串 <code>&lt;text&gt;</code> 的第一个单词。</li>
+<li>示例： <code>$(firstword foo bar)</code> 返回值是 <code>foo</code>。</li>
+<li>备注：这个函数可以用 <code>word</code> 函数来实现： <code>$(word 1,&lt;text&gt;)</code></li>
+</ul>
+<p>以上，是所有的字符串操作函数，如果搭配混合使用，可以完成比较复杂的功能。这里，举一个现实中应用的例子。我们知道，make使用 <code>VPATH</code> 变量来指定“依赖文件”的搜索路径。于是，我们可以利用这个搜索路径来指定编译器对头文件的搜索路径参数 <code>CFLAGS</code> ，如：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-keyword">override</span> CFLAGS += <span class="hljs-variable">$(<span class="hljs-built_in">patsubst</span> %,-I%,$(<span class="hljs-built_in">subst</span> :, ,<span class="hljs-variable">$(VPATH)</span>)</span>)<br></code></pre></td></tr></table></figure>
+
+<p>如果我们的 <code>$(VPATH)</code> 值是 <code>src:../headers</code> ，那么 <code>$(patsubst %,-I%,$(subst :, ,$(VPATH)))</code> 将返回 <code>-Isrc -I../headers</code> ，这正是cc或gcc搜索头文件路径的参数。</p>
+<h2 id="3-文件名操作函数"><a href="#3-文件名操作函数" class="headerlink" title="-3- 文件名操作函数"></a>-3- 文件名操作函数</h2><p>这些函数主要是处理文件名的。每个函数的参数字符串都会被当做一个或是一系列的文件名来对待。</p>
+<h3 id="dir"><a href="#dir" class="headerlink" title="dir"></a>dir</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-variable">$(<span class="hljs-built_in">dir</span> &lt;names...&gt;)</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>名称：取目录函数——dir。</li>
+<li>功能：从文件名序列 <code>&lt;names&gt;</code> 中取出目录部分。目录部分是指最后一个反斜杠（ <code>/</code> ）之前的部分。如果没有反斜杠，那么返回 <code>./</code> 。</li>
+<li>返回：返回文件名序列 <code>&lt;names&gt;</code> 的目录部分。</li>
+<li>示例： <code>$(dir src/foo.c hacks)</code> 返回值是 <code>src/ ./</code> 。</li>
+</ul>
+<h3 id="notdir"><a href="#notdir" class="headerlink" title="notdir"></a>notdir</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-variable">$(<span class="hljs-built_in">notdir</span> &lt;names...&gt;)</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>名称：取文件函数——notdir。</li>
+<li>功能：从文件名序列 <code>&lt;names&gt;</code> 中取出非目录部分。非目录部分是指最後一个反斜杠（ <code>/</code> ）之后的部分。</li>
+<li>返回：返回文件名序列 <code>&lt;names&gt;</code> 的非目录部分。</li>
+<li>示例: <code>$(notdir src/foo.c hacks)</code> 返回值是 <code>foo.c hacks</code> 。</li>
+</ul>
+<h3 id="suffix"><a href="#suffix" class="headerlink" title="suffix"></a>suffix</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-variable">$(<span class="hljs-built_in">suffix</span> &lt;names...&gt;)</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>名称：取後缀函数——suffix。</li>
+<li>功能：从文件名序列 <code>&lt;names&gt;</code> 中取出各个文件名的后缀。</li>
+<li>返回：返回文件名序列 <code>&lt;names&gt;</code> 的后缀序列，如果文件没有后缀，则返回空字串。</li>
+<li>示例： <code>$(suffix src/foo.c src-1.0/bar.c hacks)</code> 返回值是 <code>.c .c</code>。</li>
+</ul>
+<h3 id="basename"><a href="#basename" class="headerlink" title="basename"></a>basename</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-variable">$(<span class="hljs-built_in">basename</span> &lt;names...&gt;)</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>名称：取前缀函数——basename。</li>
+<li>功能：从文件名序列 <code>&lt;names&gt;</code> 中取出各个文件名的前缀部分。</li>
+<li>返回：返回文件名序列 <code>&lt;names&gt;</code> 的前缀序列，如果文件没有前缀，则返回空字串。</li>
+<li>示例： <code>$(basename src/foo.c src-1.0/bar.c hacks)</code> 返回值是 <code>src/foo src-1.0/bar hacks</code> 。</li>
+</ul>
+<h3 id="addsuffix"><a href="#addsuffix" class="headerlink" title="addsuffix"></a>addsuffix</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-variable">$(<span class="hljs-built_in">addsuffix</span> &lt;<span class="hljs-built_in">suffix</span>&gt;,&lt;names...&gt;)</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>名称：加后缀函数——addsuffix。</li>
+<li>功能：把后缀 <code>&lt;suffix&gt;</code> 加到 <code>&lt;names&gt;</code> 中的每个单词后面。</li>
+<li>返回：返回加过后缀的文件名序列。</li>
+<li>示例： <code>$(addsuffix .c,foo bar)</code> 返回值是 <code>foo.c bar.c</code> 。</li>
+</ul>
+<h3 id="addprefix"><a href="#addprefix" class="headerlink" title="addprefix"></a>addprefix</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">$(addprefix <span class="hljs-tag">&lt;<span class="hljs-name">prefix</span>&gt;</span>,<span class="hljs-tag">&lt;<span class="hljs-name">names...</span>&gt;</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>名称：加前缀函数——addprefix。</li>
+<li>功能：把前缀 <code>&lt;prefix&gt;</code> 加到 <code>&lt;names&gt;</code> 中的每个单词前面。</li>
+<li>返回：返回加过前缀的文件名序列。</li>
+<li>示例： <code>$(addprefix src/,foo bar)</code> 返回值是 <code>src/foo src/bar</code> 。</li>
+</ul>
+<h3 id="join"><a href="#join" class="headerlink" title="join"></a>join</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">$(<span class="hljs-keyword">join</span> <span class="hljs-symbol">&lt;list1&gt;</span>,<span class="hljs-symbol">&lt;list2&gt;</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>名称：连接函数——join。</li>
+<li>功能：把 <code>&lt;list2&gt;</code> 中的单词对应地加到 <code>&lt;list1&gt;</code> 的单词后面。如果 <code>&lt;list1&gt;</code> 的单词个数要比 <code>&lt;list2&gt;</code> 的多，那么， <code>&lt;list1&gt;</code> 中的多出来的单词将保持原样。如果 <code>&lt;list2&gt;</code> 的单词个数要比 <code>&lt;list1&gt;</code> 多，那么， <code>&lt;list2&gt;</code> 多出来的单词将被复制到 <code>&lt;list1&gt;</code> 中。</li>
+<li>返回：返回连接过后的字符串。</li>
+<li>示例： <code>$(join aaa bbb , 111 222 333)</code> 返回值是 <code>aaa111 bbb222 333</code> 。</li>
+</ul>
+<h2 id="4-foreach-函数"><a href="#4-foreach-函数" class="headerlink" title="-4- foreach 函数"></a>-4- foreach 函数</h2><p>foreach是一个用于循环的函数，它的语法规则：</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">$(foreach &lt;<span class="hljs-keyword">var</span>&gt;,&lt;list&gt;,&lt;<span class="hljs-built_in">text</span>&gt;)<br></code></pre></td></tr></table></figure>
+
+<p>这个函数的意思是，把参数 <code>&lt;list&gt;</code> 中的单词逐一取出放到参数 <code>&lt;var&gt;</code> 所指定的变量中，然后再执行 <code>&lt;text&gt;</code> 所包含的表达式。每一次 <code>&lt;text&gt;</code> 会返回一个字符串，循环过程中， <code>&lt;text&gt;</code> 的所返回的每个字符串会以空格分隔，最后当整个循环结束时， <code>&lt;text&gt;</code> 所返回的每个字符串所组成的整个字符串（以空格分隔）将会是foreach函数的返回值。</p>
+<p>所以， <code>&lt;var&gt;</code> 最好是一个变量名， <code>&lt;list&gt;</code> 可以是一个表达式，而 <code>&lt;text&gt;</code> 中一般会使用 <code>&lt;var&gt;</code> 这个参数来依次枚举 <code>&lt;list&gt;</code> 中的单词。举个例子：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs makefile">names := a b c d<br><br>files := <span class="hljs-variable">$(<span class="hljs-built_in">foreach</span> n,<span class="hljs-variable">$(names)</span>,<span class="hljs-variable">$(n)</span>.o)</span><br></code></pre></td></tr></table></figure>
+
+<p>上面的例子中， <code>$(name)</code> 中的单词会被挨个取出，并存到变量 <code>n</code> 中， <code>$(n).o</code> 每次根据 <code>$(n)</code> 计算出一个值，这些值以空格分隔，最后作为foreach函数的返回，所以， <code>$(files)</code> 的值是 <code>a.o b.o c.o d.o</code> 。</p>
+<p>注意，foreach中的 <code>&lt;var&gt;</code> 参数是一个临时的局部变量，foreach函数执行完后，参数 <code>&lt;var&gt;</code> 的变量将不在作用，其作用域只在foreach函数当中。</p>
+<h2 id="5-if函数"><a href="#5-if函数" class="headerlink" title="-5- if函数"></a>-5- if函数</h2><p>if函数很像GNU的make所支持的条件语句——ifeq（参见前面所述的章节），if函数的语法是：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">$(if <span class="hljs-tag">&lt;<span class="hljs-name">condition</span>&gt;</span>,<span class="hljs-tag">&lt;<span class="hljs-name">then-part</span>&gt;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>或是</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">$(if <span class="hljs-tag">&lt;<span class="hljs-name">condition</span>&gt;</span>,<span class="hljs-tag">&lt;<span class="hljs-name">then-part</span>&gt;</span>,<span class="hljs-tag">&lt;<span class="hljs-name">else-part</span>&gt;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>可见，if函数可以包含“else”部分，或是不含。即if函数的参数可以是两个，也可以是三个。 <code>&lt;condition&gt;</code> 参数是if的表达式，如果其返回的为非空字符串，那么这个表达式就相当于返回真，于是， <code>&lt;then-part&gt;</code> 会被计算，否则 <code>&lt;else-part&gt;</code> 会被计算。</p>
+<p>而if函数的返回值是，如果 <code>&lt;condition&gt;</code> 为真（非空字符串），那个 <code>&lt;then-part&gt;</code> 会是整个函数的返回值，如果 <code>&lt;condition&gt;</code> 为假（空字符串），那么 <code>&lt;else-part&gt;</code> 会是整个函数的返回值，此时如果 <code>&lt;else-part&gt;</code> 没有被定义，那么，整个函数返回空字串。</p>
+<p>所以， <code>&lt;then-part&gt;</code> 和 <code>&lt;else-part&gt;</code> 只会有一个被计算。</p>
+<p>举个例子：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment"># 定义一个变量</span><br>DEBUG = 1<br><br><span class="hljs-comment"># 使用 if 函数进行条件判断</span><br>CFLAGS = <span class="hljs-variable">$(<span class="hljs-built_in">if</span> $(<span class="hljs-built_in">filter</span> 1,<span class="hljs-variable">$(DEBUG)</span>)</span>,-g -Wall,-O2)<br></code></pre></td></tr></table></figure>
+
+<p>在这个例子中，<code>CFLAGS</code>的值会更具<code>DEBUG</code>变量的值来选择，如果其值为1，则会选择<code>-g -Wall</code>，否则会选择<code>-O2</code>。</p>
+<h2 id="6-call函数"><a href="#6-call函数" class="headerlink" title="-6- call函数"></a>-6- call函数</h2><p>call函数可以调用你自定义的参数化函数，你可以写一个非常复杂的表达式，这个表达式中，你可以定义许多参数，然后你可以call函数来向这个表达式传递参数。它的语法是：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">$(<span class="hljs-keyword">call</span> <span class="hljs-symbol">&lt;function-name&gt;</span>,<span class="hljs-symbol">&lt;parm1&gt;</span>,<span class="hljs-symbol">&lt;parm2&gt;</span>,...,<span class="hljs-symbol">&lt;parmn&gt;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>当执行这个函数时，会把参数 <code>&lt;parm1&gt;</code> 、 <code>&lt;parm2&gt;</code> 、 <code>&lt;parm3&gt;</code> 依次传入自定义的函数中的变量，最后的自定义函数返回值就是call函数的返回值。关于这个自定义函数，其变量通常用<code>$(1)</code> <code>$(2)</code> <code>$(3)</code>(以此类推)来表示传入的第1个、第2个、第3个参数。举个例子更好理解</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment"># 定义一个简单的函数，用于连接两个字符串</span><br>concat = $(1)$(2)<br><br><span class="hljs-comment"># 使用 call 函数调用定义的函数</span><br>result := <span class="hljs-variable">$(<span class="hljs-built_in">call</span> concat, Hello, World)</span><br></code></pre></td></tr></table></figure>
+
+<p>在这个例子中，concat就是一个我们自定义的简单函数，它接受两个参数<code>$(1)</code> 和<code>$(2)</code>，并把它们按顺序连起来。所以最终如result的结果是<code>HelloWorld</code></p>
+<p>再举个例子</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-built_in">reverse</span> =  $(<span class="hljs-number">2</span>) $(<span class="hljs-number">1</span>)<br><br>foo = $(call <span class="hljs-built_in">reverse</span>,a,b)<br></code></pre></td></tr></table></figure>
+
+<p>此时的 <code>foo</code> 的值就是 <code>b a</code> 。</p>
+<p>需要注意：在向 call 函数传递参数时要尤其注意空格的使用。call 函数在处理参数时，第2个及其之后的参数中的空格会被保留，因而可能造成一些奇怪的效果。因而在向call函数提供参数时，最安全的做法是去除所有多余的空格。</p>
+<h2 id="7-origin函数"><a href="#7-origin函数" class="headerlink" title="-7- origin函数"></a>-7- origin函数</h2><p>origin函数不像其它的函数，他并不操作变量的值，他只是告诉你你的这个变量是哪里来的？其语法是：</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gams"><span class="hljs-symbol">$</span>(origin &lt;<span class="hljs-keyword">variable</span>&gt;)<br></code></pre></td></tr></table></figure>
+
+<p>注意， <code>&lt;variable&gt;</code> 是变量的名字，不应该是引用。所以你最好不要在 <code>&lt;variable&gt;</code> 中使用<code>$</code> 字符。Origin函数会以其返回值来告诉你这个变量的“出生情况”，下面，是origin函数的返回值:</p>
+<ul>
+<li><p><code>undefined</code></p>
+<p>如果 <code>&lt;variable&gt;</code> 从来没有定义过，origin函数返回这个值 <code>undefined</code></p>
+</li>
+<li><p><code>default</code></p>
+<p>如果 <code>&lt;variable&gt;</code> 是一个默认的定义，比如“CC”这个变量，这种变量我们将在后面讲述。</p>
+</li>
+<li><p><code>environment</code></p>
+<p>如果 <code>&lt;variable&gt;</code> 是一个环境变量，并且当Makefile被执行时， <code>-e</code> 参数没有被打开。</p>
+</li>
+<li><p><code>file</code></p>
+<p>如果 <code>&lt;variable&gt;</code> 这个变量被定义在Makefile中。</p>
+</li>
+<li><p><code>command line</code></p>
+<p>如果 <code>&lt;variable&gt;</code> 这个变量是被命令行定义的。</p>
+</li>
+<li><p><code>override</code></p>
+<p>如果 <code>&lt;variable&gt;</code> 是被override指示符重新定义的。</p>
+</li>
+<li><p><code>automatic</code></p>
+<p>如果 <code>&lt;variable&gt;</code> 是一个命令运行中的自动化变量。关于自动化变量将在前面介绍过了。</p>
+</li>
+</ul>
+<p>这些信息对于我们编写Makefile是非常有用的，例如，假设我们有一个Makefile其包了一个定义文件 Make.def，在 Make.def中定义了一个变量“bletch”，而我们的环境中也有一个环境变量“bletch”，此时，我们想判断一下，如果变量来源于环境，那么我们就把之重定义了，如果来源于Make.def或是命令行等非环境的，那么我们就不重新定义它。于是，在我们的Makefile中，我们可以这样写：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-keyword">ifdef</span> bletch<br>    <span class="hljs-keyword">ifeq</span> <span class="hljs-string">&quot;$(origin bletch)&quot;</span> <span class="hljs-string">&quot;environment&quot;</span><br>        bletch = barf, gag, etc.<br>    <span class="hljs-keyword">endif</span><br><span class="hljs-keyword">endif</span><br></code></pre></td></tr></table></figure>
+
+<p>当然，你也许会说，使用 <code>override</code> 关键字不就可以重新定义环境中的变量了吗？为什么需要使用这样的步骤？是的，我们用 <code>override</code> 是可以达到这样的效果，可是 <code>override</code> 过于粗暴，它同时会把从命令行定义的变量也覆盖了，而我们只想重新定义环境传来的，而不想重新定义命令行传来的。</p>
+<h2 id="8-shell函数"><a href="#8-shell函数" class="headerlink" title="-8- shell函数"></a>-8- shell函数</h2><p>shell函数就是用来执行shell命令的函数。它的参数是操作系统的shell命令，操作系统的标准输出会作为函数的返回值，可以用来给变量赋值，也可以用于函数的嵌套。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs makefile">contents := <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> cat foo)</span><br>files := <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> echo *.c)</span><br></code></pre></td></tr></table></figure>
+
+<p>除了shell函数之外，直接在shell命令前后加上反引号&#96;，这样同样也能执行shell命令。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs go">contents := <span class="hljs-string">`cat foo`</span><br>files := <span class="hljs-string">`echo *.c`</span><br></code></pre></td></tr></table></figure>
+
+<p>注意，这个函数会新生成一个Shell程序来执行命令，所以你要注意其运行性能，如果你的Makefile中有一些比较复杂的规则，并大量使用了这个函数，那么对于你的系统性能是有害的。特别是Makefile的隐式规则可能会让你的shell函数执行的次数比你想像的多得多。</p>
+<h2 id="9-控制make函数"><a href="#9-控制make函数" class="headerlink" title="-9- 控制make函数"></a>-9- 控制make函数</h2><p>make提供了一些函数来控制make的运行。通常，你需要检测一些运行Makefile时的运行时信息，并且根据这些信息来决定，你是让make继续执行，还是停止。</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mel">$(<span class="hljs-keyword">error</span> &lt;<span class="hljs-keyword">text</span> ...&gt;)<br></code></pre></td></tr></table></figure>
+
+<p>产生一个致命的错误， <code>&lt;text ...&gt;</code> 是错误信息。注意，error函数不会在一被使用就会产生错误信息，所以如果你把其定义在某个变量中，并在后续的脚本中使用这个变量，那么也是可以的。例如：</p>
+<p>示例一：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-keyword">ifdef</span> ERROR_001<br>    <span class="hljs-variable">$(<span class="hljs-built_in">error</span> <span class="hljs-built_in">error</span> is <span class="hljs-variable">$(ERROR_001)</span>)</span><br><span class="hljs-keyword">endif</span><br></code></pre></td></tr></table></figure>
+
+<p>示例二：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs makefile">ERR = <span class="hljs-variable">$(<span class="hljs-built_in">error</span> found an <span class="hljs-built_in">error</span>!)</span><br><br><span class="hljs-meta"><span class="hljs-keyword">.PHONY</span>: err</span><br><br><span class="hljs-section">err: <span class="hljs-variable">$(ERR)</span></span><br></code></pre></td></tr></table></figure>
+
+<p>示例一会在变量ERROR_001定义了后执行时产生error调用，而示例二则在目录err被执行时才发生error调用。</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mel">$(<span class="hljs-keyword">warning</span> &lt;<span class="hljs-keyword">text</span> ...&gt;)<br></code></pre></td></tr></table></figure>
+
+<p>这个函数很像error函数，只是它并不会让make退出，只是输出一段警告信息，而make继续执行。</p>
+<h1 id="0x08-Make的运行"><a href="#0x08-Make的运行" class="headerlink" title="0x08 Make的运行"></a>0x08 Make的运行</h1><p>这一部分主要是make这个命令是如何使用的，以及make有关参数的讲解。</p>
+<h2 id="1-make的退出码"><a href="#1-make的退出码" class="headerlink" title="-1- make的退出码"></a>-1- make的退出码</h2><p>make命令执行后有三个退出码：</p>
+<ul>
+<li><p><strong>0</strong></p>
+<p>表示成功执行。</p>
+</li>
+<li><p><strong>1</strong></p>
+<p>如果make运行时出现任何错误，其返回1。</p>
+</li>
+<li><p><strong>2</strong></p>
+<p>如果你使用了make的“-q”选项，并且make使得一些目标不需要更新，那么返回2。</p>
+</li>
+</ul>
+<h2 id="2-指定Makefile"><a href="#2-指定Makefile" class="headerlink" title="-2- 指定Makefile"></a>-2- 指定Makefile</h2><p>GNU make找寻默认的Makefile的规则是在当前目录下依次找三个文件——“GNUmakefile”、“makefile”和“Makefile”。其按顺序找这三个文件，一旦找到，就开始读取这个文件并执行。</p>
+<p>如果希望make执行我们指定的makefile，那么可以使用make的 <code>-f</code> 或是 <code>--file</code> 参数（ <code>--makefile</code> 参数也行）。例如，我们有个makefile的名字是“hchen.mk”，那么，我们可以这样来让make来执行这个文件：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">make</span> –<span class="hljs-keyword">f</span> hchen.<span class="hljs-keyword">mk</span><br></code></pre></td></tr></table></figure>
+
+<p>如果在make的命令行不只一次地使用了 <code>-f</code> 参数，那么，所有指定的makefile将会被连在一起传递给make执行。</p>
+<h2 id="3-指定目标"><a href="#3-指定目标" class="headerlink" title="-3- 指定目标"></a>-3- 指定目标</h2><p>一般来说，make的最终目标是makefile中的第一个目标，而其它目标一般是由这个目标连带出来的。这是make的默认行为。如果希望make以我们指定的目标为最终目标的话，就可以显式的指出你希望完成的目标，类似于<code>make clean</code>。</p>
+<p>任何在makefile中的目标都可以被指定成终极目标，但是除了以 <code>-</code> 打头，或是包含了 <code>=</code> 的目标，因为有这些字符的目标，会被解析成命令行参数或是变量。甚至没有被我们明确写出来的目标也可以成为make的终极目标，也就是说，只要make可以找到其隐含规则推导规则，那么这个隐含目标同样可以被指定成终极目标。</p>
+<p>有一个make的环境变量叫 <code>MAKECMDGOALS</code> ，这个变量中会存放你所指定的终极目标的列表，如果在命令行上，你没有指定目标，那么，这个变量是空值。这个变量可以让你使用在一些比较特殊的情形下。比如下面的例子：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs makefile">sources = foo.c bar.c<br><span class="hljs-keyword">ifneq</span> ( <span class="hljs-variable">$(MAKECMDGOALS)</span>,clean)<br>    <span class="hljs-keyword">include</span> $(sources:.c=.d)<br><span class="hljs-keyword">endif</span><br></code></pre></td></tr></table></figure>
+
+<p>基于上面的这个例子，只要我们输入的命令不是“make clean”，那么makefile会自动包含“foo.d”和“bar.d”这两个makefile。</p>
+<p>使用指定终极目标的方法可以很方便地让我们编译我们的程序，例如下面这个例子：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-meta"><span class="hljs-keyword">.PHONY</span>: all</span><br><span class="hljs-section">all: prog1 prog2 prog3 prog4</span><br></code></pre></td></tr></table></figure>
+
+<p>从这个例子中，我们可以看到，这个makefile中有四个需要编译的程序——“prog1”， “prog2”，“prog3”和 “prog4”，我们可以使用“make all”命令来编译所有的目标（如果把all置成第一个目标，那么只需执行“make”），我们也可以使用 “make prog2”来单独编译目标“prog2”。</p>
+<p>即然make可以指定所有makefile中的目标，那么也包括“伪目标”，于是我们可以根据这种性质来让我们的makefile根据指定的不同的目标来完成不同的事。在Unix世界中，软件发布时，特别是GNU这种开源软件的发布时，其makefile都包含了编译、安装、打包等功能。我们可以参照这种规则来书写我们的makefile中的目标。</p>
+<ul>
+<li>all:这个伪目标是所有目标的目标，其功能一般是编译所有的目标。</li>
+<li>clean:这个伪目标功能是删除所有被make创建的文件。</li>
+<li>install:这个伪目标功能是安装已编译好的程序，其实就是把目标执行文件拷贝到指定的目标中去。</li>
+<li>print:这个伪目标的功能是例出改变过的源文件。</li>
+<li>tar:这个伪目标功能是把源程序打包备份。也就是一个tar文件。</li>
+<li>dist:这个伪目标功能是创建一个压缩文件，一般是把tar文件压成Z文件。或是gz文件。</li>
+<li>TAGS:这个伪目标功能是更新所有的目标，以备完整地重编译使用。</li>
+<li>check和test:这两个伪目标一般用来测试makefile的流程。</li>
+</ul>
+<h2 id="2-检查规则"><a href="#2-检查规则" class="headerlink" title="-2- 检查规则"></a>-2- 检查规则</h2><p>有时候，我们不想让我们的makefile中的规则执行起来，我们只想检查一下我们的命令，或是执行的序列。于是我们可以使用make命令的下述参数：</p>
+<ul>
+<li><p><code>-n</code>, <code>--just-print</code>, <code>--dry-run</code>, <code>--recon</code></p>
+<p>不执行参数，这些参数只是打印命令，不管目标是否更新，把规则和连带规则下的命令打印出来，但不执行，这些参数对于我们调试makefile很有用处。</p>
+</li>
+<li><p><code>-t</code>, <code>--touch</code></p>
+<p>这个参数的意思就是把目标文件的时间更新，但不更改目标文件。也就是说，make假装编译目标，但不是真正的编译目标，只是把目标变成已编译过的状态。</p>
+</li>
+<li><p><code>-q</code>, <code>--question</code></p>
+<p>这个参数的行为是找目标的意思，也就是说，如果目标存在，那么其什么也不会输出，当然也不会执行编译，如果目标不存在，其会打印出一条出错信息。</p>
+</li>
+<li><p><code>-W &lt;file&gt;</code>, <code>--what-if=&lt;file&gt;</code>, <code>--assume-new=&lt;file&gt;</code>, <code>--new-file=&lt;file&gt;</code></p>
+<p>这个参数需要指定一个文件。一般是是源文件（或依赖文件），Make会根据规则推导来运行依赖于这个文件的命令，一般来说，可以和“-n”参数一同使用，来查看这个依赖文件所发生的规则命令。</p>
+</li>
+</ul>
+<p>另外一个很有意思的用法是结合 <code>-p</code> 和 <code>-v</code> 来输出makefile被执行时的信息（这个将在后面讲述）。</p>
+<h2 id="3-make参数"><a href="#3-make参数" class="headerlink" title="-3- make参数"></a>-3- make参数</h2><p>下面列举了所有GNU make 3.80版的参数定义。不过还是推荐去查看make的手册，这样可以得到最准确的解释。</p>
+<ul>
+<li><p><code>-b</code>, <code>-m</code></p>
+<p>这两个参数的作用是忽略和其它版本make的兼容性。</p>
+</li>
+<li><p><code>-B</code>, <code>--always-make</code></p>
+<p>认为所有的目标都需要更新（重编译）。</p>
+</li>
+<li><p><code>-C</code> <em><dir></em>, <code>--directory</code>&#x3D;<em><dir></em></p>
+<p>指定读取makefile的目录。如果有多个“-C”参数，make的解释是后面的路径以前面的作为相对路径，并以最后的目录作为被指定目录。如：“make -C ~hchen&#x2F;test -C prog”等价于“make -C ~hchen&#x2F;test&#x2F;prog”。</p>
+</li>
+<li><p><code>-debug</code>[&#x3D;<em><options></em>]</p>
+<p>输出make的调试信息。它有几种不同的级别可供选择，如果没有参数，那就是输出最简单的调试信息。下面是<options>的取值：a: 也就是all，输出所有的调试信息。（会非常的多）b: 也就是basic，只输出简单的调试信息。即输出不需要重编译的目标。v: 也就是verbose，在b选项的级别之上。输出的信息包括哪个makefile被解析，不需要被重编译的依赖文件（或是依赖目标）等。i: 也就是implicit，输出所有的隐含规则。j: 也就是jobs，输出执行规则中命令的详细信息，如命令的PID、返回码等。m: 也就是makefile，输出make读取makefile，更新makefile，执行makefile的信息。</p>
+</li>
+<li><p><code>-d</code></p>
+<p>相当于“–debug&#x3D;a”。</p>
+</li>
+<li><p><code>-e</code>, <code>--environment-overrides</code></p>
+<p>指明环境变量的值覆盖makefile中定义的变量的值。</p>
+</li>
+<li><p><code>-f</code>&#x3D;<em><file></em>, <code>--file</code>&#x3D;<em><file></em>, <code>--makefile</code>&#x3D;<em><file></em></p>
+<p>指定需要执行的makefile。</p>
+</li>
+<li><p><code>-h</code>, <code>--help</code></p>
+<p>显示帮助信息。</p>
+</li>
+<li><p><code>-i</code> , <code>--ignore-errors</code></p>
+<p>在执行时忽略所有的错误。</p>
+</li>
+<li><p><code>-I</code> <em><dir></em>, <code>--include-dir</code>&#x3D;<em><dir></em></p>
+<p>指定一个被包含makefile的搜索目标。可以使用多个“-I”参数来指定多个目录。</p>
+</li>
+<li><p><code>-j</code> [<em><jobsnum></em>], <code>--jobs</code>[&#x3D;<em><jobsnum></em>]</p>
+<p>指同时运行命令的个数。如果没有这个参数，make运行命令时能运行多少就运行多少。如果有一个以上的“-j”参数，那么仅最后一个“-j”才是有效的。（注意这个参数在MS-DOS中是无用的）</p>
+</li>
+<li><p><code>-k</code>, <code>--keep-going</code></p>
+<p>出错也不停止运行。如果生成一个目标失败了，那么依赖于其上的目标就不会被执行了。</p>
+</li>
+<li><p><code>-l</code> <em><load></em>, <code>--load-average</code>[&#x3D;<em><load></em>], <code>-max-load</code>[&#x3D;<em><load></em>]</p>
+<p>指定make运行命令的负载。</p>
+</li>
+<li><p><code>-n</code>, <code>--just-print</code>, <code>--dry-run</code>, <code>--recon</code></p>
+<p>仅输出执行过程中的命令序列，但并不执行。</p>
+</li>
+<li><p><code>-o</code> <em><file></em>, <code>--old-file</code>&#x3D;<em><file></em>, <code>--assume-old</code>&#x3D;<em><file></em></p>
+<p>不重新生成的指定的<file>，即使这个目标的依赖文件新于它。</p>
+</li>
+<li><p><code>-p</code>, <code>--print-data-base</code></p>
+<p>输出makefile中的所有数据，包括所有的规则和变量。这个参数会让一个简单的makefile都会输出一堆信息。如果你只是想输出信息而不想执行makefile，你可以使用“make -qp”命令。如果你想查看执行makefile前的预设变量和规则，你可以使用 “make –p –f &#x2F;dev&#x2F;null”。这个参数输出的信息会包含着你的makefile文件的文件名和行号，所以，用这个参数来调试你的 makefile会是很有用的，特别是当你的环境变量很复杂的时候。</p>
+</li>
+<li><p><code>-q</code>, <code>--question</code></p>
+<p>不运行命令，也不输出。仅仅是检查所指定的目标是否需要更新。如果是0则说明要更新，如果是2则说明有错误发生。</p>
+</li>
+<li><p><code>-r</code>, <code>--no-builtin-rules</code></p>
+<p>禁止make使用任何隐含规则。</p>
+</li>
+<li><p><code>-R</code>, <code>--no-builtin-variabes</code></p>
+<p>禁止make使用任何作用于变量上的隐含规则。</p>
+</li>
+<li><p><code>-s</code>, <code>--silent</code>, <code>--quiet</code></p>
+<p>在命令运行时不输出命令的输出。</p>
+</li>
+<li><p><code>-S</code>, <code>--no-keep-going</code>, <code>--stop</code></p>
+<p>取消“-k”选项的作用。因为有些时候，make的选项是从环境变量“MAKEFLAGS”中继承下来的。所以你可以在命令行中使用这个参数来让环境变量中的“-k”选项失效。</p>
+</li>
+<li><p><code>-t</code>, <code>--touch</code></p>
+<p>相当于UNIX的touch命令，只是把目标的修改日期变成最新的，也就是阻止生成目标的命令运行。</p>
+</li>
+<li><p><code>-v</code>, <code>--version</code></p>
+<p>输出make程序的版本、版权等关于make的信息。</p>
+</li>
+<li><p><code>-w</code>, <code>--print-directory</code></p>
+<p>输出运行makefile之前和之后的信息。这个参数对于跟踪嵌套式调用make时很有用。</p>
+</li>
+<li><p><code>--no-print-directory</code></p>
+<p>禁止“-w”选项。</p>
+</li>
+<li><p><code>-W</code> <em><file></em>, <code>--what-if</code>&#x3D;<em><file></em>, <code>--new-file</code>&#x3D;<em><file></em>, <code>--assume-file</code>&#x3D;<em><file></em></p>
+<p>假定目标<file>;需要更新，如果和“-n”选项使用，那么这个参数会输出该目标更新时的运行动作。如果没有“-n”那么就像运行UNIX的“touch”命令一样，使得<file>;的修改时间为当前时间。</p>
+</li>
+<li><p><code>--warn-undefined-variables</code></p>
+<p>只要make发现有未定义的变量，那么就输出警告信息。</p>
+</li>
+</ul>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><h2 id="库文件相关问答"><a href="#库文件相关问答" class="headerlink" title="库文件相关问答"></a>库文件相关问答</h2><p>以下回答来自ChatGPT 3.5</p>
+<p><strong>Q：为什么目标要写成archive.a(member.o)这样</strong></p>
+<blockquote>
+<p>A：在GNU Make中，<code>archive.a(member.o)</code> 表示静态库（archive）中的一个成员（member），这种表示方式通常用于静态库的构建和维护。这里的 <code>archive.a</code> 是一个静态库文件，<code>member.o</code> 是该静态库中的一个对象文件。</p>
+<p>这种语法的用途主要是对静态库进行精确的成员管理。你可以使用这种形式来指定只从静态库中提取或添加特定的对象文件，而不是整个静态库。</p>
+<p>例如，在构建时，你可能只想要将某个对象文件加入静态库，而不是整个重新构建静态库。类似地，在一些规则中，你可能只关心特定的库成员。</p>
+<p>语法为 <code>archive.a(member.o)</code> 提供了精细的控制，使你能够指定与静态库关联的特定文件。这对于大型项目，特别是库的管理，非常有用。</p>
+</blockquote>
+<p><strong>Q：帮我解释一下库文件</strong></p>
+<blockquote>
+<p>A：库文件（Library）是一种包含可重用代码的二进制文件集合。这些文件包含已经编译好的对象代码，可以由程序员在其项目中引用，以便重用这些代码而不必重新编写。库文件的目的是提供一种模块化的方式来组织和共享代码。</p>
+<p>有两种主要类型的库文件：</p>
+<ol>
+<li><p><strong>静态库（Static Library）：</strong> 静态库是一组已编译的目标文件的集合，这些目标文件在链接时会被直接合并到最终的可执行文件中。它的文件扩展名通常是 <code>.a</code>（在Unix&#x2F;Linux系统）或 <code>.lib</code>（在Windows系统）。</p>
+<p>静态库的优点是在链接时会将库中的代码嵌入到可执行文件中，使得最终的可执行文件独立于库文件。缺点是如果多个程序使用相同的静态库，它们都会有一份该库的拷贝，可能导致可执行文件较大。</p>
+</li>
+<li><p><strong>动态库（Dynamic Library）：</strong> 动态库是一组已编译的目标文件的集合，它在运行时被加载到内存中，并可以被多个程序共享。它的文件扩展名通常是 <code>.so</code>（在Unix&#x2F;Linux系统）或 <code>.dll</code>（在Windows系统）。</p>
+<p>动态库的优点是多个程序可以共享同一份库，从而减小可执行文件的大小。缺点是程序在运行时需要确保动态库的存在，并且在不同的系统中可能需要处理不同的动态库版本和依赖关系。</p>
+</li>
+</ol>
+<p>在编写程序时，程序员可以通过链接器（Linker）将库文件与他们的代码链接起来。库文件中的代码可以包括函数、变量、类等，使得程序员可以使用这些库提供的功能而不必重新实现。库文件对于代码的组织和复用非常重要，它们提供了一种有效的方式来管理和共享代码。</p>
+</blockquote>
+<p><strong>Q：我可否理解成  库文件就是一类目标文件.o的集合</strong></p>
+<blockquote>
+<p>A：是的，你理解得很正确。库文件可以看作是一组目标文件（<code>.o</code> 文件）的集合。这些目标文件都是通过编译源代码而生成的，然后链接在一起形成一个库文件。库文件中的目标文件包含了已编译的代码，如函数、变量等，可以被其他程序或库引用。</p>
+<p>在静态库的情况下，这些目标文件在链接时会被直接合并到可执行文件中。在动态库的情况下，库文件在运行时被加载到内存中，并且多个程序可以共享同一份动态库。</p>
+<p>因此，你可以将库文件视为一种组织和打包已编译代码的方式，以便于在不同的项目中进行共享和重用。</p>
+</blockquote>
+<p><strong>Q：在C语言中经常调用的printf函数是否已经编译为了库文件</strong></p>
+<blockquote>
+<p>A：是的，<code>printf</code> 函数通常包含在标准C库（Standard C Library）中，这是一个包含许多常见C语言函数的库。在大多数C编译器中，<code>printf</code> 函数的实现是作为库的一部分提供的。</p>
+<p>对于大多数操作系统和编译器，C语言的标准库通常是由系统提供的。在Unix和Linux系统上，标准C库通常是 <code>libc</code>（例如，<code>glibc</code> 是GNU C库的实现）。在Windows系统上，标准C库是 Microsoft C Runtime Library（CRT）。</p>
+<p>当你使用 <code>printf</code> 函数时，编译器会知道在标准C库中查找这个函数的实现。在链接过程中，编译器会将标准C库链接到你的程序中，以确保 <code>printf</code> 等函数能够正确地被调用。</p>
+<p>在编写C程序时，你通常不需要显式链接标准C库，因为这通常是默认的。然而，在某些情况下，可能需要确保正确地链接了标准C库，特别是在一些嵌入式系统或裸机编程的场景中。</p>
+</blockquote>
+<p><strong>Q：那库文件的源文件为什么还存在呢</strong></p>
+<blockquote>
+<p>A：在软件开发中，库文件（静态库或动态库）的源文件通常是为了提供库的源代码，以便进行编译、调试、理解实现细节等目的。源文件通常以扩展名 <code>.c</code>（C语言源文件）或 <code>.cpp</code>（C++语言源文件）为结尾。</p>
+<p>以下是为什么库文件的源文件仍然存在的一些原因：</p>
+<ol>
+<li><p><strong>调试和分析：</strong> 当开发者遇到问题时，有时需要查看库的源代码以进行调试和分析。源文件的可读性使得开发者能够理解库的实现细节，有助于定位和修复问题。</p>
+</li>
+<li><p><strong>自定义编译：</strong> 有时，开发者可能希望使用不同的编译选项或对库进行一些修改，并重新编译库。在这种情况下，库的源文件是必需的。</p>
+</li>
+<li><p><strong>构建特定版本：</strong> 在某些情况下，开发者可能需要构建特定版本的库，这可能需要访问库的源代码。</p>
+</li>
+<li><p><strong>学习和教育：</strong> 学习和教育是另一个常见的原因。库的源代码可以作为学习编程、学习算法、学习库的实现方式的资源。</p>
+</li>
+</ol>
+<p>请注意，库的用户通常只需要库的二进制形式（静态库或动态库）以及相应的头文件（包含库的函数声明等），而不需要库的完整源代码。因此，发布库时，通常只提供二进制形式和头文件。然而，在开发阶段，库的源代码是非常重要的资源。</p>
+</blockquote>
+<p><strong>Q：在linux上，编译器如何根据头文件确定到对应的库文件呢，编译器如何区分是库文件的头文件还是用户自己编写的头文件呢</strong></p>
+<blockquote>
+<p>A：在Linux上，编译器（例如 GCC）如何找到对应的库文件与头文件有关。以下是一些关键的概念：</p>
+<ol>
+<li><p><strong>头文件（Header Files）：</strong> 头文件通常具有 <code>.h</code> 扩展名，包含了函数声明、结构体定义、常量等。头文件用于在源代码中声明函数或引入库的声明，以便编译器在编译时能够正确理解和验证对这些函数的调用。</p>
+</li>
+<li><p><strong>库文件（Library Files）：</strong> 库文件通常包含已编译的二进制代码，例如静态库（<code>.a</code>）或动态库（<code>.so</code>）。库文件提供了函数的实现，而头文件提供了函数的声明。</p>
+</li>
+<li><p><strong>搜索路径：</strong> 编译器使用一组搜索路径来查找头文件和库文件。这些路径包括系统默认路径和用户自定义路径。默认路径可能包括 <code>/usr/include</code> 用于头文件，以及 <code>/usr/lib</code> 或 <code>/usr/lib64</code> 用于库文件。</p>
+<ul>
+<li><p><strong>头文件搜索路径：</strong> 编译器使用 <code>-I</code> 选项指定额外的头文件搜索路径，例如 <code>-I/path/to/headers</code>。</p>
+</li>
+<li><p><strong>库文件搜索路径：</strong> 编译器使用 <code>-L</code> 选项指定额外的库文件搜索路径，例如 <code>-L/path/to/libs</code>。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>库命名约定：</strong> 在Linux中，库文件的命名约定通常是 <code>lib&lt;name&gt;.a</code> 或 <code>lib&lt;name&gt;.so</code>，其中 <code>&lt;name&gt;</code> 是库的名字。例如，<code>libm.a</code> 或 <code>libm.so</code>。</p>
+</li>
+<li><p><strong>链接器选项：</strong> 在链接阶段，使用 <code>-l</code> 选项指定要链接的库。例如，<code>-lm</code> 表示链接数学库。链接器在搜索库文件时会根据命名约定自动查找合适的库文件。</p>
+<ul>
+<li><p><strong>静态库：</strong> 使用 <code>-l&lt;name&gt;</code> 表示链接静态库。例如，<code>-lmylib</code> 表示链接 <code>libmylib.a</code>。</p>
+</li>
+<li><p><strong>动态库：</strong> 使用 <code>-l&lt;name&gt;</code> 表示链接动态库。例如，<code>-lmylib</code> 表示链接 <code>libmylib.so</code>。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>在编译器搜索头文件和库文件时，它会按照特定的顺序和规则查找，通常按照用户指定的路径、系统默认路径以及一些标准路径。如果头文件或库文件在搜索路径中找不到，编译器将生成相应的错误信息。</p>
+<p>对于区分库文件的头文件和用户自己编写的头文件，通常没有直接的方式。编译器根据搜索路径和命名约定来查找文件。如果头文件在系统默认路径或用户指定的路径中，并且符合命名约定，编译器就会找到它。因此，要确保头文件和库文件的名字不会与系统标准或其他库冲突。</p>
+</blockquote>
+<p><strong>Q：还是之前那个问题，编译器在预编译完成之后，以stdio.h为例，在编译printf这个函数时，编译器为什么知道该函数已经被编译为库函数了而非是.c的源码呢</strong></p>
+<blockquote>
+<p>A：当编译器在预处理和编译阶段处理源代码时，它会遇到 <code>#include &lt;stdio.h&gt;</code> 这样的预处理指令。这个指令告诉编译器去系统的标准头文件路径中查找 <code>stdio.h</code> 文件并将其内容插入到源代码中。</p>
+<p><code>stdio.h</code> 是标准C库头文件，其中包含了 <code>printf</code> 函数的声明。在预处理和编译阶段，编译器并不关心这个函数是如何实现的，它只需要知道函数的声明以便在后续阶段进行类型检查。</p>
+<p>在链接阶段，编译器会生成目标文件（<code>.o</code> 文件）包含了对 <code>printf</code> 函数的引用。然后，在链接器阶段，链接器会将目标文件与库文件链接在一起，以解析对 <code>printf</code> 的引用。</p>
+<p>如果是静态库，链接器会从静态库文件中提取 <code>printf</code> 函数的实现，并将其嵌入最终的可执行文件中。如果是动态库，链接器会在运行时动态加载动态库，并将 <code>printf</code> 函数的地址解析为在库中的实现。</p>
+<p>在这个过程中，编译器并不关心 <code>printf</code> 函数的具体实现是来自源代码还是库文件。它只关心函数的声明以及如何将对该函数的引用解析为实际的代码。这就是为什么在编译时，编译器并不需要源代码，而只需要头文件的原因。</p>
+</blockquote>
+<p><strong>Q：还是没懂，再详细解释一下</strong></p>
+<blockquote>
+<p>A：好的，让我更详细地解释一下整个过程。</p>
+<ol>
+<li><p><strong>预处理阶段：</strong></p>
+<ul>
+<li>在预处理阶段，编译器会执行一系列的预处理操作，其中之一是处理 <code>#include</code> 指令。当编译器遇到 <code>#include &lt;stdio.h&gt;</code> 时，它会查找系统的标准头文件路径，找到 <code>stdio.h</code> 文件并将其内容插入源代码中。这是为了让编译器知道标准库中函数的声明，比如 <code>printf</code>。</li>
+</ul>
+</li>
+<li><p><strong>编译阶段：</strong></p>
+<ul>
+<li>在编译阶段，编译器会将源代码翻译成汇编代码。这一阶段中，编译器只关注函数的声明，而不需要关心函数的实现。所以，在这个阶段，它并不需要 <code>printf</code> 函数的源代码，只需要知道函数的声明，即函数的原型（prototype）。</li>
+</ul>
+</li>
+<li><p><strong>链接阶段：</strong></p>
+<ul>
+<li>在链接阶段，编译器生成目标文件（通常是 <code>.o</code> 文件）。这个文件包含了对 <code>printf</code> 函数的引用，但并不包含函数的实现。</li>
+<li>接下来，链接器将目标文件与库文件链接在一起。对于 <code>printf</code> 函数，它来自于标准C库（<code>libc</code>）。链接器会从标准C库中提取 <code>printf</code> 函数的实现，然后将其嵌入最终的可执行文件中。</li>
+<li>如果是静态库，整个 <code>printf</code> 函数的实现将被嵌入到可执行文件中。</li>
+<li>如果是动态库，链接器会在可执行文件中留下一个引用，告诉操作系统在运行时需要动态加载 <code>libc.so</code>，并在内存中解析 <code>printf</code> 函数的地址。</li>
+</ul>
+</li>
+<li><p><strong>运行时阶段：</strong></p>
+<ul>
+<li>当你运行可执行文件时，操作系统会负责动态加载库（如果是动态库），并解析函数的地址。</li>
+<li>在程序执行过程中，实际的 <code>printf</code> 函数代码从库文件加载到内存中，并被调用。</li>
+</ul>
+</li>
+</ol>
+<p>总结起来，编译器在编译阶段并不关心函数的具体实现，而是通过头文件获取函数的声明。在链接阶段，实际的函数实现会被链接到可执行文件中，无论是嵌入到可执行文件中（静态库）还是在运行时动态加载（动态库）。</p>
+</blockquote>
+<p><strong>Q：链接器将目标文件与库文件链接在一起。对于 printf 函数，它来自于标准C库（libc）。链接器会从标准C库中提取 printf 函数的实现，然后将其嵌入最终的可执行文件中。 在这个过程中，链接器为什么知道printf来自库文件而非其他的目标文件呢</strong></p>
+<blockquote>
+<p>A：在链接阶段，链接器并不是根据函数名直接知道一个函数是来自库文件还是其他目标文件。链接器主要通过符号解析（Symbol Resolution）的过程来确定符号（如函数名）的来源。这个过程包括以下几个步骤：</p>
+<ol>
+<li><p><strong>符号表（Symbol Table）：</strong> 在目标文件和库文件中都包含有符号表，记录了文件中定义和引用的符号。符号可以是函数、变量或其他标识符。</p>
+</li>
+<li><p><strong>符号解析：</strong> 链接器会遍历目标文件和库文件，查找每个文件中定义和引用的符号，并建立一个符号表的全局视图。</p>
+</li>
+<li><p><strong>符号匹配：</strong> 当链接器遇到一个引用的符号（如 <code>printf</code>）时，它会在符号表中查找这个符号的定义。如果找到了，链接器就能确定这个符号是来自某个库文件或目标文件。</p>
+</li>
+<li><p><strong>库的搜索：</strong> 如果链接器在已知的目标文件中找不到符号的定义，它会继续搜索库文件。链接器会按照命令行参数的顺序搜索库，直到找到符号的定义或者遍历完所有的库。</p>
+</li>
+</ol>
+<p>在 <code>printf</code> 的例子中，链接器首先在目标文件中查找 <code>printf</code> 的定义。如果找不到，它会继续搜索链接时指定的库文件，其中通常包括标准C库（<code>libc</code>）。</p>
+<p>关键点在于符号的定义和引用。如果目标文件或库文件中定义了 <code>printf</code>，链接器就能找到这个定义。如果没有，链接器就会在库文件中继续搜索。这是为什么在链接时需要指定库文件的原因，以便链接器知道从哪里找到缺失的符号。</p>
+</blockquote>
+<p><strong>Q：也就是说，即使我包含了stdio.h的头文件，但是我在某个.c中实现了printf的函数，那在链接时，printf最终就会指向我所编写的printf函数</strong></p>
+<blockquote>
+<p>A：是的，你理解得对。在链接阶段，链接器会根据符号解析的过程来确定最终引用的符号的实现。如果你在某个 <code>.c</code> 文件中实现了 <code>printf</code> 函数，并且在其他文件中引用了 <code>printf</code>，链接器会选择使用你自己实现的 <code>printf</code> 函数而不是标准C库中的版本。</p>
+<p>这种情况下，链接器会将你的 <code>.c</code> 文件编译生成的目标文件（<code>.o</code> 文件）与其他目标文件进行链接，生成最终的可执行文件。在这个过程中，符号解析确保所有引用的符号都能找到对应的定义。</p>
+<p>这也说明了为什么在C语言中，通常将函数的声明放在头文件中，而将函数的定义放在 <code>.c</code> 文件中。头文件用于在编译阶段提供函数的声明，以便在其他文件中引用。然后，在链接阶段，链接器根据符号解析将这些引用与实际的定义连接起来。</p>
+</blockquote>
+<h1 id="END"><a href="#END" class="headerlink" title="-END-"></a>-END-</h1>
                 
               </div>
             
