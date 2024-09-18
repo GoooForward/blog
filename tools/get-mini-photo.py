@@ -2,11 +2,11 @@ import os
 from PIL import Image
 
 # 创建目录用于存储生成的图片
-save_dirname = "test_thumb"
+save_dirname = "mini_picture"
 if not os.path.exists(save_dirname):
     os.mkdir(save_dirname)
 
-dirname = "test"
+dirname = "ori_picture"
 imgs = [os.path.join(dirname, i) for i in os.listdir(dirname)]
 
 for idx, img_path in enumerate(imgs):
