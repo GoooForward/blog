@@ -1,7 +1,7 @@
 ---
 title: STM32学习笔记4——GPIO
 date: 2024-11-04 21:39:00
-updated: 2024-11-04 00:09:32
+updated: 2024-11-04 23:25:42
 hide: false
 tags: stm32
 categories: 学习
@@ -33,15 +33,10 @@ GPIO(General Purpose Input Output)，即通用输入输出端口，负责采集�
 
 1. GPIO识别电压范围？
 
-    > COMS端口：
->
-    > -0.3V ≤ V(IL) ≤ 1.164V ，1.833V ≤ V(IH) ≤ 3.6V
-
-    >  TLL端口（FT标记）：
->
-    > 兼容5V
-
-1. GPIO输出电流?
+    > COMS端口：-0.3V ≤ V(IL) ≤ 1.164V ，1.833V ≤ V(IH) ≤ 3.6V
+    
+    > TLL端口（FT标记）:兼容5V
+3. GPIO输出电流?
 
     > 单个IO，最大25mA
 
