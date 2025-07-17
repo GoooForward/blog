@@ -1,7 +1,7 @@
 ---
 title: 记录利用GitHub+Hexo搭建博客
 date: 2023-10-15 10:00:00
-updated: 2024-09-18 22:29:41
+updated: 2025-07-17 20:22:04
 tags: hexo
 categories: 学习
 ---
