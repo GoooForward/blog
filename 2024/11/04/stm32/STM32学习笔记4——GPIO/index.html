@@ -1,0 +1,856 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/logo.png">
+  <link rel="icon" href="/blog/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="tangyuwei">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 Reference0x01 GPIO简介GPIO(General Purpose Input Output)，即通用输入输出端口，负责采集外部器件的信息或者控制外部器件工作，即输入输出 1-1 GPIO特点 不同型号，IO口数量可能不一样，可通过选型手册快速查询  快速翻转，每次翻转最快只需要两个时钟周期（F1最高速度可以到50Mhz）  每个IO口都可以做中断  支持8种工作模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STM32学习笔记4——GPIO">
+<meta property="og:url" content="https://goooforward.github.io/blog/2024/11/04/stm32/STM32%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94GPIO/index.html">
+<meta property="og:site_name" content="GoForwrard&#39;s blog">
+<meta property="og:description" content="0x00 Reference0x01 GPIO简介GPIO(General Purpose Input Output)，即通用输入输出端口，负责采集外部器件的信息或者控制外部器件工作，即输入输出 1-1 GPIO特点 不同型号，IO口数量可能不一样，可通过选型手册快速查询  快速翻转，每次翻转最快只需要两个时钟周期（F1最高速度可以到50Mhz）  每个IO口都可以做中断  支持8种工作模式">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%202.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%203.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%204.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%205.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%206.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104222755793.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104222906176.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104223039869.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104223126451.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2011.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2012.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104223753436.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2014.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2015.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2016.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2017.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2018.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104224320179.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2019.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2021.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2022.png">
+<meta property="article:published_time" content="2024-11-04T13:39:00.000Z">
+<meta property="article:modified_time" content="2025-07-17T12:22:04.000Z">
+<meta property="article:author" content="tangyuwei">
+<meta property="article:tag" content="stm32">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%202.png">
+  
+  
+  
+  <title>STM32学习笔记4——GPIO - GoForwrard&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"goooforward.github.io","root":"/blog/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>GoForwrard&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/photo/" target="_self">
+                <i class="iconfont icon-image"></i>
+                <span>摄影</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/blog/img/cover_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">STM32学习笔记4——GPIO</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-04 21:39" pubdate>
+          2024年11月4日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          41 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">STM32学习笔记4——GPIO</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2025年7月17日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="0x00-Reference"><a href="#0x00-Reference" class="headerlink" title="0x00 Reference"></a>0x00 Reference</h1><h1 id="0x01-GPIO简介"><a href="#0x01-GPIO简介" class="headerlink" title="0x01 GPIO简介"></a>0x01 GPIO简介</h1><p>GPIO(General Purpose Input Output)，即通用输入输出端口，负责采集外部器件的信息或者控制外部器件工作，即输入输出</p>
+<h2 id="1-1-GPIO特点"><a href="#1-1-GPIO特点" class="headerlink" title="1-1 GPIO特点"></a>1-1 GPIO特点</h2><ol>
+<li><p>不同型号，IO口数量可能不一样，可通过选型手册快速查询</p>
+</li>
+<li><p>快速翻转，每次翻转最快只需要两个时钟周期（F1最高速度可以到50Mhz）</p>
+</li>
+<li><p>每个IO口都可以做中断</p>
+</li>
+<li><p>支持8种工作模式</p>
+</li>
+</ol>
+<h2 id="1-2-GPIO电气特性"><a href="#1-2-GPIO电气特性" class="headerlink" title="1-2 GPIO电气特性"></a>1-2 GPIO电气特性</h2><ol>
+<li><p>STM32工作电压范围?</p>
+<blockquote>
+<p>2V ~ 3.6V</p>
+</blockquote>
+</li>
+<li><p>GPIO识别电压范围？</p>
+<blockquote>
+<p>COMS端口：-0.3V ≤ V(IL) ≤ 1.164V ，1.833V ≤ V(IH) ≤ 3.6V</p>
+</blockquote>
+<blockquote>
+<p>TLL端口（FT标记）:兼容5V</p>
+</blockquote>
+</li>
+<li><p>GPIO输出电流?</p>
+<blockquote>
+<p>单个IO，最大25mA</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="1-3-GPIO引脚分布类型"><a href="#1-3-GPIO引脚分布类型" class="headerlink" title="1-3 GPIO引脚分布类型"></a>1-3 GPIO引脚分布类型</h2><ol>
+<li><p>电源引脚</p>
+</li>
+<li><p>晶振引脚</p>
+</li>
+<li><p>复位引脚</p>
+</li>
+<li><p>下载引脚</p>
+</li>
+<li><p>BOOT引脚</p>
+</li>
+<li><p>GPIO引脚</p>
+</li>
+</ol>
+<h1 id="0x02-IO端口基本结构介绍"><a href="#0x02-IO端口基本结构介绍" class="headerlink" title="0x02 IO端口基本结构介绍"></a>0x02 IO端口基本结构介绍</h1><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%202.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<blockquote>
+<p>① 保护二极管 </p>
+<p>保证了引脚只有在Vss到Vdd之间的电压信号才能传入IO端口内部</p>
+<p>② 内部上拉、下拉电阻（30k~50k欧 )</p>
+<p>用来设置IO口默认电平</p>
+<p>③ 施密特触发器</p>
+<p>用来整形输入电路</p>
+<p>④ P-MOS &amp; N-MOS管</p>
+<p>用来控制输出电平</p>
+</blockquote>
+<h2 id="2-1-施密特触发器简介"><a href="#2-1-施密特触发器简介" class="headerlink" title="2-1 施密特触发器简介"></a>2-1 施密特触发器简介</h2><p>施密特触发器就是一种整形电路，可以将非标准方波，整形成方波</p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%203.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<p><strong>特点：</strong></p>
+<ul>
+<li><p>当输入电压高于正向阈值电压，输出为高；</p>
+</li>
+<li><p>当输入电压低于负向阈值电压，输出为低；</p>
+</li>
+<li><p>当输入在正负向阈值电压之间，输出不改变。</p>
+</li>
+</ul>
+<p><strong>作用：整形！如正弦波转方波</strong></p>
+<h2 id="2-2-P-MOS-N-MOS管简介"><a href="#2-2-P-MOS-N-MOS管简介" class="headerlink" title="2-2 P-MOS &amp; N-MOS管简介"></a>2-2 P-MOS &amp; N-MOS管简介</h2><p>MOS管是压控型元件，通过控制栅源电压（ Vgs ）来实现导通或关闭。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%204.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%205.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<blockquote>
+<p>G：栅极<br>S：源极<br>D：漏极</p>
+</blockquote>
+<blockquote>
+<p>P-MOS：Vgs&lt;0，导通<br>N-MOS：Vgs&gt;0，导通</p>
+</blockquote>
+<h1 id="0x03-GPIO的八种模式"><a href="#0x03-GPIO的八种模式" class="headerlink" title="0x03 GPIO的八种模式"></a>0x03 GPIO的八种模式</h1><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%206.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="3-1-输入浮空"><a href="#3-1-输入浮空" class="headerlink" title="3-1 输入浮空"></a>3-1 输入浮空</h2><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104222755793.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241104222755793"></p>
+<blockquote>
+<p>①上拉电阻关闭<br>②下拉电阻关闭<br>③施密特触发器打开<br>④双MOS管不导通</p>
+</blockquote>
+<p><strong>特点：空闲时，IO状态不确定，由外部环境决定，可以用于按键检测等场景</strong></p>
+<h2 id="3-2-输入上拉"><a href="#3-2-输入上拉" class="headerlink" title="3-2 输入上拉"></a>3-2 输入上拉</h2><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104222906176.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241104222906176"></p>
+<blockquote>
+<p>①上拉电阻打开<br>②下拉电阻关闭<br>③施密特触发器打开<br>④双MOS管不导通</p>
+</blockquote>
+<p><strong>特点：空闲时，IO呈现高电平；由于内部上拉电阻阻值大，电流小，不适合做驱动</strong></p>
+<h2 id="3-3-输入下拉"><a href="#3-3-输入下拉" class="headerlink" title="3-3 输入下拉"></a>3-3 输入下拉</h2><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104223039869.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241104223039869"></p>
+<blockquote>
+<p>①上拉电阻关闭<br>②下拉电阻打开<br>③施密特触发器打开<br>④双MOS管不导通 </p>
+</blockquote>
+<p><strong>特点：空闲时，IO呈现低电平，同输入上拉一样，不适合做电流型驱动</strong></p>
+<h2 id="3-4-模拟功能"><a href="#3-4-模拟功能" class="headerlink" title="3-4 模拟功能"></a>3-4 模拟功能</h2><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104223126451.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241104223126451"></p>
+<blockquote>
+<p>①上拉电阻关闭<br>②下拉电阻关闭<br>③施密特触发器关闭<br>④双MOS管不导通 </p>
+</blockquote>
+<p><strong>特点：专门用于模拟信号输入或输出，如：ADC和DAC</strong></p>
+<h2 id="3-5-开漏输出"><a href="#3-5-开漏输出" class="headerlink" title="3-5 开漏输出"></a>3-5 开漏输出</h2><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2011.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<blockquote>
+<p>①上拉电阻关闭<br>②下拉电阻关闭<br>③施密特触发器打开<br>④P-MOS管始终不导通<br>⑤往ODR对应位写0，N-MOS管导通，写1则N-MOS管不导通的</p>
+</blockquote>
+<p><strong>特点：</strong></p>
+<ol>
+<li><strong>内部只能输出低电平Vss和高阻态，输出高电平需要外部上拉电阻</strong></li>
+<li><strong>施密特触发器打开，可以读取IO口的电平状态</strong></li>
+</ol>
+<h2 id="3-6-开漏式复用功能"><a href="#3-6-开漏式复用功能" class="headerlink" title="3-6 开漏式复用功能"></a>3-6 开漏式复用功能</h2><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2012.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<blockquote>
+<p>①上拉电阻关闭<br>②下拉电阻关闭<br>③施密特触发器打开<br>④ P-MOS管始终不导通</p>
+</blockquote>
+<p>**特点： **</p>
+<ol>
+<li><p><strong>不能输出高电平， 必须有外部（或内部），上拉才能输出高电平</strong></p>
+</li>
+<li><p><strong>由其他外设控制输出</strong></p>
+</li>
+</ol>
+<h2 id="3-7-推挽输出"><a href="#3-7-推挽输出" class="headerlink" title="3-7 推挽输出"></a>3-7 推挽输出</h2><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104223753436.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241104223753436"></p>
+<blockquote>
+<p>①上拉电阻关闭<br>②下拉电阻关闭<br>③施密特触发器打开<br>④往ODR对应位写0，N-MOS管导通，写1则P-MOS管导通 </p>
+</blockquote>
+<p><strong>特点：</strong></p>
+<ol>
+<li><strong>可输出高低电平，驱动能力强</strong></li>
+<li><strong>P-MOS和N-MOS只能同时有一个导通</strong></li>
+<li><strong>施密特触发器打开，可以读取IO输入电平</strong></li>
+</ol>
+<h2 id="3-8-推挽式复用功能"><a href="#3-8-推挽式复用功能" class="headerlink" title="3-8 推挽式复用功能"></a>3-8 推挽式复用功能</h2><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2014.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<blockquote>
+<p>①上拉电阻关闭<br>②下拉电阻关闭<br>③施密特触发器打开</p>
+</blockquote>
+<p><strong>特点：</strong></p>
+<ol>
+<li><p>**可输出高低电平，驱动能力强 **</p>
+</li>
+<li><p><strong>由其他外设控制输出</strong></p>
+</li>
+</ol>
+<h1 id="0x04-GPIO寄存器介绍"><a href="#0x04-GPIO寄存器介绍" class="headerlink" title="0x04 GPIO寄存器介绍"></a>0x04 GPIO寄存器介绍</h1><p>STM32F1 <strong>每组</strong> 通用 GPIO 口有 7 个 32 位寄存器控制，包括 ：<br>2 个 32 位端口配置寄存器（CRL 和 CRH）<br>2 个 32 位端口数据寄存器（IDR 和 ODR）<br>1 个 32 位端口置位&#x2F;复位寄存器（BSRR）<br>1 个 16 位端口复位寄存器（BRR）<br>1 个 32 位端口锁定寄存器 (LCKR)</p>
+<h2 id="4-1-端口配置低寄存器（GPIOx-CRL）"><a href="#4-1-端口配置低寄存器（GPIOx-CRL）" class="headerlink" title="4-1 端口配置低寄存器（GPIOx_CRL）"></a>4-1 端口配置低寄存器（GPIOx_CRL）</h2><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2015.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="4-2-端口配置高寄存器（GPIOx-CRH）"><a href="#4-2-端口配置高寄存器（GPIOx-CRH）" class="headerlink" title="4-2 端口配置高寄存器（GPIOx_CRH）"></a>4-2 <strong>端口配置高寄存器（GPIOx_CRH）</strong></h2><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2016.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="4-3-工作模式配置补充"><a href="#4-3-工作模式配置补充" class="headerlink" title="4-3 工作模式配置补充"></a>4-3 <strong>工作模式配置补充</strong></h2><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2017.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="4-4-端口输入数据寄存器（GPIOx-IDR"><a href="#4-4-端口输入数据寄存器（GPIOx-IDR" class="headerlink" title="4-4 端口输入数据寄存器（GPIOx_IDR)"></a>4-4 端口输入数据寄存器（GPIOx_IDR)</h2><p>用于读取IO引脚输入的电平</p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2018.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="4-5-端口输出数据寄存器（GPIOx-ODR）"><a href="#4-5-端口输出数据寄存器（GPIOx-ODR）" class="headerlink" title="4-5 端口输出数据寄存器（GPIOx_ODR）"></a>4-5 端口输出数据寄存器（GPIOx_ODR）</h2><p>该寄存器用于控制 GPIOx 的输出高电平或者低电平</p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104224320179.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241104224320179"></p>
+<h2 id="4-6-端口位设置-清除寄存器（GPIOx-BSRR）"><a href="#4-6-端口位设置-清除寄存器（GPIOx-BSRR）" class="headerlink" title="4-6 端口位设置&#x2F;清除寄存器（GPIOx_BSRR）"></a>4-6 <strong>端口位设置&#x2F;清除寄存器（GPIOx_BSRR）</strong></h2><p>用于设置ODR寄存器</p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2019.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="4-6-ODR和BSRR寄存器控制输出有什么区别？"><a href="#4-6-ODR和BSRR寄存器控制输出有什么区别？" class="headerlink" title="4-6 ODR和BSRR寄存器控制输出有什么区别？"></a><strong>4-6 ODR和BSRR寄存器控制输出有什么区别？</strong></h2><p>首先 BSRR 是只写权限，而 ODR 是可读可写权限。BSRR 寄存器 32 位有效，对于低 16 位，我们往相应的位写 1，那么对应的 IO 口会输出高电平，往相应的位写 0，对 IO 口没有任何影响，高16位作用刚好相反，对相应的位写 1会输出低电平，写 0没有任何影响。</p>
+<p>也就是说，对于BSRR寄存器，你写 0 的话，对 IO 口电平是没有任何影响的。我们要设置某个 IO 口电平，只需要相关位设置为 1 即可。而 ODR 寄存器，我们要设置某个 IO 口电平，我们首先需要读出来 ODR 寄存器的值，然后对整个 ODR 寄存器重新赋值来达到设置某个或者某些 IO 口的目的，而 BSRR 寄存器直接设置即可，这在多任务实时操作系统中作用很大。BSRR寄存器还有一个好处，就是 BSRR 寄存器改变引脚状态的时候，不会被中断打断，而 ODR 寄存器有被中断打断的风险。</p>
+<p><strong>总的来说，建议使用BSRR寄存器控制输出！</strong></p>
+<h1 id="0x05-通用外设驱动模型（四步法）"><a href="#0x05-通用外设驱动模型（四步法）" class="headerlink" title="0x05 通用外设驱动模型（四步法）"></a>0x05 通用外设驱动模型（四步法）</h1><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2021.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<h1 id="0x06-GPIO配置步骤"><a href="#0x06-GPIO配置步骤" class="headerlink" title="0x06 GPIO配置步骤"></a>0x06 GPIO配置步骤</h1><h2 id="6-1-配置步骤"><a href="#6-1-配置步骤" class="headerlink" title="6-1 配置步骤"></a>6-1 配置步骤</h2><ol>
+<li><p>使能时钟 __HAL_RCC_GPIOx_CLK_ENABLE()</p>
+</li>
+<li><p>设置工作模式 HAL_GPIO_Init()</p>
+</li>
+<li><p>设置输出状态（可选） HAL_GPIO_WritePin()、HAL_GPIO_TogglePin()</p>
+</li>
+<li><p>读取输入状态（可选） HAL_GPIO_ReadPin()</p>
+</li>
+</ol>
+<h2 id="6-2-相关HAL库函数简介"><a href="#6-2-相关HAL库函数简介" class="headerlink" title="6-2 相关HAL库函数简介"></a>6-2 相关HAL库函数简介</h2><p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image%2022.png" srcset="/blog/img/loading.gif" lazyload alt="image.png"></p>
+<p>HAL 库中关于 GPIO 的驱动程序在 <code>stm32f1xx_hal_gpio.c</code> 文件以及其对应的头文件。</p>
+<h3 id="6-2-1-HAL-GPIO-Init"><a href="#6-2-1-HAL-GPIO-Init" class="headerlink" title="6.2.1 HAL_GPIO_Init"></a>6.2.1 HAL_GPIO_Init</h3><p><strong>初始化GPIO口</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_GPIO_Init</span><span class="hljs-params">(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>第一个入口参数是GPIOx，实际上就是对应的GPIO寄存器组的基地址</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIOA               ((GPIO_TypeDef *)GPIOA_BASE)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIOB               ((GPIO_TypeDef *)GPIOB_BASE)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIOC               ((GPIO_TypeDef *)GPIOC_BASE)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIOD               ((GPIO_TypeDef *)GPIOD_BASE)</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIOE               ((GPIO_TypeDef *)GPIOE_BASE)</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>第二个入口参数是一个结构体指针，其描述了GPIO组下的各引脚的功能</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//define in stm32f1xx_hal_gpio.h</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> </span><br><span class="hljs-class">&#123;</span> <br>  <span class="hljs-type">uint32_t</span> Pin;        <span class="hljs-comment">/* 引脚号 */</span> <br>  <span class="hljs-type">uint32_t</span> Mode;       <span class="hljs-comment">/* 模式设置 */</span> <br>  <span class="hljs-type">uint32_t</span> Pull;       <span class="hljs-comment">/* 上拉下拉设置 */</span> <br>  <span class="hljs-type">uint32_t</span> Speed;      <span class="hljs-comment">/* 速度设置 */</span> <br>&#125; GPIO_InitTypeDef;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p>由CubeMX自动生成的配置GPIO的代码示例如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c">GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3<br>                        |GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;<br>GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP<br>GPIO_InitStruct.Pull = GPIO_NOPULL;<br>GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;<br>HAL_GPIO_Init(GPIOA, &amp;GPIO_InitStruct);<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="6-2-2-HAL-GPIO-WritePin"><a href="#6-2-2-HAL-GPIO-WritePin" class="headerlink" title="6.2.2 HAL_GPIO_WritePin"></a>6.2.2 HAL_GPIO_WritePin</h3><p><strong>控制GPIO口输出电平</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_GPIO_WritePin</span><span class="hljs-params">(GPIO_TypeDef *GPIOx, <span class="hljs-type">uint16_t</span> GPIO_Pin, GPIO_PinState PinState)</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>第一个入口参数同样是GPIOx，就是对应的GPIO寄存器组的基地址，同上</p>
+</li>
+<li><p>第二个入口参数是GPIO_Pin，是该GPIO组中具体的Pin，可选GPIO_PIN_0到GPIO_PIN_15</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//define in stm32f1xx_hal_gpio.h</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_0                 ((uint16_t)0x0001)  <span class="hljs-comment">/* Pin 0 selected    */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_1                 ((uint16_t)0x0002)  <span class="hljs-comment">/* Pin 1 selected    */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_2                 ((uint16_t)0x0004)  <span class="hljs-comment">/* Pin 2 selected    */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_3                 ((uint16_t)0x0008)  <span class="hljs-comment">/* Pin 3 selected    */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_4                 ((uint16_t)0x0010)  <span class="hljs-comment">/* Pin 4 selected    */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_5                 ((uint16_t)0x0020)  <span class="hljs-comment">/* Pin 5 selected    */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_6                 ((uint16_t)0x0040)  <span class="hljs-comment">/* Pin 6 selected    */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_7                 ((uint16_t)0x0080)  <span class="hljs-comment">/* Pin 7 selected    */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_8                 ((uint16_t)0x0100)  <span class="hljs-comment">/* Pin 8 selected    */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_9                 ((uint16_t)0x0200)  <span class="hljs-comment">/* Pin 9 selected    */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_10                ((uint16_t)0x0400)  <span class="hljs-comment">/* Pin 10 selected   */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_11                ((uint16_t)0x0800)  <span class="hljs-comment">/* Pin 11 selected   */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_12                ((uint16_t)0x1000)  <span class="hljs-comment">/* Pin 12 selected   */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_13                ((uint16_t)0x2000)  <span class="hljs-comment">/* Pin 13 selected   */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_14                ((uint16_t)0x4000)  <span class="hljs-comment">/* Pin 14 selected   */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_15                ((uint16_t)0x8000)  <span class="hljs-comment">/* Pin 15 selected   */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> GPIO_PIN_All               ((uint16_t)0xFFFF)  <span class="hljs-comment">/* All pins selected */</span></span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>第三个入口参数PinState是要输出的电平状态，0为低电平，1为高电平</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//define in stm32f1xx_hal_gpio.h</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">enum</span></span><br><span class="hljs-class">&#123;</span><br>  GPIO_PIN_RESET = <span class="hljs-number">0u</span>,<br>  GPIO_PIN_SET<br>&#125; GPIO_PinState;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="6-2-3-HAL-GPIO-ReadPin"><a href="#6-2-3-HAL-GPIO-ReadPin" class="headerlink" title="6.2.3 HAL_GPIO_ReadPin"></a>6.2.3 HAL_GPIO_ReadPin</h3><p><strong>从GPIO中读取IO口电平状态</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">GPIO_PinState <span class="hljs-title function_">HAL_GPIO_ReadPin</span><span class="hljs-params">(GPIO_TypeDef *GPIOx, <span class="hljs-type">uint16_t</span> GPIO_Pin)</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>第一个入口参数同样是GPIOx，就是对应的GPIO寄存器组的基地址，同上</li>
+<li>第二个入口参数是GPIO_Pin，是该GPIO组中具体的Pin，同上</li>
+<li><strong>返回值</strong>是枚举类型GPIO_PinState，代表IO口的电平状态，0为低电平，1为高电平，同上</li>
+</ul>
+<h3 id="6-2-4-HAL-GPIO-TogglePin"><a href="#6-2-4-HAL-GPIO-TogglePin" class="headerlink" title="6.2.4 HAL_GPIO_TogglePin"></a>6.2.4 HAL_GPIO_TogglePin</h3><p><strong>用于设置引脚的电平翻转，调用此函数后，对应的GPIO引脚电平会发生翻转</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_GPIO_TogglePin</span><span class="hljs-params">(GPIO_TypeDef *GPIOx, <span class="hljs-type">uint16_t</span> GPIO_Pin)</span>;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>第一个入口参数同样是GPIOx，同上</li>
+<li>第二个入口参数是GPIO_Pin，是GPIO组中具体的引脚号，同上</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/stm32/" class="print-no-link">#stm32</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>STM32学习笔记4——GPIO</div>
+      <div>https://goooforward.github.io/blog/2024/11/04/stm32/STM32学习笔记4——GPIO/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>tangyuwei</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a>Powered by<a> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a>Theme</a> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,679 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/logo.png">
+  <link rel="icon" href="/blog/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="tangyuwei">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 ReferenceCortex-M3&#x2F;M4芯片启动流程概括_cortex-m4 mcu的启动与初始化过程-CSDN博客 01.一探究竟STM32的三种启动模式_stm32启动模式-CSDN博客 0x01 加载中断向量表stm32基于ARM cortex-m3 内核设计，所以先来看cm3内核的启动流程 cm3内核在上电 or 复位之后会先做两件事  去0x00000000的地址读">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STM32学习笔记1——启动">
+<meta property="og:url" content="https://goooforward.github.io/blog/2024/09/24/stm32/STM32%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%90%AF%E5%8A%A8/index.html">
+<meta property="og:site_name" content="GoForwrard&#39;s blog">
+<meta property="og:description" content="0x00 ReferenceCortex-M3&#x2F;M4芯片启动流程概括_cortex-m4 mcu的启动与初始化过程-CSDN博客 01.一探究竟STM32的三种启动模式_stm32启动模式-CSDN博客 0x01 加载中断向量表stm32基于ARM cortex-m3 内核设计，所以先来看cm3内核的启动流程 cm3内核在上电 or 复位之后会先做两件事  去0x00000000的地址读">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/20131216123519953">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/6e38618bf7abee5f3a4cc87de8d86ade.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/5a67c0c8c9ef2f6232fdbd4771757ac9.png">
+<meta property="article:published_time" content="2024-09-24T14:59:00.000Z">
+<meta property="article:modified_time" content="2025-07-17T12:22:04.000Z">
+<meta property="article:author" content="tangyuwei">
+<meta property="article:tag" content="stm32">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/20131216123519953">
+  
+  
+  
+  <title>STM32学习笔记1——启动 - GoForwrard&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"goooforward.github.io","root":"/blog/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>GoForwrard&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/photo/" target="_self">
+                <i class="iconfont icon-image"></i>
+                <span>摄影</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/blog/img/cover_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">STM32学习笔记1——启动</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-24 22:59" pubdate>
+          2024年9月24日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">STM32学习笔记1——启动</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2025年7月17日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="0x00-Reference"><a href="#0x00-Reference" class="headerlink" title="0x00 Reference"></a>0x00 Reference</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_47409662/article/details/119276572">Cortex-M3&#x2F;M4芯片启动流程概括_cortex-m4 mcu的启动与初始化过程-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_19760839/article/details/121068663">01.一探究竟STM32的三种启动模式_stm32启动模式-CSDN博客</a></p>
+<h1 id="0x01-加载中断向量表"><a href="#0x01-加载中断向量表" class="headerlink" title="0x01 加载中断向量表"></a>0x01 加载中断向量表</h1><p>stm32基于ARM cortex-m3 内核设计，所以先来看cm3内核的启动流程</p>
+<p>cm3内核在上电 or 复位之后会先做两件事</p>
+<ol>
+<li>去0x00000000的地址读取MSP寄存器的初始值（MSP就是栈顶指针，这里就是将栈的初始地址赋给MSP，让内核找到栈的位置，在之后的启动流程中可能遇到）</li>
+<li>去0x00000004的地址读取PC寄存器的初始值——Reset中断处理函数的地址（PC寄存器就是指向当前程序的地址，CPU就是不停地从PC中取址然后执行）</li>
+</ol>
+<p>在PC获取到初始值之后，CPU就会跳转到PC所指的Reset中断服务函数开始执行程序</p>
+<blockquote>
+<p> OK，这里有一个问题为什么0x00000000的地址一定是MSP的初始值，0x00000004的地址一定是PC寄存器的初始值呢？这是因为CM3内核规定了中断向量表的结构，并且规定了向量表存放的地址一定是0x00000000。可以看到向量表的前两位分别是MSP的初始值和复位中断处理函数的地址</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/20131216123519953" srcset="/blog/img/loading.gif" lazyload alt="img"></p>
+<blockquote>
+<p>另外一个问题是，为什么在STM32上刷写程序是写入到0x08000000，而不是0x00000000呢？这是因为ST公司在设置STM32时为了灵活性，设计了一个硬件电路，这个电路会根据BOOT0和BOOT1的选择不同而将不同的地址映射到0x00000000</p>
+<p>打个比方，当boot0:boot1 &#x3D; 0:0 时，CPU上电去0x00000000的地址读取中断向量表，而该地址已经被硬件电路重新映射到了0x08000000了，对于CPU来说，它认为它读取的地址是0x00000000，而它实际读取的内容是来自0x08000000的flash中的数据</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/6e38618bf7abee5f3a4cc87de8d86ade.png" srcset="/blog/img/loading.gif" lazyload alt="img"></p>
+<p><strong>STM32 的三种启动方式</strong></p>
+<ul>
+<li>第一种方式(boot0 &#x3D; 0)：Flash memory启动方式<br>  启动地址：0x08000000 是STM32内置的Flash，一般我们使用JTAG或者SWD模式下载程序时，就是下载到这个里面，重启后也直接从这启动程序。基本上都是采用这种模式。</li>
+<li>第二种方式(boot0 &#x3D; 1；boot1 &#x3D; 0)：System memory启动方式<br>  启动地址：0x1FFF0000从系统存储器启动，这种模式启动的程序功能是由厂家设置的。一般来说，这种启动方式用的比较少。系统存储器是芯片内部一块特定的区域，STM32在出厂时，由ST在这个区域内部预置了一段BootLoader， 也就是我们常说的ISP程序， 这是一块ROM，出厂后无法修改。一般来说，我们选用这种启动模式时，是为了从串口下载程序，因为在厂家提供的BootLoader 中，提供了串口下载程序的固件，可以通过这个BootLoader将程序下载到系统的Flash中。</li>
+<li>第三种方式(boot0 &#x3D; 1;boot1 &#x3D; 1)：SRAM启动方式。<br>  启动地址：0x20000000 内置SRAM，既然是SRAM，自然也就没有程序存储的能力了，这个模式一般用于程序调试。假如我只修改了代码中一个小小的 地方，然后就需要重新擦除整个Flash，比较的费时，可以考虑从这个模式启动代码（也就是STM32的内存中），用于快速的程序调试，等程序调试完成后，在将程序下载到SRAM中。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/5a67c0c8c9ef2f6232fdbd4771757ac9.png" srcset="/blog/img/loading.gif" lazyload alt="img"></p>
+<h1 id="0x02-Reset-中断服务函数"><a href="#0x02-Reset-中断服务函数" class="headerlink" title="0x02 Reset 中断服务函数"></a>0x02 Reset 中断服务函数</h1><p>前面说到cm3复位后会跳转到Reset中断服务函数，那这个函数在哪呢？</p>
+<p>在写stm32的程序时，会有一个startup_xxxx.s的启动文件，使用stm32cubeMX会自动根据编译器的不同生成不同的启动文件。</p>
+<blockquote>
+<p>为什么不同编译器的启动文件不同呢？</p>
+<p>首先，启动文件使用的是汇编语言，虽然针对同一个指令集，理论上来说其汇编语言也是相同的，但是由于其汇编器的不同，因此在汇编语言的细节上也有差异，针对GNU的编译器的启动文件在ARMCC编译器可能就编译不了了，所以针对不同的编译器所使用的启动文件也就不同了</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs asm">/**<br> * @brief  This is the code that gets called when the processor first<br> *          starts execution following a reset event. Only the absolutely<br> *          necessary set is performed, after which the application<br> *          supplied main() routine is called.<br> * @param  None<br> * @retval : None<br>*/<br><br>  .section .text.Reset_Handler<br>  .weak Reset_Handler<br>  .type Reset_Handler, %function<br>Reset_Handler:<br><br>/* Call the clock system initialization function.*/<br>    bl  SystemInit<br><br>/* Copy the data segment initializers from flash to SRAM */<br>  ldr r0, =_sdata<br>  ldr r1, =_edata<br>  ldr r2, =_sidata<br>  movs r3, #0<br>  b LoopCopyDataInit<br><br>CopyDataInit:<br>  ldr r4, [r2, r3]<br>  str r4, [r0, r3]<br>  adds r3, r3, #4<br><br>LoopCopyDataInit:<br>  adds r4, r0, r3<br>  cmp r4, r1<br>  bcc CopyDataInit<br>  <br>/* Zero fill the bss segment. */<br>  ldr r2, =_sbss<br>  ldr r4, =_ebss<br>  movs r3, #0<br>  b LoopFillZerobss<br><br>FillZerobss:<br>  str  r3, [r2]<br>  adds r2, r2, #4<br><br>LoopFillZerobss:<br>  cmp r2, r4<br>  bcc FillZerobss<br><br>/* Call static constructors */<br>    bl __libc_init_array<br>/* Call the application&#x27;s entry point.*/<br>  bl main<br>  bx lr<br>.size Reset_Handler, .-Reset_Handler<br><br></code></pre></td></tr></table></figure>
+
+<p>这是一个使用GCC编译器的Reset_Handler，由STM32cubeMX自动生成，主要做了如下的事情</p>
+<ul>
+<li>调用<code>SystemInit</code>来初始化系统。</li>
+<li>将初始化数据从Flash复制到RAM。</li>
+<li>清零BSS段（未初始化数据段）。</li>
+<li>调用<code>__libc_init_array</code>来执行C库的构造函数。</li>
+<li>调用<code>main</code>函数，这是C程序开始执行的地方。</li>
+</ul>
+<blockquote>
+<p>这里有两个值得注意的地方，首先是SystemInit，如果定义了DATA_IN_ExtSRAM，则会初始化外部SRAM，启动FSMC控制器；而如果定义了USER_VECT_TAB_ADDRESS，则会重定向 向量表</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">SystemInit</span> <span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br><span class="hljs-meta">#<span class="hljs-keyword">if</span> defined(STM32F100xE) || defined(STM32F101xE) || defined(STM32F101xG) || defined(STM32F103xE) || defined(STM32F103xG)</span><br>  <span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> DATA_IN_ExtSRAM</span><br>    SystemInit_ExtMemCtl(); <br>  <span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">/* DATA_IN_ExtSRAM */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> </span><br><br>  <span class="hljs-comment">/* Configure the Vector Table location -------------------------------------*/</span><br><span class="hljs-meta">#<span class="hljs-keyword">if</span> defined(USER_VECT_TAB_ADDRESS)</span><br>  SCB-&gt;VTOR = VECT_TAB_BASE_ADDRESS | VECT_TAB_OFFSET; <span class="hljs-comment">/* Vector Table Relocation in Internal SRAM. */</span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">/* USER_VECT_TAB_ADDRESS */</span></span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>另外一个值得注意的是，使用GNU工具链，需要调用<code>__libc_init_array</code>来初始化C库（newlib），而使用ARMCC编译器生成的启动文件中却没有这一步。</p>
+</blockquote>
+<p>在执行完Reset_Handler后，程序就会跳转到main函数开始执行用户程序了</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/stm32/" class="print-no-link">#stm32</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>STM32学习笔记1——启动</div>
+      <div>https://goooforward.github.io/blog/2024/09/24/stm32/STM32学习笔记1——启动/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>tangyuwei</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a>Powered by<a> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a>Theme</a> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,865 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/logo.png">
+  <link rel="icon" href="/blog/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="tangyuwei">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 ReferenceARM中断的使能与除能 0x01 中断简介打断CPU执行正常的程序，转而处理紧急程序，然后返回原暂停的程序继续运行，就叫中断     中断的作用和意义  实时控制 在确定时间内对相应事件作出响应，如：温度监控  故障处理 检测到故障，需要第一时间处理，如：电梯门夹人了  数据传输 不确定数据何时会来，如：串口数据接收   中断的意义：高效处理紧急程序，不会一直占用CPU">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STM32学习笔记5——中断">
+<meta property="og:url" content="https://goooforward.github.io/blog/2024/11/05/stm32/STM32%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E4%B8%AD%E6%96%AD/index.html">
+<meta property="og:site_name" content="GoForwrard&#39;s blog">
+<meta property="og:description" content="0x00 ReferenceARM中断的使能与除能 0x01 中断简介打断CPU执行正常的程序，转而处理紧急程序，然后返回原暂停的程序继续运行，就叫中断     中断的作用和意义  实时控制 在确定时间内对相应事件作出响应，如：温度监控  故障处理 检测到故障，需要第一时间处理，如：电梯门夹人了  数据传输 不确定数据何时会来，如：串口数据接收   中断的意义：高效处理紧急程序，不会一直占用CPU">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105211928050.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105213712605.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105220059487.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105230443955.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105231808315.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105234201742.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105234414538.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106201928730.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106202615473.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106210329507.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106210307813.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106210720529.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106215333456.png">
+<meta property="og:image" content="c:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20241106215453461.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106225325628.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106221958593.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106221342227.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106225206060.png">
+<meta property="article:published_time" content="2024-11-05T13:20:00.000Z">
+<meta property="article:modified_time" content="2025-07-17T12:22:04.000Z">
+<meta property="article:author" content="tangyuwei">
+<meta property="article:tag" content="stm32">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105211928050.png">
+  
+  
+  
+  <title>STM32学习笔记5——中断 - GoForwrard&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"goooforward.github.io","root":"/blog/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>GoForwrard&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/photo/" target="_self">
+                <i class="iconfont icon-image"></i>
+                <span>摄影</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/blog/img/cover_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">STM32学习笔记5——中断</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-05 21:20" pubdate>
+          2024年11月5日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          61 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">STM32学习笔记5——中断</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2025年7月17日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="0x00-Reference"><a href="#0x00-Reference" class="headerlink" title="0x00 Reference"></a>0x00 Reference</h1><p><a target="_blank" rel="noopener" href="https://shequ.stmicroelectronics.cn/thread-579856-1-1.html">ARM中断的使能与除能</a></p>
+<h1 id="0x01-中断简介"><a href="#0x01-中断简介" class="headerlink" title="0x01 中断简介"></a>0x01 中断简介</h1><p>打断CPU执行正常的程序，转而处理紧急程序，然后返回原暂停的程序继续运行，就叫中断</p>
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105211928050.png" srcset="/blog/img/loading.gif" lazyload style="zoom:67%;" />
+
+
+
+<p><strong>中断的作用和意义</strong></p>
+<ol>
+<li><p><strong>实时控制</strong> 在确定时间内对相应事件作出响应，如：温度监控</p>
+</li>
+<li><p><strong>故障处理</strong> 检测到故障，需要第一时间处理，如：电梯门夹人了</p>
+</li>
+<li><p><strong>数据传输</strong> 不确定数据何时会来，如：串口数据接收</p>
+</li>
+</ol>
+<p><strong>中断的意义：高效处理紧急程序，不会一直占用CPU资源</strong></p>
+<h1 id="0x02-Cortex-M3的中断"><a href="#0x02-Cortex-M3的中断" class="headerlink" title="0x02 Cortex-M3的中断"></a>0x02 Cortex-M3的中断</h1><h2 id="1-中断类型"><a href="#1-中断类型" class="headerlink" title="-1- 中断类型"></a>-1- 中断类型</h2><p>CM3内核的NVIC最高支持256个中断，也就是有0~255个中断号，其中前16个（0~15）为内核中断，也叫系统中断，后面的240个中断号全部都为外部中断。芯片厂商可以精简设计，所以做成芯片后，支持的外部中断数量往往不到240个</p>
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105213712605.png" srcset="/blog/img/loading.gif" lazyload alt="系统中断列表" style="zoom:80%;" />
+
+<p>在 NVIC 的中断控制及状态寄存器中，有一个 VECTACTIVE 位段；另外，还有一个特殊功能寄存器 IPSR。在它们二者的里面，都记录了当前正服务中断号</p>
+<p>当一个中断触发了但是不能被立即响应时，就处于“悬起”状态（pending）。出现“悬起”的原因可能是CPU正在执行更高优先级的中断，也可能是该中断被除能了。处于pending状态的中断，会有一个对应的 悬起状态寄存器 来保存这个中断请求，直到这个中断请求能够被响应。</p>
+<h2 id="2-中断优先级"><a href="#2-中断优先级" class="headerlink" title="-2- 中断优先级"></a>-2- 中断优先级</h2><p>当有多个中断同时请求响应时，哪一个应该被优先响应由中断的优先级决定。</p>
+<p>CM3 支持中断嵌套，使得高优先级异常可以抢占(preempt)低优先级异常。比如CPU正在响应一个低优先级的中断时，又触发了一个高优先级的中断，那CPU将会暂时放弃响应此低优先级中断，转而先去响应高优先级中断，这就是中断嵌套。</p>
+<p>有 3 个系统中断<strong>复位</strong>，<strong>NMI</strong> 以及<strong>硬 fault</strong>，它们有固定的优先级，并且它们的优先级号是负数，从而高于所有其它中断。所有其它中断的优先级则都是可编程的</p>
+<p>CM3用8位来表达优先级，所以最高支持2^8&#x3D;256级优先级，并且将优先级分为了 <strong>抢占优先级</strong> 和 <strong>响应优先级</strong>（也叫亚优先级&#x2F;子优先级）。</p>
+<ul>
+<li>抢占优先级：高抢占优先级可以打断正在执行的低抢占优先级中断</li>
+<li>响应优先级：两个抢占优先级相同的中断同时触发时，响应优先级高的先执行，但是不能互相打断</li>
+</ul>
+<blockquote>
+<p>CM3规定至少需要用一位来表示响应优先级，所以抢占优先级最多只能有128个</p>
+<p>优先级的数量是可裁剪的，几位表示抢占优先级，几位表示响应优先级是由芯片厂商决定的</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105220059487.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h2 id="3-向量表"><a href="#3-向量表" class="headerlink" title="-3- 向量表"></a>-3- 向量表</h2><p>当中断发生时，CPU需要知道如何响应中断，也就是需要找到中断服务函数。中断服务函数的入口地址就被记录在向量表中。</p>
+<p>默认情况下，向量表被放在0地址处，并且每个地址占4个字节。但是CM3支持向量表重定向。为了实现这个功能，NVIC 中有一个寄存器，称为“向量表偏移量寄存器”（在地址 0xE000_ED08 处），通过修改它的值就能重新定位向量表。</p>
+<p>如果需要动态地更改向量表，则对于任何器件来说，向量表的起始处都必须包含以下向量：</p>
+<ul>
+<li>主堆栈指针（MSP）的初始值</li>
+<li>复位向量</li>
+<li>NMI</li>
+<li>硬 fault 服务例程</li>
+</ul>
+<blockquote>
+<p>可以在 SRAM 中开出一块用于存储向量表。然后在引导完成后，就可以启用内存中的向量表，从而实现向量可动态调整的功能</p>
+</blockquote>
+<h2 id="4-SVC-和-PendSV"><a href="#4-SVC-和-PendSV" class="headerlink" title="-4- SVC 和 PendSV"></a>-4- SVC 和 PendSV</h2><p>SVC（SuperVisor Call,系统调用中断）和 PendSV（Pendable Service Call，可悬起系统调用）多用于带操作系统的软件开发中。</p>
+<h3 id="4-1-SVC的用法"><a href="#4-1-SVC的用法" class="headerlink" title="4-1 SVC的用法"></a>4-1 SVC的用法</h3><p>操作系统抽象了抽象硬件，程序无法直接操作硬件，当用户程序想操作硬件时，就会生成SVC中断 ，CPU响应SVC中断服务函数，在这个中断服务函数里再去执行相应的操作系统函数，完成用户程序的请求。</p>
+<blockquote>
+<p>SVC异常是必须立即得到响应的，如果因为CPU在响应更高优先级的中断而导致SVC中断无法立即响应，则会抛出一个<strong>硬fault</strong>异常中断</p>
+</blockquote>
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105230443955.png" srcset="/blog/img/loading.gif" lazyload style="zoom:80%;" />
+
+
+
+<h3 id="4-2-PendSV的用法"><a href="#4-2-PendSV的用法" class="headerlink" title="4-2 PendSV的用法"></a>4-2 PendSV的用法</h3><p>PendSV中断不要求被立即响应，它可以被“悬起”。PendSV通常被用在OS的上下文切换中。</p>
+<p>在OS的时间片轮转调度中，通常会有个SysTick中断用来切换任务，在没有PendSV的情况下，如果在响应中断服务时，触发了SysTick中断抢占了ISR进行任务切换，OS 在某中断活跃时尝试切入线程模式，将抛出用法 fault 异常。</p>
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105231808315.png" srcset="/blog/img/loading.gif" lazyload style="zoom:80%;" />
+
+<p>为了处理此问题，在早期的OS中，大多会检测当前是否有中断在活跃中，只有没有任何中断需要响应时，才执行上下文切换。然而，这种方法的弊端在于，它可以把任务切换动作拖延很久（因为如果抢占了 IRQ，则本次 SysTick 在执行后不得作上下文切换，只能等待下一次 SysTick 异常）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105234201742.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>有了PendSV就可以完美解决此问题，PendSV 异常会自动延迟上下文切换的请求，直到其它的 ISR 都完成了处理后才放行。为实现这个机制，需要把 PendSV 编程为最低优先级的中断。如果 OS 检测到某 IRQ 正在活动并且被 SysTick 抢占，它将悬起一个 PendSV 异常，<br>以便缓期执行上下文切换。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241105234414538.png" srcset="/blog/img/loading.gif" lazyload></p>
+<blockquote>
+<ol>
+<li>任务 A 呼叫 SVC 来请求任务切换（例如，等待某些工作完成）</li>
+<li>OS 接收到请求，做好上下文切换的准备，并且挂起一个 PendSV 中断。</li>
+<li>当 CPU 退出 SVC 后，它立即进入 PendSV，从而执行上下文切换。</li>
+<li>当 PendSV 执行完毕后，将返回到任务 B，同时进入线程模式。</li>
+<li>发生了一个中断，并且中断服务程序开始执行</li>
+<li>在 ISR 执行过程中，发生 SysTick 异常，并且抢占了该 ISR。</li>
+<li>OS 执行必要的操作，然后挂起 PendSV 中断以作好上下文切换的准备。</li>
+<li>当 SysTick 退出后，回到先前被抢占的 ISR 中，ISR 继续执行</li>
+<li>ISR 执行完毕并退出后，PendSV 服务例程开始执行，并且在里面执行上下文切换</li>
+<li>当 PendSV 执行完毕后，回到任务 A，同时系统再次进入线程模式。</li>
+</ol>
+</blockquote>
+<h1 id="0x03-NVIC"><a href="#0x03-NVIC" class="headerlink" title="0x03 NVIC"></a>0x03 NVIC</h1><p>CM3实现中断的核心是NVIC（Nested Vectored Interrupt Controller），嵌套向量中断控制器。NVIC 的寄存器以存储器映射的方式来访问，除了包含控制寄存器和中断处理的控制逻辑之外，NVIC 还包含了 MPU的控制寄存器、SysTick 定时器以及调试控制。</p>
+<p>NVIC 的访问地址是 0xE000_E000。所有 NVIC 的中断控制&#x2F;状态寄存器都只能在特权级下访问。不过有一个例外——软件触发中断寄存器可以在用户级下访问以产生软件中断。</p>
+<h2 id="1-中断寄存器"><a href="#1-中断寄存器" class="headerlink" title="-1- 中断寄存器"></a>-1- 中断寄存器</h2><p>每个外部中断都在NVIC的下列寄存器中“挂号”：</p>
+<ul>
+<li>使能与除能寄存器</li>
+<li>悬起与“解悬”寄存器</li>
+<li>优先级寄存器</li>
+<li>活动状态寄存器</li>
+</ul>
+<p>此外，下列寄存器也对中断处理有重大影响：</p>
+<ul>
+<li>异常掩蔽寄存器（PRIMASK, FAULTMASK 以及 BASEPRI）</li>
+<li>向量表偏移量寄存器</li>
+<li>软件触发中断寄存器</li>
+<li>优先级分组位段</li>
+</ul>
+<h3 id="1-1-使能与除能中断寄存器"><a href="#1-1-使能与除能中断寄存器" class="headerlink" title="1-1 使能与除能中断寄存器"></a>1-1 使能与除能中断寄存器</h3><blockquote>
+<p><strong>SETENAs</strong>：0xE000_E100 - 0xE000_E11C </p>
+<p><strong>CLRENAs</strong>：0xE000_E180 - 0xE000_E19C</p>
+</blockquote>
+<p>中断的使能与除能分别使用各自的寄存器来控制，而不是使用一个位的0和1来分别代表关闭和打开。欲使能一个中断，你需要写 1 到对应 SETENA 的位中；欲除能一个中断，你需要写 1 到对应的 CLRENA 位中；如果往它们中写 0，不会有任何效果。</p>
+<p>中断使能寄存器SETENA也叫<strong>ISER</strong>，中断除能寄存器CLRENA也叫<strong>ICER</strong></p>
+<blockquote>
+<p><strong>如果将一个向一个中断的使能寄存器和除能寄存器都写1会怎么样呢？</strong></p>
+<p>正是因为使能和除能是不同的寄存器，所以不可能同时向两个寄存器中写值，必然存在一个先后顺序，具体的结果就与最后写入的值有关了</p>
+<p><a target="_blank" rel="noopener" href="https://shequ.stmicroelectronics.cn/thread-579856-1-1.html">ARM中断的使能与除能</a></p>
+</blockquote>
+<p>SETENA 位和 CLRENA 位可以有 240 对，对应的 32 位寄存器可以有 8 对。但是在特定的芯片中，只有该芯片实现的中断，其对应的位才有意义。因此，如果你使用的芯片只支持 32 个中断，则只有 SETENA0&#x2F;CLRENA0 才需要使用。SETENA&#x2F;CLRENA 可以按字&#x2F;半字&#x2F;字节的方式来访问。又因为前 16 个异常已经分配给系统异常，外部中断的中断号是从16开始的，所以寄存器控制的中断号也是从16开始的</p>
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106201928730.png" srcset="/blog/img/loading.gif" lazyload style="zoom:80%;" />
+
+
+
+<h3 id="1-2-悬起与解悬中断寄存器"><a href="#1-2-悬起与解悬中断寄存器" class="headerlink" title="1-2 悬起与解悬中断寄存器"></a>1-2 悬起与解悬中断寄存器</h3><blockquote>
+<p><strong>SETPENDs</strong>：0xE000_E200 - 0xE000_E21C</p>
+<p><strong>CLRPENDs</strong>：0xE000_E280 - 0xE000_E29C</p>
+</blockquote>
+<p>如果中断发生时，正在处理同级或高优先级异常，或者被掩蔽，则中断不能立即得到响应。此时中断被悬起。中断的悬起状态可以通过“中断设置悬起寄存器(SETPEND)”和“中断悬起清除寄存器(CLRPEND)”来读取，还可以写它们来手工悬起中断。</p>
+<p>悬起寄存器和“解悬”寄存器也可以有 8 对，其用法和用量都与前面的使能&#x2F;除能中断寄存器完全相同</p>
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106202615473.png" srcset="/blog/img/loading.gif" lazyload style="zoom:80%;" />
+
+<h3 id="1-3-优先级寄存器"><a href="#1-3-优先级寄存器" class="headerlink" title="1-3 优先级寄存器"></a>1-3 优先级寄存器</h3><blockquote>
+<p><strong>外部中断优先级寄存器IPR</strong>：0xE000_E400 - 0xE000_E4EF</p>
+<p><strong>系统中断优先级寄存器SHPR</strong>：0xE000_ED18 - 0xE000_ED23</p>
+</blockquote>
+<p>每个中断有都有一个8位的优先级寄存器来存储此中断的优先级。每个寄存器占用 8 位，但是允许最少只使用最高 3 位。4 个相临的优先级寄存器拼成一个 32 位寄存器。按照优先级位数的配置，会将8位分为抢占优先级和响应优先级。</p>
+<p>优先级寄存器都可以按字节访问，当然也可以按半字&#x2F;字来访问。有意义的优先级寄存器数目由芯片厂商实现的中断数目决定</p>
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106210329507.png" srcset="/blog/img/loading.gif" lazyload style="zoom:80%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106210307813.png" srcset="/blog/img/loading.gif" lazyload style="zoom:80%;" />
+
+<h3 id="1-4-活动状态寄存器"><a href="#1-4-活动状态寄存器" class="headerlink" title="1-4 活动状态寄存器"></a>1-4 活动状态寄存器</h3><blockquote>
+<p><strong>ACTIVE 寄存器族</strong>: 0xE000_E300 - 0xE000_E31C</p>
+</blockquote>
+<p>每个外部中断都有一个活动状态位。在处理器执行了其 ISR 的第一条指令后，它的活动位就被置 1，并且直到 ISR 返回时才硬件清零。由于支持嵌套，允许高优先级异常抢占某个ISR。然而，哪怕一个中断被抢占，其活动状态也依然为 1</p>
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106210720529.png" srcset="/blog/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+
+<h3 id="1-5-PRIMASK寄存器"><a href="#1-5-PRIMASK寄存器" class="headerlink" title="1-5 PRIMASK寄存器"></a>1-5 PRIMASK寄存器</h3><p>PRIMASK寄存器用来屏蔽除了NMI和硬fault之外的其他中断，PRIMASK寄存器只有1位，写1就是屏蔽其他中断，写0就是恢复</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs asm">MOVS   R0,#1<br>MSR    PRIMASK,  R0;//屏蔽所有可屏蔽中断<br><br>MOVS   R0,#0<br>MSR    PRIMASK,  R0;//恢复所有可屏蔽中断<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>为什么要使用MSR指令而不是MOV指令写入PRIMASK寄存器呢？</strong></p>
+<p>因为PRIMASK寄存器是一个特殊寄存器（系统寄存器），所以MOV不能直接操作PRIMASK寄存器。对于特殊寄存器，ARM提供了专门的指令MSR（Move to Special Register）和MRS（Move from Special Register），所以往PRIMASK写值要使用MSR指令。</p>
+</blockquote>
+<p>通过CPS指令可以快速完成上述指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">CPSID i;关中断<br>CPSIE i;开中断<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="1-6-FAULTMASK寄存器"><a href="#1-6-FAULTMASK寄存器" class="headerlink" title="1-6 FAULTMASK寄存器"></a>1-6 FAULTMASK寄存器</h3><p>FAULTMASK的作用与PRIMASK的相似，它会连同硬FAULT一起屏蔽，只剩下NMI不可屏蔽。但要注意的是，FAULTMASK会在异常退出时自动清零。</p>
+<blockquote>
+<p><strong>既然FAULTMASK屏蔽了异常，那异常怎么会退出呢？</strong></p>
+<p><code>FAULTMASK</code>的屏蔽作用是临时的，它不会影响已经发生的异常。如果一个异常在<code>FAULTMASK</code>被设置之前已经发生，那么异常处理程序会按照正常的流程执行。在异常处理程序执行完毕后，处理器会返回到异常发生前的状态，继续执行程序。</p>
+</blockquote>
+<h3 id="1-7-BASEPRI寄存器"><a href="#1-7-BASEPRI寄存器" class="headerlink" title="1-7 BASEPRI寄存器"></a>1-7 BASEPRI寄存器</h3><p>如果需要对中断屏蔽进行更精细的控制——只屏蔽优先级低于某一阈值的中断，那就需要用到BASEPRI寄存器。优先级在数字上大于BASEPRI寄存器的中断会被屏蔽，如果往BASEPRI寄存器中写0，那将表示关闭此功能，BASEPRI将停止屏蔽任何中断</p>
+<h3 id="1-8-其他特殊寄存器"><a href="#1-8-其他特殊寄存器" class="headerlink" title="1-8 其他特殊寄存器"></a>1-8 其他特殊寄存器</h3><blockquote>
+<p><strong>系统Handler控制及状态寄存器SHCSR</strong>：0xE000_ED24</p>
+</blockquote>
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106215333456.png" srcset="/blog/img/loading.gif" lazyload style="zoom:80%;" />
+
+<blockquote>
+<p><strong>中断控制及状态寄存器ICSR</strong>：0xE000_ED04</p>
+</blockquote>
+<img src="C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20241106215453461.png" srcset="/blog/img/loading.gif" lazyload alt="" style="zoom:80%;" />
+
+
+
+<h2 id="2-NVIC工作原理"><a href="#2-NVIC工作原理" class="headerlink" title="-2- NVIC工作原理"></a>-2- NVIC工作原理</h2><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106225325628.png" srcset="/blog/img/loading.gif" lazyload style="zoom:80%;" />
+
+
+
+<h1 id="0x04-STM32的中断"><a href="#0x04-STM32的中断" class="headerlink" title="0x04 STM32的中断"></a>0x04 STM32的中断</h1><h2 id="1-STM32的中断个数"><a href="#1-STM32的中断个数" class="headerlink" title="-1- STM32的中断个数"></a>-1- STM32的中断个数</h2><p>CM3支持240个外部中断，而STM32F1系列只支持了其中的60个</p>
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106221958593.png" srcset="/blog/img/loading.gif" lazyload style="zoom:80%;" />
+
+<blockquote>
+<p>具体参考《STM32F10xxx 参考手册_V10（中文版）.pdf》的 9.1.2 小节</p>
+</blockquote>
+<h2 id="2-STM32的优先级分组"><a href="#2-STM32的优先级分组" class="headerlink" title="-2- STM32的优先级分组"></a>-2- STM32的优先级分组</h2><p>STM32支持16个优先级，具体由AIRCR寄存器控制</p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106221342227.png" srcset="/blog/img/loading.gif" lazyload></p>
+<blockquote>
+<p>前面CM3中断中要求至少要有一位分配给响应优先级，而STM32却可以全部为抢占优先级，是因为STM32没有沾满所有的优先级分组</p>
+</blockquote>
+<h2 id="3-STM32-GPIO外部中断简图"><a href="#3-STM32-GPIO外部中断简图" class="headerlink" title="-3- STM32 GPIO外部中断简图"></a>-3- STM32 GPIO外部中断简图</h2><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241106225206060.png" srcset="/blog/img/loading.gif" lazyload style="zoom:80%;" />
+
+<h2 id="4-相关函数"><a href="#4-相关函数" class="headerlink" title="-4- 相关函数"></a>-4- 相关函数</h2><p>STM32 NVIC相关函数被封装在 stm32f1xx_hal_cortex.c 文件中</p>
+<h3 id="4-1-HAL-NVIC-SetPriorityGrouping"><a href="#4-1-HAL-NVIC-SetPriorityGrouping" class="headerlink" title="4-1 HAL_NVIC_SetPriorityGrouping"></a>4-1 HAL_NVIC_SetPriorityGrouping</h3><p><strong>用于设置中断优先级分组</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_NVIC_SetPriorityGrouping</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> PriorityGroup)</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>唯一参数是优先级分组情况，也就是写入AIRCR[10:8]的数，可选</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> NVIC_PRIORITYGROUP_0         0x00000007U <span class="hljs-comment">/*!&lt; 0 bits for pre-emption priority</span></span><br><span class="hljs-comment"><span class="hljs-meta">                                                      4 bits for subpriority */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> NVIC_PRIORITYGROUP_1         0x00000006U <span class="hljs-comment">/*!&lt; 1 bits for pre-emption priority</span></span><br><span class="hljs-comment"><span class="hljs-meta">                                                      3 bits for subpriority */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> NVIC_PRIORITYGROUP_2         0x00000005U <span class="hljs-comment">/*!&lt; 2 bits for pre-emption priority</span></span><br><span class="hljs-comment"><span class="hljs-meta">                                                      2 bits for subpriority */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> NVIC_PRIORITYGROUP_3         0x00000004U <span class="hljs-comment">/*!&lt; 3 bits for pre-emption priority</span></span><br><span class="hljs-comment"><span class="hljs-meta">                                                      1 bits for subpriority */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> NVIC_PRIORITYGROUP_4         0x00000003U <span class="hljs-comment">/*!&lt; 4 bits for pre-emption priority</span></span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="4-2-HAL-NVIC-SetPriority"><a href="#4-2-HAL-NVIC-SetPriority" class="headerlink" title="4-2 HAL_NVIC_SetPriority"></a>4-2 HAL_NVIC_SetPriority</h3><p><strong>用于设置中断的抢占优先级和响应优先级</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_NVIC_GetPriority</span><span class="hljs-params">(IRQn_Type IRQn, <span class="hljs-type">uint32_t</span> PriorityGroup, <span class="hljs-type">uint32_t</span> *pPreemptPriority, <span class="hljs-type">uint32_t</span> *pSubPriority)</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>第一个参数是中断号，IRQn_Type 定义的枚举类型，定义在 stm32f103xe.h</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">enum</span></span><br><span class="hljs-class">&#123;</span><br><span class="hljs-comment">/******  Cortex-M3 Processor Exceptions Numbers ***************************************************/</span><br>  NonMaskableInt_IRQn         = <span class="hljs-number">-14</span>,    <span class="hljs-comment">/*!&lt; 2 Non Maskable Interrupt                             */</span><br>  HardFault_IRQn              = <span class="hljs-number">-13</span>,    <span class="hljs-comment">/*!&lt; 3 Cortex-M3 Hard Fault Interrupt                     */</span><br>  MemoryManagement_IRQn       = <span class="hljs-number">-12</span>,    <span class="hljs-comment">/*!&lt; 4 Cortex-M3 Memory Management Interrupt              */</span><br>  BusFault_IRQn               = <span class="hljs-number">-11</span>,    <span class="hljs-comment">/*!&lt; 5 Cortex-M3 Bus Fault Interrupt                      */</span><br>  UsageFault_IRQn             = <span class="hljs-number">-10</span>,    <span class="hljs-comment">/*!&lt; 6 Cortex-M3 Usage Fault Interrupt                    */</span><br>  SVCall_IRQn                 = <span class="hljs-number">-5</span>,     <span class="hljs-comment">/*!&lt; 11 Cortex-M3 SV Call Interrupt                       */</span><br>  DebugMonitor_IRQn           = <span class="hljs-number">-4</span>,     <span class="hljs-comment">/*!&lt; 12 Cortex-M3 Debug Monitor Interrupt                 */</span><br>  PendSV_IRQn                 = <span class="hljs-number">-2</span>,     <span class="hljs-comment">/*!&lt; 14 Cortex-M3 Pend SV Interrupt                       */</span><br>  SysTick_IRQn                = <span class="hljs-number">-1</span>,     <span class="hljs-comment">/*!&lt; 15 Cortex-M3 System Tick Interrupt                   */</span><br><br><span class="hljs-comment">/******  STM32 specific Interrupt Numbers *********************************************************/</span><br>  WWDG_IRQn                   = <span class="hljs-number">0</span>,      <span class="hljs-comment">/*!&lt; Window WatchDog Interrupt                            */</span><br>  PVD_IRQn                    = <span class="hljs-number">1</span>,      <span class="hljs-comment">/*!&lt; PVD through EXTI Line detection Interrupt            */</span><br>  TAMPER_IRQn                 = <span class="hljs-number">2</span>,      <span class="hljs-comment">/*!&lt; Tamper Interrupt                                     */</span><br>  RTC_IRQn                    = <span class="hljs-number">3</span>,      <span class="hljs-comment">/*!&lt; RTC global Interrupt                                 */</span><br>  FLASH_IRQn                  = <span class="hljs-number">4</span>,      <span class="hljs-comment">/*!&lt; FLASH global Interrupt                               */</span><br>  RCC_IRQn                    = <span class="hljs-number">5</span>,      <span class="hljs-comment">/*!&lt; RCC global Interrupt                                 */</span><br>  EXTI0_IRQn                  = <span class="hljs-number">6</span>,      <span class="hljs-comment">/*!&lt; EXTI Line0 Interrupt                                 */</span><br>  ...<br>  DMA2_Channel4_5_IRQn        = <span class="hljs-number">59</span>,     <span class="hljs-comment">/*!&lt; DMA2 Channel 4 and Channel 5 global Interrupt        */</span><br>&#125; IRQn_Type;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>第二个参数为抢占优先级，可选0~15</p>
+</li>
+<li><p>第三个参数为响应优先级，可选0~15</p>
+</li>
+</ul>
+<h3 id="4-3-HAL-NVIC-EnableIRQ"><a href="#4-3-HAL-NVIC-EnableIRQ" class="headerlink" title="4-3 HAL_NVIC_EnableIRQ"></a>4-3 HAL_NVIC_EnableIRQ</h3><p><strong>用于使能中断</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_NVIC_EnableIRQ</span><span class="hljs-params">(IRQn_Type IRQn)</span>;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>唯一参数是中断号，IRQn_Type 定义的枚举类型，定义在 stm32f103xe.h</li>
+</ul>
+<h3 id="4-4-HAL-NVIC-disableIRQ"><a href="#4-4-HAL-NVIC-disableIRQ" class="headerlink" title="4-4 HAL_NVIC_disableIRQ"></a>4-4 HAL_NVIC_disableIRQ</h3><p><strong>用于除能中断</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_NVIC_disableIRQ</span><span class="hljs-params">(IRQn_Type IRQn)</span>;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>唯一参数是中断号，IRQn_Type 定义的枚举类型，定义在 stm32f103xe.h</li>
+</ul>
+<h3 id="4-5-HAL-NVIC-SystemReset"><a href="#4-5-HAL-NVIC-SystemReset" class="headerlink" title="4-5 HAL_NVIC_SystemReset"></a>4-5 HAL_NVIC_SystemReset</h3><p><strong>用于实现软复位</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_NVIC_SystemReset</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/stm32/" class="print-no-link">#stm32</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>STM32学习笔记5——中断</div>
+      <div>https://goooforward.github.io/blog/2024/11/05/stm32/STM32学习笔记5——中断/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>tangyuwei</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a>Powered by<a> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a>Theme</a> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

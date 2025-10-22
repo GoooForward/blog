@@ -1,0 +1,684 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/logo.png">
+  <link rel="icon" href="/blog/img/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="tangyuwei">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 ReferenceSTM32中的几个时钟SysTick、FCLK、SYSCLK、HCLK - Darrick_Jan - 博客园 0x01 时钟树  A部分表示其他电路需要的输入源时钟信号；B 为一个特殊的振荡电路“PLL”，由几个部分构成；C 为我们重点需要关注的 MCU 内的注释中“SYSCLK”；AHB 预分频器将 SYSCLK 分频或不分频后分发给其他外设进行处理，包括到 F 部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STM32学习笔记3——时钟树">
+<meta property="og:url" content="https://goooforward.github.io/blog/2024/10/15/stm32/STM32%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E6%97%B6%E9%92%9F%E6%A0%91/index.html">
+<meta property="og:site_name" content="GoForwrard&#39;s blog">
+<meta property="og:description" content="0x00 ReferenceSTM32中的几个时钟SysTick、FCLK、SYSCLK、HCLK - Darrick_Jan - 博客园 0x01 时钟树  A部分表示其他电路需要的输入源时钟信号；B 为一个特殊的振荡电路“PLL”，由几个部分构成；C 为我们重点需要关注的 MCU 内的注释中“SYSCLK”；AHB 预分频器将 SYSCLK 分频或不分频后分发给其他外设进行处理，包括到 F 部">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241016213810675.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241017124355853.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241017124917712.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241017124925593.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241017125158426.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241017130108099.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241017130108099.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241103231446336.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104000630388.png">
+<meta property="article:published_time" content="2024-10-15T14:24:00.000Z">
+<meta property="article:modified_time" content="2025-07-17T12:22:04.000Z">
+<meta property="article:author" content="tangyuwei">
+<meta property="article:tag" content="stm32">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241016213810675.png">
+  
+  
+  
+  <title>STM32学习笔记3——时钟树 - GoForwrard&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"goooforward.github.io","root":"/blog/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>GoForwrard&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/photo/" target="_self">
+                <i class="iconfont icon-image"></i>
+                <span>摄影</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/blog/img/cover_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">STM32学习笔记3——时钟树</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-15 22:24" pubdate>
+          2024年10月15日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">STM32学习笔记3——时钟树</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2025年7月17日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="0x00-Reference"><a href="#0x00-Reference" class="headerlink" title="0x00 Reference"></a>0x00 Reference</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Darrick-Jan/p/11379913.html">STM32中的几个时钟SysTick、FCLK、SYSCLK、HCLK - Darrick_Jan - 博客园</a></p>
+<h1 id="0x01-时钟树"><a href="#0x01-时钟树" class="headerlink" title="0x01 时钟树"></a>0x01 时钟树</h1><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241016213810675.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241016213810675" style="zoom:67%;" />
+
+<p>A部分表示其他电路需要的输入源时钟信号；B 为一个特殊的振荡电路“PLL”，由几个部分构成；C 为我们重点需要关注的 MCU 内的注释中“SYSCLK”；AHB 预分频器将 SYSCLK 分频或不分频后分发给其他外设进行处理，包括到 F 部分的 Cortex-M 内核系统的时钟。D 和 E 部分分别为定时器等外设的时钟源 APB1&#x2F;APB2。G 是 STM32 的时钟输出功能，其他部分等我们学习到再详细探讨</p>
+<h1 id="0x02-时钟源"><a href="#0x02-时钟源" class="headerlink" title="0x02 时钟源"></a>0x02 时钟源</h1><p>对于 STM32F1，输入时钟源（Input Clock）主要包括 HSI，HSE，LSI，LSE。从时钟频率来分可以分为高速时钟源和低速时钟源，其中 HSI、HSE 高速时钟，LSI 和 LSE 是低速时钟。从来源可分为外部时钟源和内部时钟源，外部时钟源就是从外部通过接晶振的方式获取时钟源，其中 HSE 和 LSE 是外部时钟源，其他是内部时钟源，芯片上电即可产生，不需要借助外部电路</p>
+<ul>
+<li><strong>高速外部振荡器 HSE (High Speed External Clock signal)</strong><br>  外接石英&#x2F;陶瓷谐振器，频率为 4MHz~16MHz。</li>
+<li><strong>低速外部振荡器 LSE (Low Speed External Clock signal)</strong><br>  外接 32.768kHz 石英晶体，主要作用于 RTC 的时钟源。</li>
+<li><strong>高速内部振荡器 HSI(High Speed Internal Clock signal)</strong><br>  由内部 RC 振荡器产生，频率为 8MHz。</li>
+<li><strong>低速内部振荡器 LSI(Low Speed Internal Clock signal)</strong><br>  由内部 RC 振荡器产生，频率为 40kHz，可作为独立看门狗的时钟源。</li>
+</ul>
+<p>芯片上电时默认由内部的 HSI 时钟启动，如果用户进行了硬件和软件的配置，芯片才会根据用户配置调试尝试切换到对应的外部时钟源，所以同时了解这几个时钟源信号还是很有必要的。</p>
+<h1 id="0x03-锁相环PLL"><a href="#0x03-锁相环PLL" class="headerlink" title="0x03 锁相环PLL"></a>0x03 锁相环PLL</h1><p>锁相环是自动控制系统中常用的一个反馈电路，在 STM32 主控中，锁相环的作用主要有两个部分：输入时钟净化和倍频。前者是利用锁相环电路的反馈机制实现，后者我们用于使芯片在更高且频率稳定的时钟下工作。</p>
+<p>锁相环PLL的输出也可以作为芯片系统的时钟源。配置PLL需要配置三个部分</p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241017124355853.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241017124355853"></p>
+<ol>
+<li>这部分是HSE分频器，HSE分频器可以作为PLL输入，通过PLLXTPRE寄存器来控制分频倍数，可以HSE设置2分频或者不分频<br> <img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241017124917712.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241017124917712"></li>
+<li>这部分是PLL 时钟源的选择器，PLL可以选择HSE或者HSI作为输入时钟源，通过PLLSRC寄存器控制<br> <img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241017124925593.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241017124925593"></li>
+<li>这部分是PLL倍频器，它可以对PLL的输入时钟信号进行倍频，可选择 2-16 倍频，通过PLLMUL寄存器控制<br> <img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241017125158426.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241017125158426"></li>
+</ol>
+<h1 id="0x04-系统时钟SYSCLK"><a href="#0x04-系统时钟SYSCLK" class="headerlink" title="0x04 系统时钟SYSCLK"></a>0x04 系统时钟SYSCLK</h1><p>系统时钟SYSCLK为整个芯片提供时钟信号，也就是整个芯片的工作频率。系统时钟还作为其他外设提供时钟信号，其他外设、总线的时钟信号通过SYSCLK倍频或分频获得。</p>
+<p>系统时钟可以选择三个来源：外部高速时钟 HSE(8M)、内部高速时钟 HSI(8M)和经过倍频的 PLL CLK</p>
+<p>对于配置系统时钟来说，也就是配置时钟信号的来源</p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241017130108099.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241017130108099"></p>
+<h1 id="0x05-总线时钟"><a href="#0x05-总线时钟" class="headerlink" title="0x05 总线时钟"></a>0x05 总线时钟</h1><p>目前已经得到的SYSCLK时钟，并不是内核直接的工作频率，也不是外设直接使用的频率，外设都是挂在总线上的，使用的是总线的频率。而SYSCLK是总线频率的来源。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Darrick-Jan/p/11379913.html">STM32中的几个时钟SysTick、FCLK、SYSCLK、HCLK - Darrick_Jan - 博客园</a></p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241017130108099.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h2 id="HCLK"><a href="#HCLK" class="headerlink" title="HCLK"></a>HCLK</h2><p>首先是HCLK，SYSCLK经过分频器得到HCLK，通常不分频</p>
+<p>HCLK是AHB总线的频率，此外HCLK还为内存DMA提供频率</p>
+<h2 id="FCLK"><a href="#FCLK" class="headerlink" title="FCLK"></a>FCLK</h2><p>提供给CPU内核的时钟信号，CPU的主频就是指这个信号</p>
+<h2 id="PCLK1"><a href="#PCLK1" class="headerlink" title="PCLK1"></a>PCLK1</h2><p>APB1总线时钟频率，由HCLK分频得到，一般使用二分频</p>
+<h2 id="PCLK2"><a href="#PCLK2" class="headerlink" title="PCLK2"></a>PCLK2</h2><p>APB1总线时钟频率，同样由HCLK分频得到，一般不分频</p>
+<h1 id="0x06-时钟配置"><a href="#0x06-时钟配置" class="headerlink" title="0x06 时钟配置"></a>0x06 时钟配置</h1><p>下图是STM32C8T6的一个配置图，可以看到其SYSCLK使用的是PLL三倍频后的HSE，使用此配置生成的初始化时钟代码如下</p>
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241103231446336.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241103231446336" style="zoom:50%;" />
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><span class="hljs-comment">/**</span><br><span class="hljs-comment">  * @brief System Clock Configuration</span><br><span class="hljs-comment">  * @retval None</span><br><span class="hljs-comment">  */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">SystemClock_Config</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>  RCC_OscInitTypeDef RCC_OscInitStruct = &#123;<span class="hljs-number">0</span>&#125;;<br>  RCC_ClkInitTypeDef RCC_ClkInitStruct = &#123;<span class="hljs-number">0</span>&#125;;<br><br>  <span class="hljs-comment">/** Initializes the RCC Oscillators according to the specified parameters</span><br><span class="hljs-comment">  * in the RCC_OscInitTypeDef structure.</span><br><span class="hljs-comment">  */</span><br>  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;<span class="hljs-comment">//振荡器类型选择HSE</span><br>  RCC_OscInitStruct.HSEState = RCC_HSE_ON;<span class="hljs-comment">//HSE状态是打开</span><br>  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;<span class="hljs-comment">//HSE预分频是DIV1-不分频</span><br>  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;<span class="hljs-comment">//使用PLL锁相环</span><br>  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;<span class="hljs-comment">//PLL时钟来源选择HSE</span><br>  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL3;<span class="hljs-comment">//PLL选择3倍频</span><br>  <span class="hljs-keyword">if</span> (HAL_RCC_OscConfig(&amp;RCC_OscInitStruct) != HAL_OK)<span class="hljs-comment">//调用HAL_RCC_OscConfig进行配置</span><br>  &#123;<br>    Error_Handler();<br>  &#125;<br><br>  <span class="hljs-comment">/** Initializes the CPU, AHB and APB buses clocks</span><br><span class="hljs-comment">  */</span><br>  <span class="hljs-comment">//选择初始化的时钟 HCLK,SYSCLK,PCLK1,PCLK2</span><br>  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK<br>                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;<br>  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;<span class="hljs-comment">//SYSCLK时钟源选择PLL</span><br>  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;<span class="hljs-comment">//HCLK选择一倍频</span><br>  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;<span class="hljs-comment">//PCLK1选择一倍频</span><br>  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;<span class="hljs-comment">//PCLK2选择一倍频</span><br><br>  <span class="hljs-keyword">if</span> (HAL_RCC_ClockConfig(&amp;RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)<span class="hljs-comment">//配置对应的时钟，并且设置FLASH读写0时延</span><br>  &#123;<br>    Error_Handler();<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>HAL_RCC_ClockConfig的第二个参数是啥？</p>
+<p>Flash的读写频率为24MHz，这里的c8t6的主频也是24MHz，所以Flash可以满足CPU每个周期都操作一次。但是当CPU主频继续提高，Flash的工作频率就跟不上CPU了，所以就需要设置时延。打个比方，CPU主频为72MHz，就需要设置时延为2个周期，也就是CPU操作Flash后需要等待2个周期，Flash才能被继续操作，相当于三分频来适应Flash的工作频率</p>
+</blockquote>
+<h1 id="0x07MCO输出时钟信号"><a href="#0x07MCO输出时钟信号" class="headerlink" title="0x07MCO输出时钟信号"></a>0x07MCO输出时钟信号</h1><p>STM32允许输出时钟信号，可以用来调试或者为其他设备提供时钟信号</p>
+<p>MCO支持输出SYSCLK，HSI，HSE，PLL&#x2F;2</p>
+<p>将引脚复用为MCO，就可以输出设置的时钟信号了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241104000630388.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241104000630388"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/stm32/" class="print-no-link">#stm32</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>STM32学习笔记3——时钟树</div>
+      <div>https://goooforward.github.io/blog/2024/10/15/stm32/STM32学习笔记3——时钟树/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>tangyuwei</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年10月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a>Powered by<a> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a>Theme</a> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
