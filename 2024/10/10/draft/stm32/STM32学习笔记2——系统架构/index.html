@@ -16,26 +16,26 @@
   <meta name="author" content="tangyuwei">
   <meta name="keywords" content="">
   
-    <meta name="description" content="0x00 ReferenceCortex-M3&#x2F;M4芯片启动流程概括_cortex-m4 mcu的启动与初始化过程-CSDN博客 01.一探究竟STM32的三种启动模式_stm32启动模式-CSDN博客 0x01 加载中断向量表stm32基于ARM cortex-m3 内核设计，所以先来看cm3内核的启动流程 cm3内核在上电 or 复位之后会先做两件事  去0x00000000的地址读">
+    <meta name="description" content="0x00 ReferenceAHB与APB总线介绍_ahb apb-CSDN博客 深入理解MPU_mpu为什么不能直接访问寄存器-CSDN博客 0x01 Cortex-M3内核架构stm32是基于cm3内核的mcu，所以先看cm3的内核架构是怎么样的（每个色块表示一个组件）   CM3采用的是哈弗架构，所以取指和数据使用的总线是分开的   **嵌套向量中断控制器NVIC(Nested Vector">
 <meta property="og:type" content="article">
-<meta property="og:title" content="STM32学习笔记1——启动">
-<meta property="og:url" content="https://goooforward.github.io/blog/2024/09/24/stm32/STM32%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%90%AF%E5%8A%A8/index.html">
+<meta property="og:title" content="STM32学习笔记2——系统架构">
+<meta property="og:url" content="https://goooforward.github.io/blog/2024/10/10/draft/stm32/STM32%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/index.html">
 <meta property="og:site_name" content="GoForwrard&#39;s blog">
-<meta property="og:description" content="0x00 ReferenceCortex-M3&#x2F;M4芯片启动流程概括_cortex-m4 mcu的启动与初始化过程-CSDN博客 01.一探究竟STM32的三种启动模式_stm32启动模式-CSDN博客 0x01 加载中断向量表stm32基于ARM cortex-m3 内核设计，所以先来看cm3内核的启动流程 cm3内核在上电 or 复位之后会先做两件事  去0x00000000的地址读">
+<meta property="og:description" content="0x00 ReferenceAHB与APB总线介绍_ahb apb-CSDN博客 深入理解MPU_mpu为什么不能直接访问寄存器-CSDN博客 0x01 Cortex-M3内核架构stm32是基于cm3内核的mcu，所以先看cm3的内核架构是怎么样的（每个色块表示一个组件）   CM3采用的是哈弗架构，所以取指和数据使用的总线是分开的   **嵌套向量中断控制器NVIC(Nested Vector">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/20131216123519953">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/6e38618bf7abee5f3a4cc87de8d86ade.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/5a67c0c8c9ef2f6232fdbd4771757ac9.png">
-<meta property="article:published_time" content="2024-09-24T14:59:00.000Z">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241014222237921.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241015204725359.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241015220738841.png">
+<meta property="article:published_time" content="2024-10-10T15:29:00.000Z">
 <meta property="article:modified_time" content="2025-07-17T12:22:04.000Z">
 <meta property="article:author" content="tangyuwei">
 <meta property="article:tag" content="stm32">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/20131216123519953">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241014222237921.png">
   
   
   
-  <title>STM32学习笔记1——启动 - GoForwrard&#39;s blog</title>
+  <title>STM32学习笔记2——系统架构 - GoForwrard&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -213,7 +213,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle">STM32学习笔记1——启动</span>
+            <span id="subtitle">STM32学习笔记2——系统架构</span>
           
         </div>
 
@@ -224,8 +224,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-09-24 22:59" pubdate>
-          2024年9月24日 晚上
+        <time datetime="2024-10-10 23:29" pubdate>
+          2024年10月10日 晚上
         </time>
       </span>
     
@@ -236,7 +236,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.5k 字
+          2.4k 字
         
       </span>
     
@@ -247,7 +247,7 @@
         
         
         
-          30 分钟
+          20 分钟
         
       </span>
     
@@ -284,7 +284,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">STM32学习笔记1——启动</h1>
+            <h1 id="seo-header">STM32学习笔记2——系统架构</h1>
             
               <p class="note note-info">
                 
@@ -297,54 +297,111 @@
             
               <div class="markdown-body">
                 
-                <h1 id="0x00-Reference"><a href="#0x00-Reference" class="headerlink" title="0x00 Reference"></a>0x00 Reference</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_47409662/article/details/119276572">Cortex-M3&#x2F;M4芯片启动流程概括_cortex-m4 mcu的启动与初始化过程-CSDN博客</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_19760839/article/details/121068663">01.一探究竟STM32的三种启动模式_stm32启动模式-CSDN博客</a></p>
-<h1 id="0x01-加载中断向量表"><a href="#0x01-加载中断向量表" class="headerlink" title="0x01 加载中断向量表"></a>0x01 加载中断向量表</h1><p>stm32基于ARM cortex-m3 内核设计，所以先来看cm3内核的启动流程</p>
-<p>cm3内核在上电 or 复位之后会先做两件事</p>
-<ol>
-<li>去0x00000000的地址读取MSP寄存器的初始值（MSP就是栈顶指针，这里就是将栈的初始地址赋给MSP，让内核找到栈的位置，在之后的启动流程中可能遇到）</li>
-<li>去0x00000004的地址读取PC寄存器的初始值——Reset中断处理函数的地址（PC寄存器就是指向当前程序的地址，CPU就是不停地从PC中取址然后执行）</li>
-</ol>
-<p>在PC获取到初始值之后，CPU就会跳转到PC所指的Reset中断服务函数开始执行程序</p>
+                <h1 id="0x00-Reference"><a href="#0x00-Reference" class="headerlink" title="0x00 Reference"></a>0x00 Reference</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_60503814/article/details/139231790">AHB与APB总线介绍_ahb apb-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_20334947/article/details/86603530">深入理解MPU_mpu为什么不能直接访问寄存器-CSDN博客</a></p>
+<h1 id="0x01-Cortex-M3内核架构"><a href="#0x01-Cortex-M3内核架构" class="headerlink" title="0x01 Cortex-M3内核架构"></a>0x01 Cortex-M3内核架构</h1><p>stm32是基于cm3内核的mcu，所以先看cm3的内核架构是怎么样的（每个色块表示一个组件）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241014222237921.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241014222237921"></p>
 <blockquote>
-<p> OK，这里有一个问题为什么0x00000000的地址一定是MSP的初始值，0x00000004的地址一定是PC寄存器的初始值呢？这是因为CM3内核规定了中断向量表的结构，并且规定了向量表存放的地址一定是0x00000000。可以看到向量表的前两位分别是MSP的初始值和复位中断处理函数的地址</p>
+<p>CM3采用的是哈弗架构，所以取指和数据使用的总线是分开的</p>
 </blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/20131216123519953" srcset="/blog/img/loading.gif" lazyload alt="img"></p>
-<blockquote>
-<p>另外一个问题是，为什么在STM32上刷写程序是写入到0x08000000，而不是0x00000000呢？这是因为ST公司在设置STM32时为了灵活性，设计了一个硬件电路，这个电路会根据BOOT0和BOOT1的选择不同而将不同的地址映射到0x00000000</p>
-<p>打个比方，当boot0:boot1 &#x3D; 0:0 时，CPU上电去0x00000000的地址读取中断向量表，而该地址已经被硬件电路重新映射到了0x08000000了，对于CPU来说，它认为它读取的地址是0x00000000，而它实际读取的内容是来自0x08000000的flash中的数据</p>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/6e38618bf7abee5f3a4cc87de8d86ade.png" srcset="/blog/img/loading.gif" lazyload alt="img"></p>
-<p><strong>STM32 的三种启动方式</strong></p>
 <ul>
-<li>第一种方式(boot0 &#x3D; 0)：Flash memory启动方式<br>  启动地址：0x08000000 是STM32内置的Flash，一般我们使用JTAG或者SWD模式下载程序时，就是下载到这个里面，重启后也直接从这启动程序。基本上都是采用这种模式。</li>
-<li>第二种方式(boot0 &#x3D; 1；boot1 &#x3D; 0)：System memory启动方式<br>  启动地址：0x1FFF0000从系统存储器启动，这种模式启动的程序功能是由厂家设置的。一般来说，这种启动方式用的比较少。系统存储器是芯片内部一块特定的区域，STM32在出厂时，由ST在这个区域内部预置了一段BootLoader， 也就是我们常说的ISP程序， 这是一块ROM，出厂后无法修改。一般来说，我们选用这种启动模式时，是为了从串口下载程序，因为在厂家提供的BootLoader 中，提供了串口下载程序的固件，可以通过这个BootLoader将程序下载到系统的Flash中。</li>
-<li>第三种方式(boot0 &#x3D; 1;boot1 &#x3D; 1)：SRAM启动方式。<br>  启动地址：0x20000000 内置SRAM，既然是SRAM，自然也就没有程序存储的能力了，这个模式一般用于程序调试。假如我只修改了代码中一个小小的 地方，然后就需要重新擦除整个Flash，比较的费时，可以考虑从这个模式启动代码（也就是STM32的内存中），用于快速的程序调试，等程序调试完成后，在将程序下载到SRAM中。</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/5a67c0c8c9ef2f6232fdbd4771757ac9.png" srcset="/blog/img/loading.gif" lazyload alt="img"></p>
-<h1 id="0x02-Reset-中断服务函数"><a href="#0x02-Reset-中断服务函数" class="headerlink" title="0x02 Reset 中断服务函数"></a>0x02 Reset 中断服务函数</h1><p>前面说到cm3复位后会跳转到Reset中断服务函数，那这个函数在哪呢？</p>
-<p>在写stm32的程序时，会有一个startup_xxxx.s的启动文件，使用stm32cubeMX会自动根据编译器的不同生成不同的启动文件。</p>
+<li><p>**嵌套向量中断控制器NVIC(Nested Vectored Interrupt Controller)**：NVIC 是一个在 CM3 中内建的中断控制器，在中断发生时，它会自动取出对应的服务例程入口地址，并且直接调用，无需软件判定中断源</p>
+</li>
+<li><p><strong>系统时钟定时器SYSTICK</strong>：Systick是一个基本定时器，是24位向下计数器，归零时会产生中断并且自动重新装载。它是个比较单纯的时基定时器，它的功能相对其他外设TIMER，功能就较为单一，不支持输入捕获、比较输出等复杂功能，也不能触发DMA等。但是它的中断号是15，优先级比其他通用定时器高</p>
+</li>
+<li><p><strong>存储器保护单元MPU</strong>：MPU 是一个选配的单元，有些 CM3 芯片可能没有配备此组件。它可以将存储器分为不同的区域，并且设定不同的访问权限，提高系统运行的健壮性。例如避免应用任务破坏其他任务或者OS内核使用的栈或数据存储器。</p>
+</li>
+<li><p><strong>总线矩阵BusMatrix</strong>：BusMatrix 是 CM3 内部总线系统的核心。它是一个 AHB 互连的网络，通过它可以让数据在不同的总线之间并行传送——只要两个总线主机不试图访问同一块内存区域</p>
 <blockquote>
-<p>为什么不同编译器的启动文件不同呢？</p>
-<p>首先，启动文件使用的是汇编语言，虽然针对同一个指令集，理论上来说其汇编语言也是相同的，但是由于其汇编器的不同，因此在汇编语言的细节上也有差异，针对GNU的编译器的启动文件在ARMCC编译器可能就编译不了了，所以针对不同的编译器所使用的启动文件也就不同了</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_60503814/article/details/139231790">AHB与APB总线介绍_ahb apb-CSDN博客</a></p>
 </blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs asm">/**<br> * @brief  This is the code that gets called when the processor first<br> *          starts execution following a reset event. Only the absolutely<br> *          necessary set is performed, after which the application<br> *          supplied main() routine is called.<br> * @param  None<br> * @retval : None<br>*/<br><br>  .section .text.Reset_Handler<br>  .weak Reset_Handler<br>  .type Reset_Handler, %function<br>Reset_Handler:<br><br>/* Call the clock system initialization function.*/<br>    bl  SystemInit<br><br>/* Copy the data segment initializers from flash to SRAM */<br>  ldr r0, =_sdata<br>  ldr r1, =_edata<br>  ldr r2, =_sidata<br>  movs r3, #0<br>  b LoopCopyDataInit<br><br>CopyDataInit:<br>  ldr r4, [r2, r3]<br>  str r4, [r0, r3]<br>  adds r3, r3, #4<br><br>LoopCopyDataInit:<br>  adds r4, r0, r3<br>  cmp r4, r1<br>  bcc CopyDataInit<br>  <br>/* Zero fill the bss segment. */<br>  ldr r2, =_sbss<br>  ldr r4, =_ebss<br>  movs r3, #0<br>  b LoopFillZerobss<br><br>FillZerobss:<br>  str  r3, [r2]<br>  adds r2, r2, #4<br><br>LoopFillZerobss:<br>  cmp r2, r4<br>  bcc FillZerobss<br><br>/* Call static constructors */<br>    bl __libc_init_array<br>/* Call the application&#x27;s entry point.*/<br>  bl main<br>  bx lr<br>.size Reset_Handler, .-Reset_Handler<br><br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>总线桥AHB-to-APB Bridge</strong>：总线桥，顾名思义就是连接两种不同总线之间的桥梁，在APB总线中，Bridge是唯一的主机，也就是APB总线所有的数据请求都是由总线桥发出的。它用于把若干个 APB 设备连接到 CM3 处理器的私有外设总线上（包括内部的和外部的APB设备）</p>
+</li>
+</ul>
+<p>框图中其它的组件都用于调试，通常不会在应用程序中使用它们。</p>
+<h1 id="0x02-STM32-系统架构"><a href="#0x02-STM32-系统架构" class="headerlink" title="0x02 STM32 系统架构"></a>0x02 STM32 系统架构</h1><p>STM32内部系统架构如下图</p>
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241015204725359.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241015204725359" style="zoom:67%;" />
 
-<p>这是一个使用GCC编译器的Reset_Handler，由STM32cubeMX自动生成，主要做了如下的事情</p>
+<p>其主要分为主机部分和从机部分，也叫驱动单元（可以主动发起通信）和被动单元（只能被驱动工作）</p>
 <ul>
-<li>调用<code>SystemInit</code>来初始化系统。</li>
-<li>将初始化数据从Flash复制到RAM。</li>
-<li>清零BSS段（未初始化数据段）。</li>
-<li>调用<code>__libc_init_array</code>来执行C库的构造函数。</li>
-<li>调用<code>main</code>函数，这是C程序开始执行的地方。</li>
-</ul>
+<li><p>I Code总线：CM3内核的指令总线，连接Flash接口，负责在 0x0000_0000 – 0x1FFF_FFFF 之间的取指操作；I Code是一条32位的总线，也就是一次取指操作可以读取32位的指令，对于16位的Thumb指令来说，CM3内核一次可以取出两条指令</p>
+</li>
+<li><p>D Code总线：CM3内核的数据总线，也是一条的 32 位总线，负责在 0x0000_0000 – 0x1FFF_FFFF 之间的数据访问操作，连接闪存存储器数据接口（Flash），用于各种数据访问，如常量、变量等</p>
+</li>
+<li><p>System总线：CM3内核的系统总线 ，也是一条32 位总线，负责在 0x2000_0000 – 0xDFFF_FFFF 和 0xE010_0000 – 0xFFFF_FFFF 之间的所有数据传送，包括取值和数据。连接所有外设（如：GPIO、SPI、IIC、TIM等），用于控制各种外设工作，如配置各种外设相关寄存器等</p>
+</li>
+<li><p>DMA总线：DMA是直接存储访问，可以在不需要CPU参与的情况下完成数据搬运，可以实现内存到外设、外设到内存、内存到内存的数据传输。STM32F103内部有两个DMA控制器</p>
+</li>
+<li><p>内部FLASH：FLASH是STM32的硬盘，用于存储代码和数据，其内部的数据掉电后也不会丢失。FLASH最高访问速度是24Mhz</p>
+</li>
+<li><p>内部 SRAM：SRAM是STM32的内存，用于临时数据存储，直接挂载在总线矩阵上面，SRAM的最高访问速度是72MHz，比Flash要快</p>
 <blockquote>
-<p>这里有两个值得注意的地方，首先是SystemInit，如果定义了DATA_IN_ExtSRAM，则会初始化外部SRAM，启动FSMC控制器；而如果定义了USER_VECT_TAB_ADDRESS，则会重定向 向量表</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">SystemInit</span> <span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br><span class="hljs-meta">#<span class="hljs-keyword">if</span> defined(STM32F100xE) || defined(STM32F101xE) || defined(STM32F101xG) || defined(STM32F103xE) || defined(STM32F103xG)</span><br>  <span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> DATA_IN_ExtSRAM</span><br>    SystemInit_ExtMemCtl(); <br>  <span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">/* DATA_IN_ExtSRAM */</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> </span><br><br>  <span class="hljs-comment">/* Configure the Vector Table location -------------------------------------*/</span><br><span class="hljs-meta">#<span class="hljs-keyword">if</span> defined(USER_VECT_TAB_ADDRESS)</span><br>  SCB-&gt;VTOR = VECT_TAB_BASE_ADDRESS | VECT_TAB_OFFSET; <span class="hljs-comment">/* Vector Table Relocation in Internal SRAM. */</span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">/* USER_VECT_TAB_ADDRESS */</span></span><br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>另外一个值得注意的是，使用GNU工具链，需要调用<code>__libc_init_array</code>来初始化C库（newlib），而使用ARMCC编译器生成的启动文件中却没有这一步。</p>
+<p>there is a question?</p>
+<p>D-code bus的寻址范围是0x0000_0000 – 0x1FFF_FFFF，而SRAM的映射是从0x2000_0000开始的，但是正点原子的教材中说CPU通过D-Code访问SRAM？网上对于这一问题似乎没有明确的答案，因此在StackOverflow上提问了</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/79090269/can-stm32f103-access-internal-sram-via-d-code-bus">stm32 - Can STM32F103 access internal SRAM via D-Code Bus? - Stack Overflow</a></p>
 </blockquote>
-<p>在执行完Reset_Handler后，程序就会跳转到main函数开始执行用户程序了</p>
+</li>
+<li><p>FSMC：FSMC（Flexible Static Memory Controller）即灵活的静态存储控制器，实际上就是一个外部总线接口，可以用来访问外部SRAM、NAND&#x2F;NOR FLASH、LCD等。它也是直接挂在总线矩阵上面的，以方便CPU快速访问外挂器件</p>
+</li>
+<li><p>AHB to APB桥：用于桥接AHB总线和APB总线，其中APB总线有两条，APB2是全速的72MHz，APB1总线是慢速的36MHz，这三条总线上挂载了STM32内部绝大部分外设</p>
+</li>
+<li><p>总线矩阵：总线矩阵协调内核系统总线和DMA主控总线之间的访问仲裁，仲裁利用轮换算法，保证各个总线之间的有序访问，从而确保工作正常。</p>
+</li>
+</ul>
+<h1 id="0x03-STM32存储器映射"><a href="#0x03-STM32存储器映射" class="headerlink" title="0x03 STM32存储器映射"></a>0x03 STM32存储器映射</h1><p>老规矩先上图</p>
+<img src="https://cdn.jsdelivr.net/gh/GoooForward/picture@main/note-image/image-20241015220738841.png" srcset="/blog/img/loading.gif" lazyload alt="image-20241015220738841" style="zoom: 50%;" />
+
+<p>ST将4GB空间分成8个块，每个块512MB</p>
+<table>
+<thead>
+<tr>
+<th>存储块</th>
+<th>功能</th>
+<th>地址范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Block 0</td>
+<td>Code</td>
+<td>0X0000 0000 ~ 0x1FFF FFFF（512MB）</td>
+</tr>
+<tr>
+<td>Block 1</td>
+<td>SRAM</td>
+<td>0X2000 0000 ~ 0x3FFF FFFF（512MB）</td>
+</tr>
+<tr>
+<td>Block 2</td>
+<td>外设</td>
+<td>0X4000 0000 ~ 0x5FFF FFFF（512MB）</td>
+</tr>
+<tr>
+<td>Block 3</td>
+<td>FSMC Bank1&amp;2</td>
+<td>0X6000 0000 ~ 0x7FFF FFFF（512MB）</td>
+</tr>
+<tr>
+<td>Block 4</td>
+<td>FSMC Bank3&amp;4</td>
+<td>0X8000 0000 ~ 0x9FFF FFFF（512MB）</td>
+</tr>
+<tr>
+<td>Block 5</td>
+<td>FSMC 寄存器</td>
+<td>0XA000 0000 ~ 0xBFFF FFFF（512MB）</td>
+</tr>
+<tr>
+<td>Block 6</td>
+<td>没用到</td>
+<td>0XC000 0000 ~ 0xDFFF FFFF（512MB）</td>
+</tr>
+<tr>
+<td>Block 7</td>
+<td>Cortex M3 内部外设</td>
+<td>0XE000 0000 ~ 0xFFFF FFFF（512MB）</td>
+</tr>
+</tbody></table>
 
                 
               </div>
@@ -390,8 +447,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>STM32学习笔记1——启动</div>
-      <div>https://goooforward.github.io/blog/2024/09/24/stm32/STM32学习笔记1——启动/</div>
+      <div>STM32学习笔记2——系统架构</div>
+      <div>https://goooforward.github.io/blog/2024/10/10/draft/stm32/STM32学习笔记2——系统架构/</div>
     </div>
     <div class="license-meta">
       
@@ -403,7 +460,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年9月24日</div>
+          <div>2024年10月10日</div>
         </div>
       
       
